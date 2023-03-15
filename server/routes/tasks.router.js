@@ -191,5 +191,24 @@ router.put(`/admin_unassign`, (req, res) => {
     res.sendStatus(500);
   });
 });
+// approve or deny new task - for admin 
+router.put(`/admin_approve`, (req, res) => {
+  let user_id = req.body.user_id;
+  let task_id = req.body.task_id;
+  let is_approved = req.body.is_approved;
+
+  const queryText = `UPDATE "tasks"
+    SET "assigned_to_id" = $1, "is_approved" = $3
+    WHERE "id" = $2;`;
+
+  pool.query(queryText, [user_id, task_id, is_approved])
+    .then((result) => res.send(result.rows[0]))
+    .catch((err) => {
+      console.log("error assigning task to user", err);
+      res.sendStatus(500);
+    });
+});
+
+
 module.exports = router
 
