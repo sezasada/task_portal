@@ -2,9 +2,9 @@ CREATE TABLE "user" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"first_name" varchar(20) NOT NULL,
 	"last_name" varchar(25) NOT NULL,
-	"email_address" TEXT NOT NULL,
-	"password" varchar(25) NOT NULL,
-	"phone_number" int NOT NULL,
+	"username" TEXT NOT NULL,
+	"password" varchar(80) NOT NULL,
+	"phone_number" TEXT NOT NULL,
 	"is_verified" BOOLEAN NOT NULL DEFAULT 'FALSE',
 	"is_admin" BOOLEAN NOT NULL DEFAULT 'FALSE'
 );
