@@ -49,4 +49,81 @@ router.post('/logout', (req, res) => {
   res.sendStatus(200);
 });
 
+//update user verified status
+router.put('/update_verified', (req, res) => {
+  let current_verified_status = req.body.is_verified;
+  let user_id = req.body.id;
+  const queryText = `UPDATE "user"
+  SET "is_verified" = $1
+  WHERE "id"=$2;`;
+
+  pool.query(queryText, [!current_verified_status, user_id]).then(res.sendStatus(200))
+    .catch((err) => {
+      console.log("update verified status failed", err);
+      res.sendStatus(500);
+    }
+    );
+
+});
+
+//update user admin status
+router.put('/update_admin', (req, res) => {
+  let current_admin_status = req.body.is_admin;
+  let user_id = req.body.id;
+  const queryText = `UPDATE "user"
+  SET "is_admin" = $1
+  WHERE "id"=$2;`;
+
+  pool.query(queryText, [!current_admin_status, user_id]).then(res.sendStatus(200))
+    .catch((err) => {
+      console.log("update admin status failed", err);
+      res.sendStatus(500);
+    });
+
+});
+
+//update user admin info
+router.put('/update_user', (req, res) => {
+  let id = req.user.id;
+  let user_info = req.body.user_info;
+  const queryText = `UPDATE "user"
+  SET "first_name" = $1, "last_name" = $2, "username" = $3, "phone_number" =$4
+  WHERE "id"=$5;`;
+
+  pool.query(queryText, [user_info.first_name, user_info.last_name, user_info.username, user_info.phone_number, id]).then(res.sendStatus(200))
+    .catch((err) => {
+      console.log("update user failed", err);
+      res.sendStatus(500);
+    });
+
+});
+
+//delete user
+router.delete(`/delete_user/:id`, (req, res) => {
+  let user_id = req.params.id;
+  const queryText = `DELETE FROM "user" WHERE "id" =$1;
+  `;
+
+  pool.query(queryText, [user_id]).then(res.sendStatus(200))
+    .catch((err) => {
+      console.log("delete user failed", err);
+      res.sendStatus(500);
+    }
+    );
+
+});
+
+// Grab all unverified users
+router.get('/unverified', (req, res) => {
+
+  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = FALSE;`;
+  pool
+    .query(queryText)
+    .then((results) => res.send(results.rows))
+    .catch((err) => {
+      console.log('Could not retrieve unverified users: ', err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
