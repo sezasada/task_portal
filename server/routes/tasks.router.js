@@ -210,5 +210,34 @@ router.put(`/admin_approve`, (req, res) => {
 });
 
 
+//admin completes any task
+router.put(`/admin_complete_task`, (req, res) => {
+  let time_completed = req.body.time_completed;
+  let task_id = req.body.task_id;
+  const queryText = `UPDATE "tasks"
+  SET "status" = 'completed', "time_completed"=$1
+  WHERE "id" = $2;`;
+
+  pool.query(queryText, [time_completed, task_id])
+  .then((result) => res.send(result.rows[0]))
+  .catch((err) => {
+    console.log("error marking task as complete", err);
+    res.sendStatus(500);
+  });
+});
+//admin marks task as incomplete
+router.put(`/admin_incomplete_task`, (req, res) => {
+  let task_id = req.body.task_id;
+  const queryText = `UPDATE "tasks"
+  SET "status" = 'available', "time_completed"= null
+  WHERE "id" = $1;`;
+
+  pool.query(queryText, [task_id])
+  .then((result) => res.send(result.rows[0]))
+  .catch((err) => {
+    console.log("error marking task as incomplete", err);
+    res.sendStatus(500);
+  });
+});
 module.exports = router
 
