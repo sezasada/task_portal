@@ -239,5 +239,28 @@ router.put(`/admin_incomplete_task`, (req, res) => {
     res.sendStatus(500);
   });
 });
+
+//admin edits original settings for task
+router.put(`/admin_edit_task`, (req, res) => {
+  let title = req.body.title;
+  let tags = req.body.tags;
+  let notes = req.body.notes;
+  let has_budget = req.body.has_budget;
+  let budget = req.body.budget;
+  let location_id = req.body.location_id;
+  let is_time_sensitive = req.body.is_time_sensitive;
+  let due_date = req.body.due_date;
+  let task_id = req.body.task_id;
+  const queryText = `UPDATE "tasks"
+  SET "title" =$1, "notes" =$2, "has_budget" =$3, "budget" =$4, "location_id" =$5, "is_time_sensitive" =$6, "due_date" =$7
+  WHERE "id" = $8;`;
+
+  pool.query(queryText, [title, notes, has_budget, budget, location_id, is_time_sensitive, due_date, task_id])
+  .then((result) => res.send(result.rows[0]))
+  .catch((err) => {
+    console.log("error editing task", err);
+    res.sendStatus(500);
+  });
+});
 module.exports = router
 
