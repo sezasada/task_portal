@@ -144,5 +144,37 @@ router.put(`/user_complete_task`, (req, res) => {
   });
 });
 
+
+/*ADMIN USER PUT ROUTES*/
+//admin assigns task
+router.put(`/admin_assign`, (req, res) => {
+  let user_id = req.body.user_id;
+  let time_assigned = req.body.time_assigned;
+  let task_id = req.body.task_id;
+  const queryText = `UPDATE "tasks"
+  SET "assigned_to_id" = $1, "time_assigned"=$2
+  WHERE "id" = $3;`;
+
+  pool.query(queryText, [user_id, time_assigned, task_id])
+  .then((result) => res.send(result.rows[0]))
+  .catch((err) => {
+    console.log("error assigning task to user", err);
+    res.sendStatus(500);
+  });
+});
+//admin unassigns task
+router.put(`/admin_unassign`, (req, res) => {
+  let task_id = req.body.task_id;
+  const queryText = `UPDATE "tasks"
+  SET "assigned_to_id" = null, "time_assigned"= null
+  WHERE "id" = $1;`;
+
+  pool.query(queryText, [task_id])
+  .then((result) => res.send(result.rows[0]))
+  .catch((err) => {
+    console.log("error unassigning task from user", err);
+    res.sendStatus(500);
+  });
+});
 module.exports = router
 
