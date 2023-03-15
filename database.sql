@@ -40,7 +40,7 @@ CREATE TABLE "tasks" (
 	"location_id" int NOT NULL REFERENCES "locations"("id"),
 	"status" TEXT NOT NULL,
 	"created_by_id" int NOT NULL REFERENCES "user"("id"),
-	"assigned_to_id" int NOT NULL REFERENCES "user"("id"),
+	"assigned_to_id" int REFERENCES "user"("id"),
 	"time_created" TIMESTAMP NOT NULL,
 	"time_assigned" TIMESTAMP,
 	"time_completed" TIMESTAMP,
