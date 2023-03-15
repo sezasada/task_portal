@@ -3,7 +3,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const pool = require('../modules/pool');
 const router = express.Router();
 
-// route to get all tasks that have been approved - history of tasks
+// route to get all tasks that have been approved by a user- history of tasks
 router.get('/', rejectUnauthenticated, async (req, res) => {
   const userId = req.user.id;
 
@@ -14,6 +14,21 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
       AND "is_approved" = TRUE 
     `;
     const result = await pool.query(queryText, [userId]);
+    res.send(result.rows);
+  } catch (error) {
+    console.log('error getting task', error);
+    res.sendStatus(500);
+  }
+});
+// route to get all tasks that have been approved - for admin 
+router.get('/approved', rejectUnauthenticated, async (req, res) => {
+
+  try {
+    const queryText = `
+      SELECT * FROM "tasks"
+      WHERE "is_approved" = TRUE
+    `;
+    const result = await pool.query(queryText, );
     res.send(result.rows);
   } catch (error) {
     console.log('error getting task', error);
