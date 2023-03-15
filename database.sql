@@ -16,12 +16,19 @@ CREATE TABLE "tags" (
 	"tag_name" varchar(25) NOT NULL
 );
 
+-- example tags
+INSERT INTO "tags" ("tag_name")
+VALUES ('maintenance'), ('cleaning'), ('farm work'), ('administrative');
 
 
 CREATE TABLE "locations" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"location_name" varchar(75) NOT NULL
 );
+
+--example locations
+INSERT INTO "locations" ("location_name")
+VALUES ('north'), ('east'), ('south'), ('west');
 
 
 CREATE TABLE "tasks" (
@@ -59,7 +66,7 @@ CREATE TABLE "comments" (
 
 CREATE TABLE "photos" (
     "id" serial PRIMARY KEY NOT NULL,
-    "task_id" serial NOT NULL REFERENCES "tasks"("id"),
-    "photo_link"
+    "task_id" serial REFERENCES "tasks"("id"),
+    "photo_link" varchar(500)
 
 );
