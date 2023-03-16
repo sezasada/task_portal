@@ -105,7 +105,6 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-    console.log("this is", assigned_to_id);
 
     const result = await pool.query(queryText, [
       title,
@@ -121,9 +120,6 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       due_date,
       is_approved,
     ]);
-
-    console.log("this is result.rows[0].id", result.rows[0].id);
-
 
     const tags_per_task = `
     INSERT INTO "tags_per_task" (
@@ -329,7 +325,7 @@ router.delete("/tasks/:id", async (req, res) => {
     if (task.rows.length === 0) {
       console.log("no task is found");
     }
-    await pool.query("DELETE FROM tasks WHERE id = $1", [id]);
+    await pool.query(`DELETE FROM "tasks" WHERE id = $1`, [id]);
     console.log("task is deleted successfully");
     return res.sendStatus(204);
   } catch (error) {
