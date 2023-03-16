@@ -86,6 +86,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       is_approved,
       assigned_to_id,
     } = req.body;
+    const tags = req.body.tags;
     const created_by_id = req.user.id;
     const queryText = `
       INSERT INTO "tasks" (
@@ -105,6 +106,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       RETURNING "id"
     `;
     console.log("this is", assigned_to_id);
+
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -119,6 +121,23 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       due_date,
       is_approved,
     ]);
+
+    console.log("this is result.rows[0].id", result.rows[0].id);
+
+
+    const tags_per_task = `
+    INSERT INTO "tags_per_task" (
+      "task_id",
+      "tag_id"
+    ) VALUES ($1, $2)
+      RETURNING "id"
+    `;
+
+    for (let tag of tags) {
+      await pool.query(tags_per_task, [
+        result.rows[0].id, tag
+      ])
+    }
     res.send(result.rows[0]);
   } catch (error) {
     console.log("Error creating task", error);
