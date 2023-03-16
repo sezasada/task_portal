@@ -78,6 +78,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
       budget, location_id, status,
       time_created, is_time_sensitive, due_date, is_approved, assigned_to_id
     } = req.body;
+    const tags = req.body.tags;
     const created_by_id = req.user.id;
     const queryText = `
       INSERT INTO "tasks" (
@@ -97,12 +98,30 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
       RETURNING "id"
     `;
     console.log("this is", assigned_to_id);
+
     const result = await pool.query(queryText, [
       title, notes, has_budget,
       budget, location_id, status,
       created_by_id, assigned_to_id,
       time_created, is_time_sensitive, due_date, is_approved
     ]);
+
+    console.log("this is result.rows[0].id", result.rows[0].id);
+
+
+    const tags_per_task = `
+    INSERT INTO "tags_per_task" (
+      "task_id",
+      "tag_id"
+    ) VALUES ($1, $2)
+      RETURNING "id"
+    `;
+
+    for (let tag of tags) {
+      await pool.query(tags_per_task, [
+        result.rows[0].id, tag
+      ])
+    }
     res.send(result.rows[0]);
   } catch (error) {
     console.log('Error creating task', error);
@@ -256,11 +275,11 @@ router.put(`/admin_edit_task`, (req, res) => {
   WHERE "id" = $8;`;
 
   pool.query(queryText, [title, notes, has_budget, budget, location_id, is_time_sensitive, due_date, task_id])
-  .then((result) => res.send(result.rows[0]))
-  .catch((err) => {
-    console.log("error editing task", err);
-    res.sendStatus(500);
-  });
+    .then((result) => res.send(result.rows[0]))
+    .catch((err) => {
+      console.log("error editing task", err);
+      res.sendStatus(500);
+    });
 });
 
 router.delete('/tasks/:id', async (req, res) => {
@@ -270,6 +289,8 @@ router.delete('/tasks/:id', async (req, res) => {
     if (task.rows.length === 0) {
       console.log('no task is found');
     }
+    await pool.query('DELETE FROM tags_per_task WHERE task_id = $1', [id]);
+
     await pool.query('DELETE FROM tasks WHERE id = $1', [id]);
     console.log('task is deleted successfully');
     return res.sendStatus(204);
@@ -278,7 +299,7 @@ router.delete('/tasks/:id', async (req, res) => {
     res.status(500);
   }
 });
-// ehfje
+
 module.exports = router
 
 
