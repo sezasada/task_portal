@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
   viewAccountInfoReducer,
   allTasksReducer,
   incomingTasksReducer,
-  viewTaskInfoReducer
+  viewTaskInfoReducer,
 });
 
 export default rootReducer;

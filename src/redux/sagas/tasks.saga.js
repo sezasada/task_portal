@@ -4,7 +4,7 @@ import axios from 'axios';
 // worker Saga: will be fired on "REGISTER" actions
 function* fetchAllTasksSaga() {
     try {
-        const response = yield axios.get('/api/tasks');
+        const response = yield axios.get('/api/tasks/approved');
         yield put({ type: 'SET_ALL_TASKS', payload: response.data });
     } catch (error) {
         console.log('Error with fetching all tasks:', error);
