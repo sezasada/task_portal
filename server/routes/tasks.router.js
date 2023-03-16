@@ -37,15 +37,12 @@ router.get('/approved', rejectUnauthenticated, async (req, res) => {
 });
 // route to get all tasks that have not been approved - for admin 
 router.get('/admin', rejectUnauthenticated, async (req, res) => {
-  const userId = req.user.id;
-
   try {
     const queryText = `
       SELECT * FROM "tasks"
-      WHERE "created_by_id" = $1
-      AND "is_approved" = FALSE 
+      WHERE "is_approved" = FALSE 
     `;
-    const result = await pool.query(queryText, [userId]);
+    const result = await pool.query(queryText);
     res.send(result.rows);
   } catch (error) {
     console.log('error getting task', error);
