@@ -68,7 +68,7 @@ function UserPage() {
 						<h2>Welcome, {user.first_name}!</h2>
 						<p>Your ID is: {user.id}</p>
 						<Paper sx={{ p: 3 }}>
-							<pre>{JSON.stringify(incomingTasks)}</pre>
+							{/* <pre>{JSON.stringify(incomingTasks)}</pre> */}
 							<Typography>Tasks awaiting approval</Typography>
 							<Table>
 								<TableHead>
@@ -156,7 +156,7 @@ function UserPage() {
 				{tabIndex === 1 && (
 					<Box>
 						<Paper sx={{ p: 3 }}>
-							<pre>{JSON.stringify(unverifiedUsers)}</pre>
+							{/* <pre>{JSON.stringify(unverifiedUsers)}</pre> */}
 							<Typography>Users awaiting approval</Typography>
 							<Table>
 								<TableHead>
@@ -239,7 +239,7 @@ function UserPage() {
 				{tabIndex === 2 && (
 					<Box>
 						<Paper sx={{ p: 3 }}>
-							<pre>{JSON.stringify(allApprovedTasks)}</pre>
+							{/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
 							<Typography>All Tasks</Typography>
 							<Table>
 								<TableHead>
