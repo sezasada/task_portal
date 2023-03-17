@@ -15,7 +15,9 @@ import {
 	TableHead,
 	TableRow,
 	Tabs,
+	TextField,
 	Typography,
+	Autocomplete,
 } from "@mui/material";
 import { Box } from "@mui/system";
 function UserPage() {
@@ -33,8 +35,23 @@ function UserPage() {
 	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
 	const allApprovedTasks = useSelector((store) => store.allTasksReducer);
 
+	// Access redux store for all tags
+	// const allTags = useSelector((store) => store.allTagsReducer);
+
+	const allTags = [
+		{ id: 1, tag_name: "maintenance" },
+		{ id: 2, tag_name: "cleaning" },
+		{ id: 3, tag_name: "farm work" },
+		{ id: 4, tag_name: "administrative" },
+	];
+
 	// Manage change in tabs
 	const [tabIndex, setTabIndex] = useState(0);
+
+	// Manage Local state for task submission
+	const [title, setTitle] = useState("");
+	const [tag, setTag] = useState([]);
+	const [tagInput, setTagInput] = useState("");
 
 	const handleTabChange = (event, newTabIndex) => {
 		setTabIndex(newTabIndex);
@@ -64,7 +81,7 @@ function UserPage() {
 			</Box>
 			<Box>
 				{tabIndex === 0 && (
-					<Box>
+					<Stack spacing={3}>
 						<h2>Welcome, {user.first_name}!</h2>
 						<p>Your ID is: {user.id}</p>
 						<Paper sx={{ p: 3 }}>
@@ -151,10 +168,10 @@ function UserPage() {
 								</Stack>
 							</Modal>
 						</Paper>
-					</Box>
+					</Stack>
 				)}
 				{tabIndex === 1 && (
-					<Box>
+					<Stack spacing={3}>
 						<Paper sx={{ p: 3 }}>
 							{/* <pre>{JSON.stringify(unverifiedUsers)}</pre> */}
 							<Typography>Users awaiting approval</Typography>
@@ -234,10 +251,10 @@ function UserPage() {
 								</Stack>
 							</Modal>
 						</Paper>
-					</Box>
+					</Stack>
 				)}
 				{tabIndex === 2 && (
-					<Box>
+					<Stack spacing={3}>
 						<Paper sx={{ p: 3 }}>
 							{/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
 							<Typography>All Tasks</Typography>
@@ -328,7 +345,54 @@ function UserPage() {
 								</Stack>
 							</Modal>
 						</Paper>
-					</Box>
+						<Paper>
+							<Stack>
+								<Typography>Create a New Task</Typography>
+								<form>
+									<TextField
+										required
+										type="text"
+										label="Title"
+										value={title}
+										sx={{
+											marginBottom: 1,
+											width: 300,
+										}}
+										onChange={(event) => setTitle(event.target.value)}
+										variant="outlined"
+									/>
+									<Autocomplete
+										sx={{
+											width: 300,
+											marginBottom: 2,
+										}}
+										multiple
+										value={tag}
+										onChange={(event, newValue) => setTag(newValue)}
+										inputValue={tagInput}
+										onInputChange={(event, newInputValue) =>
+											setTagInput(newInputValue)
+										}
+										id="all-tags-lookup"
+										getOptionLabel={(allTags) => `${allTags.tag_name}`}
+										options={allTags}
+										isOptionEqualToValue={(option, value) =>
+											option.tag_name === value.tag_name
+										}
+										noOptionsText={"No valid tags"}
+										renderOption={(props, allTags) => (
+											<Box component="li" {...props} key={allTags.id}>
+												{allTags.tag_name}
+											</Box>
+										)}
+										renderInput={(params) => (
+											<TextField {...params} label="Search for Tag" />
+										)}
+									/>
+								</form>
+							</Stack>
+						</Paper>
+					</Stack>
 				)}
 			</Box>
 
