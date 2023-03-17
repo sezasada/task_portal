@@ -37,15 +37,13 @@ function UserPage() {
 
 	// Access redux store for all tags
 	const allTags = useSelector((store) => store.allTagsReducer);
-
 	const specificTaskTags = infoOfSpecificTask.tags;
 
-	// const allTags = [
-	// 	{ id: 1, tag_name: "maintenance" },
-	// 	{ id: 2, tag_name: "cleaning" },
-	// 	{ id: 3, tag_name: "farm work" },
-	// 	{ id: 4, tag_name: "administrative" },
-	// ];
+	// Access redux store for all locations
+	const allLocations = useSelector((store) => store.allLocationsReducer);
+
+	// Access redux store for all users
+	const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
 
 	// Manage change in tabs
 	const [tabIndex, setTabIndex] = useState(0);
@@ -54,6 +52,13 @@ function UserPage() {
 	const [title, setTitle] = useState("");
 	const [tag, setTag] = useState([]);
 	const [tagInput, setTagInput] = useState("");
+	const [location, setLocation] = useState(allLocations[0]);
+	const [locationInput, setLocationInput] = useState("");
+	const [budget, setBudget] = useState("");
+	const [userLookup, setUserLookup] = useState(verifiedUsers[0]);
+	const [userLookupInput, setUserLookupInput] = useState("");
+	const [imageLink, setImageLink] = useState("");
+	const [notes, setNotes] = useState("");
 
 	const handleTabChange = (event, newTabIndex) => {
 		setTabIndex(newTabIndex);
@@ -71,6 +76,8 @@ function UserPage() {
 		dispatch({ type: "FETCH_INCOMING_TASKS" });
 		dispatch({ type: "FETCH_ALL_TASKS" });
 		dispatch({ type: "FETCH_ALL_TAGS" });
+		dispatch({ type: "FETCH_ALL_LOCATIONS" });
+		dispatch({ type: "FETCH_VERIFIED_USERS" });
 	}, []);
 
 	return (
@@ -363,46 +370,139 @@ function UserPage() {
 							<Stack>
 								<Typography>Create a New Task</Typography>
 								<form>
-									<TextField
-										required
-										type="text"
-										label="Title"
-										value={title}
-										sx={{
-											marginBottom: 1,
-											width: 300,
-										}}
-										onChange={(event) => setTitle(event.target.value)}
-										variant="outlined"
-									/>
-									<Autocomplete
-										sx={{
-											width: 300,
-											marginBottom: 2,
-										}}
-										multiple
-										value={tag}
-										onChange={(event, newValue) => setTag(newValue)}
-										inputValue={tagInput}
-										onInputChange={(event, newInputValue) =>
-											setTagInput(newInputValue)
-										}
-										id="all-tags-lookup"
-										getOptionLabel={(allTags) => `${allTags.tag_name}`}
-										options={allTags}
-										isOptionEqualToValue={(option, value) =>
-											option.tag_name === value.tag_name
-										}
-										noOptionsText={"No valid tags"}
-										renderOption={(props, allTags) => (
-											<Box component="li" {...props} key={allTags.id}>
-												{allTags.tag_name}
-											</Box>
-										)}
-										renderInput={(params) => (
-											<TextField {...params} label="Search for Tag" />
-										)}
-									/>
+									<Stack>
+										<TextField
+											required
+											type="text"
+											label="Title"
+											value={title}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setTitle(event.target.value)}
+											variant="outlined"
+										/>
+										<Autocomplete
+											sx={{
+												width: 300,
+												marginBottom: 1,
+											}}
+											multiple
+											value={tag}
+											onChange={(event, newValue) => setTag(newValue)}
+											inputValue={tagInput}
+											onInputChange={(event, newInputValue) =>
+												setTagInput(newInputValue)
+											}
+											id="all-tags-lookup"
+											getOptionLabel={(allTags) => `${allTags.tag_name}`}
+											options={allTags}
+											isOptionEqualToValue={(option, value) =>
+												option.tag_name === value.tag_name
+											}
+											noOptionsText={"No valid tags"}
+											renderOption={(props, allTags) => (
+												<Box component="li" {...props} key={allTags.id}>
+													{allTags.tag_name}
+												</Box>
+											)}
+											renderInput={(params) => (
+												<TextField {...params} label="Search for Tags" />
+											)}
+										/>
+										<Autocomplete
+											sx={{
+												width: 300,
+												marginBottom: 1,
+											}}
+											value={location}
+											onChange={(event, newValue) => setLocation(newValue)}
+											inputValue={locationInput}
+											onInputChange={(event, newInputValue) =>
+												setLocationInput(newInputValue)
+											}
+											id="all-locations-lookup"
+											getOptionLabel={(allLocations) =>
+												`${allLocations.location_name}`
+											}
+											options={allLocations}
+											isOptionEqualToValue={(option, value) =>
+												option.location_name === value.location_name
+											}
+											noOptionsText={"No valid locations"}
+											renderOption={(props, allLocations) => (
+												<Box component="li" {...props} key={allLocations.id}>
+													{allLocations.location_name}
+												</Box>
+											)}
+											renderInput={(params) => (
+												<TextField {...params} label="Search for Locations" />
+											)}
+										/>
+										<Autocomplete
+											sx={{
+												width: 300,
+												marginBottom: 1,
+											}}
+											value={userLookup}
+											onChange={(event, newValue) => setUserLookup(newValue)}
+											inputValue={userLookupInput}
+											onInputChange={(event, newInputValue) =>
+												setUserLookupInput(newInputValue)
+											}
+											id="all-verified-users-lookup"
+											getOptionLabel={(verifiedUsers) =>
+												`${verifiedUsers.first_name} ${verifiedUsers.last_name}`
+											}
+											options={verifiedUsers}
+											isOptionEqualToValue={(option, value) =>
+												option.first_name === value.first_name
+											}
+											noOptionsText={"No valid users"}
+											renderOption={(props, verifiedUsers) => (
+												<Box component="li" {...props} key={verifiedUsers.id}>
+													{verifiedUsers.first_name} {verifiedUsers.last_name}
+												</Box>
+											)}
+											renderInput={(params) => (
+												<TextField {...params} label="Search for Users" />
+											)}
+										/>
+										<TextField
+											type="number"
+											label="Budget"
+											value={budget}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setBudget(event.target.value)}
+											variant="outlined"
+										/>
+										<TextField
+											type="text"
+											label="Picture Upload"
+											value={imageLink}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setImageLink(event.target.value)}
+											variant="outlined"
+										/>
+										<TextField
+											type="text"
+											label="Notes"
+											value={notes}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setNotes(event.target.value)}
+											variant="outlined"
+										/>
+									</Stack>
 								</form>
 							</Stack>
 						</Paper>
