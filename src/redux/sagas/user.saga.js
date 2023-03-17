@@ -34,9 +34,20 @@ function* fetchUnverifiedUsersSaga() {
   }
 }
 
+function* fetchVerifiedUsersSaga() {
+  try {
+    const response = yield axios.get('/api/user/verified');
+    console.log(response);
+    yield put({ type: 'SET_VERIFIED_USERS', payload: response.data });
+  } catch (error) {
+    console.log('User get request failed', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('FETCH_UNVERIFIED_USERS', fetchUnverifiedUsersSaga);
+  yield takeLatest('FETCH_VERIFIED_USERS', fetchVerifiedUsersSaga);
 }
 
 export default userSaga;

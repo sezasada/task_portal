@@ -15,7 +15,9 @@ import {
 	TableHead,
 	TableRow,
 	Tabs,
+	TextField,
 	Typography,
+	Autocomplete,
 } from "@mui/material";
 import { Box } from "@mui/system";
 function UserPage() {
@@ -33,8 +35,30 @@ function UserPage() {
 	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
 	const allApprovedTasks = useSelector((store) => store.allTasksReducer);
 
+	// Access redux store for all tags
+	const allTags = useSelector((store) => store.allTagsReducer);
+	const specificTaskTags = infoOfSpecificTask.tags;
+
+	// Access redux store for all locations
+	const allLocations = useSelector((store) => store.allLocationsReducer);
+
+	// Access redux store for all users
+	const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
+
 	// Manage change in tabs
 	const [tabIndex, setTabIndex] = useState(0);
+
+	// Manage Local state for task submission
+	const [title, setTitle] = useState("");
+	const [tag, setTag] = useState([]);
+	const [tagInput, setTagInput] = useState("");
+	const [location, setLocation] = useState(allLocations[0]);
+	const [locationInput, setLocationInput] = useState("");
+	const [budget, setBudget] = useState("");
+	const [userLookup, setUserLookup] = useState(verifiedUsers[0]);
+	const [userLookupInput, setUserLookupInput] = useState("");
+	const [imageLink, setImageLink] = useState("");
+	const [notes, setNotes] = useState("");
 
 	const handleTabChange = (event, newTabIndex) => {
 		setTabIndex(newTabIndex);
@@ -51,6 +75,9 @@ function UserPage() {
 		dispatch({ type: "FETCH_UNVERIFIED_USERS" });
 		dispatch({ type: "FETCH_INCOMING_TASKS" });
 		dispatch({ type: "FETCH_ALL_TASKS" });
+		dispatch({ type: "FETCH_ALL_TAGS" });
+		dispatch({ type: "FETCH_ALL_LOCATIONS" });
+		dispatch({ type: "FETCH_VERIFIED_USERS" });
 	}, []);
 
 	return (
@@ -64,11 +91,11 @@ function UserPage() {
 			</Box>
 			<Box>
 				{tabIndex === 0 && (
-					<Box>
+					<Stack spacing={3}>
 						<h2>Welcome, {user.first_name}!</h2>
 						<p>Your ID is: {user.id}</p>
 						<Paper sx={{ p: 3 }}>
-							{/* <pre>{JSON.stringify(incomingTasks)}</pre> */}
+							<pre>{JSON.stringify(incomingTasks)}</pre>
 							<Typography>Tasks awaiting approval</Typography>
 							<Table>
 								<TableHead>
@@ -88,7 +115,9 @@ function UserPage() {
 											}}
 										>
 											<TableCell>{task.title}</TableCell>
-											<TableCell>{task.created_by_id}</TableCell>
+											<TableCell>
+												{task.created_by_first_name} {task.created_by_last_name}
+											</TableCell>
 											<TableCell>{task.time_created}</TableCell>
 										</TableRow>
 									))}
@@ -126,20 +155,25 @@ function UserPage() {
 											Title: {infoOfSpecificTask.title}
 										</Typography>
 										<br />
-										<Typography variant="h6" component="h4">
-											Tags: {infoOfSpecificTask.tags}
-										</Typography>
+										<ul>
+											Tags:
+											{specificTaskTags &&
+												specificTaskTags.map((tag) => (
+													<li key={tag.tag_id}>{tag.tag_name}</li>
+												))}
+										</ul>
 										<br />
 										<Typography variant="h6" component="h4">
 											Budget: ${infoOfSpecificTask.budget}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Location: {infoOfSpecificTask.location_id}
+											Location: {infoOfSpecificTask.location_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Created By: {infoOfSpecificTask.created_by_id}
+											Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+											{infoOfSpecificTask.created_by_last_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
@@ -151,10 +185,10 @@ function UserPage() {
 								</Stack>
 							</Modal>
 						</Paper>
-					</Box>
+					</Stack>
 				)}
 				{tabIndex === 1 && (
-					<Box>
+					<Stack spacing={3}>
 						<Paper sx={{ p: 3 }}>
 							{/* <pre>{JSON.stringify(unverifiedUsers)}</pre> */}
 							<Typography>Users awaiting approval</Typography>
@@ -204,6 +238,7 @@ function UserPage() {
 											padding: "20px",
 										}}
 									>
+										<pre>{JSON.stringify(infoOfSpecificUser)}</pre>
 										<Typography
 											variant="h4"
 											component="h2"
@@ -234,10 +269,10 @@ function UserPage() {
 								</Stack>
 							</Modal>
 						</Paper>
-					</Box>
+					</Stack>
 				)}
 				{tabIndex === 2 && (
-					<Box>
+					<Stack spacing={3}>
 						<Paper sx={{ p: 3 }}>
 							{/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
 							<Typography>All Tasks</Typography>
@@ -245,7 +280,6 @@ function UserPage() {
 								<TableHead>
 									<TableRow>
 										<TableCell>Title</TableCell>
-										<TableCell>Tags</TableCell>
 										<TableCell>Location</TableCell>
 										<TableCell>Due Date</TableCell>
 										<TableCell>Status</TableCell>
@@ -261,8 +295,7 @@ function UserPage() {
 											}}
 										>
 											<TableCell>{task.title}</TableCell>
-											<TableCell>{task.tags}</TableCell>
-											<TableCell>{task.location_id}</TableCell>
+											<TableCell>{task.location_name}</TableCell>
 											<TableCell>{task.due_date}</TableCell>
 											<TableCell>{task.status}</TableCell>
 										</TableRow>
@@ -301,20 +334,25 @@ function UserPage() {
 											Title: {infoOfSpecificTask.title}
 										</Typography>
 										<br />
-										<Typography variant="h6" component="h4">
-											Tags: {infoOfSpecificTask.tags}
-										</Typography>
+										<ul>
+											Tags:
+											{specificTaskTags &&
+												specificTaskTags.map((tag) => (
+													<li key={tag.tag_id}>{tag.tag_name}</li>
+												))}
+										</ul>
 										<br />
 										<Typography variant="h6" component="h4">
 											Budget: ${infoOfSpecificTask.budget}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Location: {infoOfSpecificTask.location_id}
+											Location: {infoOfSpecificTask.location_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Created By: {infoOfSpecificTask.created_by_id}
+											Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+											{infoOfSpecificTask.created_by_last_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
@@ -328,7 +366,147 @@ function UserPage() {
 								</Stack>
 							</Modal>
 						</Paper>
-					</Box>
+						<Paper>
+							<Stack>
+								<Typography>Create a New Task</Typography>
+								<form>
+									<Stack>
+										<TextField
+											required
+											type="text"
+											label="Title"
+											value={title}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setTitle(event.target.value)}
+											variant="outlined"
+										/>
+										<Autocomplete
+											sx={{
+												width: 300,
+												marginBottom: 1,
+											}}
+											multiple
+											value={tag}
+											onChange={(event, newValue) => setTag(newValue)}
+											inputValue={tagInput}
+											onInputChange={(event, newInputValue) =>
+												setTagInput(newInputValue)
+											}
+											id="all-tags-lookup"
+											getOptionLabel={(allTags) => `${allTags.tag_name}`}
+											options={allTags}
+											isOptionEqualToValue={(option, value) =>
+												option.tag_name === value.tag_name
+											}
+											noOptionsText={"No valid tags"}
+											renderOption={(props, allTags) => (
+												<Box component="li" {...props} key={allTags.id}>
+													{allTags.tag_name}
+												</Box>
+											)}
+											renderInput={(params) => (
+												<TextField {...params} label="Search for Tags" />
+											)}
+										/>
+										<Autocomplete
+											sx={{
+												width: 300,
+												marginBottom: 1,
+											}}
+											value={location}
+											onChange={(event, newValue) => setLocation(newValue)}
+											inputValue={locationInput}
+											onInputChange={(event, newInputValue) =>
+												setLocationInput(newInputValue)
+											}
+											id="all-locations-lookup"
+											getOptionLabel={(allLocations) =>
+												`${allLocations.location_name}`
+											}
+											options={allLocations}
+											isOptionEqualToValue={(option, value) =>
+												option.location_name === value.location_name
+											}
+											noOptionsText={"No valid locations"}
+											renderOption={(props, allLocations) => (
+												<Box component="li" {...props} key={allLocations.id}>
+													{allLocations.location_name}
+												</Box>
+											)}
+											renderInput={(params) => (
+												<TextField {...params} label="Search for Locations" />
+											)}
+										/>
+										<Autocomplete
+											sx={{
+												width: 300,
+												marginBottom: 1,
+											}}
+											value={userLookup}
+											onChange={(event, newValue) => setUserLookup(newValue)}
+											inputValue={userLookupInput}
+											onInputChange={(event, newInputValue) =>
+												setUserLookupInput(newInputValue)
+											}
+											id="all-verified-users-lookup"
+											getOptionLabel={(verifiedUsers) =>
+												`${verifiedUsers.first_name} ${verifiedUsers.last_name}`
+											}
+											options={verifiedUsers}
+											isOptionEqualToValue={(option, value) =>
+												option.first_name === value.first_name
+											}
+											noOptionsText={"No valid users"}
+											renderOption={(props, verifiedUsers) => (
+												<Box component="li" {...props} key={verifiedUsers.id}>
+													{verifiedUsers.first_name} {verifiedUsers.last_name}
+												</Box>
+											)}
+											renderInput={(params) => (
+												<TextField {...params} label="Search for Users" />
+											)}
+										/>
+										<TextField
+											type="number"
+											label="Budget"
+											value={budget}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setBudget(event.target.value)}
+											variant="outlined"
+										/>
+										<TextField
+											type="text"
+											label="Picture Upload"
+											value={imageLink}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setImageLink(event.target.value)}
+											variant="outlined"
+										/>
+										<TextField
+											type="text"
+											label="Notes"
+											value={notes}
+											sx={{
+												marginBottom: 1,
+												width: 300,
+											}}
+											onChange={(event) => setNotes(event.target.value)}
+											variant="outlined"
+										/>
+									</Stack>
+								</form>
+							</Stack>
+						</Paper>
+					</Stack>
 				)}
 			</Box>
 

@@ -6,6 +6,9 @@ import viewAccountInfoReducer from './view.account.info.reducer';
 import allTasksReducer from './all.tasks.reducer';
 import incomingTasksReducer from './incoming.tasks.reducer';
 import viewTaskInfoReducer from './view.task.info.reducer';
+import allTagsReducer from './all.tags.reducer';
+import allLocationsReducer from './all.locations.reducer';
+import verifiedUsersReducer from './verified.users.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -20,6 +23,9 @@ const rootReducer = combineReducers({
   allTasksReducer,
   incomingTasksReducer,
   viewTaskInfoReducer,
+  allTagsReducer,
+  allLocationsReducer,
+  verifiedUsersReducer
 });
 
 export default rootReducer;
