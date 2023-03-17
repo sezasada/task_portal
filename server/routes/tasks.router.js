@@ -5,15 +5,86 @@ const {
 const pool = require("../modules/pool");
 const router = express.Router();
 
-// route to get all tasks that have been approved by a user- history of tasks
-router.get("/", rejectUnauthenticated, async (req, res) => {
+//route to GET all tags
+router.get("/tags", (req, res) => {
+  const queryText =  `SELECT * FROM "tags";`;
+
+  pool.query(queryText)
+  .then((response) => {
+    res.send(response.rows);
+  })
+  .catch((err) => {
+
+    console.log("error grabbing all tags", err)
+    res.sendStatus(500);
+  })
+
+});
+//route to GET all locations
+router.get("/locations", (req, res) => {
+  const queryText =  `SELECT * FROM "locations";`;
+
+  pool.query(queryText)
+  .then((response) => {
+    res.send(response.rows);
+  })
+  .catch((err) => {
+
+    console.log("error grabbing all locations", err)
+    res.sendStatus(500);
+  })
+
+});
+
+// route to GET all tasks that have been completed by a user - history of completed tasks
+router.get("/user_completed", rejectUnauthenticated, async (req, res) => {
   const userId = req.user.id;
 
   try {
     const queryText = `
-      SELECT * FROM "tasks"
-      WHERE "created_by_id" = $1
-      AND "is_approved" = TRUE 
+      SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id" AS "created_by_id", 
+    created_by."first_name" AS "created_by_first_name", 
+    created_by."last_name" AS "created_by_last_name", 
+    created_by."username" AS "created_by_username", 
+    created_by."phone_number" AS "created_by_phone_number", 
+    assigned_to."id" AS "assigned_to_id", 
+    assigned_to."first_name" AS "assigned_to_first_name", 
+    assigned_to."last_name" AS "assigned_to_last_name", 
+    assigned_to."username" AS "assigned_to_username", 
+    assigned_to."phone_number" AS "assigned_to_phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", 
+    json_agg(
+        json_build_object(
+            'tag_id', "tags"."id",
+            'tag_name', "tags"."tag_name"
+        )
+    ) AS "tags",
+    json_agg(
+        json_build_object(
+            'comment_id', "comments"."id",
+            'time_posted', "comments"."time_posted",
+            'content', "comments"."content",
+            'posted_by_first_name', posted_by."first_name",
+            'posted_by_last_name', posted_by."last_name",
+            'posted_by_username', posted_by."username",
+            'posted_by_phone_number', posted_by."phone_number"
+        )
+    ) AS "comments"
+FROM "tasks"
+JOIN "locations" ON "location_id" = "locations"."id"
+JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+JOIN "tags_per_task" ON "task_id" = "tasks"."id"
+JOIN "tags" ON "tag_id" = "tags"."id"
+JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+WHERE "status" = 'completed'
+AND "assigned_to_id" = $1 
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"; 
     `;
     const result = await pool.query(queryText, [userId]);
     res.send(result.rows);
@@ -22,12 +93,112 @@ router.get("/", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-// route to get all tasks that have been approved - for admin
+
+// route to GET all tasks that have been assigned to a user - user todo list
+router.get("/user_assigned_tasks", rejectUnauthenticated, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const queryText = `
+      SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id" AS "created_by_id", 
+    created_by."first_name" AS "created_by_first_name", 
+    created_by."last_name" AS "created_by_last_name", 
+    created_by."username" AS "created_by_username", 
+    created_by."phone_number" AS "created_by_phone_number", 
+    assigned_to."id" AS "assigned_to_id", 
+    assigned_to."first_name" AS "assigned_to_first_name", 
+    assigned_to."last_name" AS "assigned_to_last_name", 
+    assigned_to."username" AS "assigned_to_username", 
+    assigned_to."phone_number" AS "assigned_to_phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", 
+    json_agg(
+        json_build_object(
+            'tag_id', "tags"."id",
+            'tag_name', "tags"."tag_name"
+        )
+    ) AS "tags",
+    json_agg(
+        json_build_object(
+            'comment_id', "comments"."id",
+            'time_posted', "comments"."time_posted",
+            'content', "comments"."content",
+            'posted_by_first_name', posted_by."first_name",
+            'posted_by_last_name', posted_by."last_name",
+            'posted_by_username', posted_by."username",
+            'posted_by_phone_number', posted_by."phone_number"
+        )
+    ) AS "comments"
+FROM "tasks"
+JOIN "locations" ON "location_id" = "locations"."id"
+JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+JOIN "tags_per_task" ON "task_id" = "tasks"."id"
+JOIN "tags" ON "tag_id" = "tags"."id"
+JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+WHERE "status" = 'ongoing'
+AND "assigned_to_id" = $1 
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"; 
+    `;
+    const result = await pool.query(queryText, [userId]);
+    res.send(result.rows);
+  } catch (error) {
+    console.log("error getting task", error);
+    res.sendStatus(500);
+  }
+});
+// route to GET all tasks that have been approved by admin and are available to be selected for work
 router.get("/approved", rejectUnauthenticated, async (req, res) => {
   try {
     const queryText = `
-      SELECT * FROM "tasks"
-      WHERE "is_approved" = TRUE
+    SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id" AS "created_by_id", 
+    created_by."first_name" AS "created_by_first_name", 
+    created_by."last_name" AS "created_by_last_name", 
+    created_by."username" AS "created_by_username", 
+    created_by."phone_number" AS "created_by_phone_number", 
+    assigned_to."id" AS "assigned_to_id", 
+    assigned_to."first_name" AS "assigned_to_first_name", 
+    assigned_to."last_name" AS "assigned_to_last_name", 
+    assigned_to."username" AS "assigned_to_username", 
+    assigned_to."phone_number" AS "assigned_to_phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", 
+    json_agg(
+        json_build_object(
+            'tag_id', "tags"."id",
+            'tag_name', "tags"."tag_name"
+        )
+    ) AS "tags",
+    json_agg(
+        json_build_object(
+            'comment_id', "comments"."id",
+            'time_posted', "comments"."time_posted",
+            'content', "comments"."content",
+            'posted_by_first_name', posted_by."first_name",
+            'posted_by_last_name', posted_by."last_name",
+            'posted_by_username', posted_by."username",
+            'posted_by_phone_number', posted_by."phone_number"
+        )
+    ) AS "comments"
+FROM "tasks"
+JOIN "locations" ON "location_id" = "locations"."id"
+JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+JOIN "tags_per_task" ON "task_id" = "tasks"."id"
+JOIN "tags" ON "tag_id" = "tags"."id"
+JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+WHERE "is_approved" = true
+AND "status" = 'available'
+
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"; 
     `;
     const result = await pool.query(queryText);
     res.send(result.rows);
@@ -36,13 +207,53 @@ router.get("/approved", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-// route to get all tasks that have not been approved - for admin 
-router.get('/admin', rejectUnauthenticated, async (req, res) => {
-
+// route to GET all tasks that have not been approved - for admin
+router.get("/not_approved", rejectUnauthenticated, async (req, res) => {
   try {
     const queryText = `
-      SELECT * FROM "tasks"
-      WHERE "is_approved" = FALSE 
+    SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id" AS "created_by_id", 
+    created_by."first_name" AS "created_by_first_name", 
+    created_by."last_name" AS "created_by_last_name", 
+    created_by."username" AS "created_by_username", 
+    created_by."phone_number" AS "created_by_phone_number", 
+    assigned_to."id" AS "assigned_to_id", 
+    assigned_to."first_name" AS "assigned_to_first_name", 
+    assigned_to."last_name" AS "assigned_to_last_name", 
+    assigned_to."username" AS "assigned_to_username", 
+    assigned_to."phone_number" AS "assigned_to_phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", 
+    json_agg(
+        json_build_object(
+            'tag_id', "tags"."id",
+            'tag_name', "tags"."tag_name"
+        )
+    ) AS "tags",
+    json_agg(
+        json_build_object(
+            'comment_id', "comments"."id",
+            'time_posted', "comments"."time_posted",
+            'content', "comments"."content",
+            'posted_by_first_name', posted_by."first_name",
+            'posted_by_last_name', posted_by."last_name",
+            'posted_by_username', posted_by."username",
+            'posted_by_phone_number', posted_by."phone_number"
+        )
+    ) AS "comments"
+FROM "tasks"
+JOIN "locations" ON "location_id" = "locations"."id"
+JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+JOIN "tags_per_task" ON "task_id" = "tasks"."id"
+JOIN "tags" ON "tag_id" = "tags"."id"
+JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+WHERE "is_approved" = false
+
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"; 
     `;
     const result = await pool.query(queryText);
     res.send(result.rows);
@@ -51,17 +262,57 @@ router.get('/admin', rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-// route to get all tasks where status is in progress - basically any task that has been approved but is not complete for a specific user
-router.get("/user", rejectUnauthenticated, async (req, res) => {
+// route to GET all tasks that have been approved by admin - for admin to track all compelted and ongoing tasks - master list
+router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
   const userId = req.user.id;
 
   try {
     const queryText = `
-      SELECT * FROM "tasks"
-      WHERE "assigned_to_id" = $1
-      AND "status" = 'in progress'
+    SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id" AS "created_by_id", 
+    created_by."first_name" AS "created_by_first_name", 
+    created_by."last_name" AS "created_by_last_name", 
+    created_by."username" AS "created_by_username", 
+    created_by."phone_number" AS "created_by_phone_number", 
+    assigned_to."id" AS "assigned_to_id", 
+    assigned_to."first_name" AS "assigned_to_first_name", 
+    assigned_to."last_name" AS "assigned_to_last_name", 
+    assigned_to."username" AS "assigned_to_username", 
+    assigned_to."phone_number" AS "assigned_to_phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", 
+    json_agg(
+        json_build_object(
+            'tag_id', "tags"."id",
+            'tag_name', "tags"."tag_name"
+        )
+    ) AS "tags",
+    json_agg(
+        json_build_object(
+            'comment_id', "comments"."id",
+            'time_posted', "comments"."time_posted",
+            'content', "comments"."content",
+            'posted_by_first_name', posted_by."first_name",
+            'posted_by_last_name', posted_by."last_name",
+            'posted_by_username', posted_by."username",
+            'posted_by_phone_number', posted_by."phone_number"
+        )
+    ) AS "comments"
+FROM "tasks"
+JOIN "locations" ON "location_id" = "locations"."id"
+JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+JOIN "tags_per_task" ON "task_id" = "tasks"."id"
+JOIN "tags" ON "tag_id" = "tags"."id"
+JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+WHERE "is_approved" = true
+
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"; 
     `;
-    const result = await pool.query(queryText, [userId]);
+    const result = await pool.query(queryText);
     res.send(result.rows);
   } catch (error) {
     console.log("error getting task", error);
@@ -69,6 +320,7 @@ router.get("/user", rejectUnauthenticated, async (req, res) => {
   }
 });
 
+//post route to add new task
 router.post("/", rejectUnauthenticated, async (req, res) => {
   try {
     const {
@@ -83,6 +335,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       due_date,
       is_approved,
       assigned_to_id,
+      photo_url,
     } = req.body;
     const tags = req.body.tags;
     const created_by_id = req.user.id;
@@ -100,7 +353,8 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
         "is_time_sensitive",
         "due_date",
         "is_approved"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        "photo_url"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,$13)
       RETURNING "id"
     `;
 
@@ -117,6 +371,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       is_time_sensitive,
       due_date,
       is_approved,
+      photo_url,
     ]);
 
     const tags_per_task = `
@@ -128,15 +383,19 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     `;
 
     for (let tag of tags) {
-      await pool.query(tags_per_task, [
-        result.rows[0].id, tag
-      ])
+      await pool.query(tags_per_task, [result.rows[0].id, tag]);
     }
     res.send(result.rows[0]);
   } catch (error) {
     console.log("Error creating task", error);
     res.sendStatus(500);
   }
+});
+
+//post route to add comments to tasks
+router.post(`/post_comment`, (req, res) => {
+
+
 });
 
 /*BASIC USER PUT ROUTES*/
