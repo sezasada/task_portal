@@ -126,4 +126,17 @@ router.get('/unverified', (req, res) => {
     });
 });
 
+// Grab all verified users
+router.get('/verified', (req, res) => {
+
+  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = TRUE;`;
+  pool
+    .query(queryText)
+    .then((results) => res.send(results.rows))
+    .catch((err) => {
+      console.log('Could not retrieve verified users: ', err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
