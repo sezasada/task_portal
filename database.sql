@@ -55,6 +55,12 @@ CREATE TABLE "comments" (
 	"posted_by_id" int NOT NULL REFERENCES "user"("id")
 );
 
+CREATE TABLE "photos" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"task_id" int NOT NULL REFERENCES "tasks"("id"),
+	"photo_url" TEXT NOT NULL 
+);
+
 INSERT INTO "tags" ("tag_name")
 VALUES ('maintenance'), ('cleaning'), ('farm work'), ('administrative');
 

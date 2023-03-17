@@ -7,33 +7,31 @@ const router = express.Router();
 
 //route to GET all tags
 router.get("/tags", (req, res) => {
-  const queryText =  `SELECT * FROM "tags";`;
+  const queryText = `SELECT * FROM "tags";`;
 
-  pool.query(queryText)
-  .then((response) => {
-    res.send(response.rows);
-  })
-  .catch((err) => {
-
-    console.log("error grabbing all tags", err)
-    res.sendStatus(500);
-  })
-
+  pool
+    .query(queryText)
+    .then((response) => {
+      res.send(response.rows);
+    })
+    .catch((err) => {
+      console.log("error grabbing all tags", err);
+      res.sendStatus(500);
+    });
 });
 //route to GET all locations
 router.get("/locations", (req, res) => {
-  const queryText =  `SELECT * FROM "locations";`;
+  const queryText = `SELECT * FROM "locations";`;
 
-  pool.query(queryText)
-  .then((response) => {
-    res.send(response.rows);
-  })
-  .catch((err) => {
-
-    console.log("error grabbing all locations", err)
-    res.sendStatus(500);
-  })
-
+  pool
+    .query(queryText)
+    .then((response) => {
+      res.send(response.rows);
+    })
+    .catch((err) => {
+      console.log("error grabbing all locations", err);
+      res.sendStatus(500);
+    });
 });
 
 // route to GET all tasks that have been completed by a user - history of completed tasks
@@ -322,6 +320,7 @@ GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", 
 
 //post route to add new task
 router.post("/", rejectUnauthenticated, async (req, res) => {
+  console.log('beginning of post route');
   try {
     const {
       title,
@@ -335,8 +334,9 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       due_date,
       is_approved,
       assigned_to_id,
-      photo_url,
+      
     } = req.body;
+    const photos = req.body.photos;
     const tags = req.body.tags;
     const created_by_id = req.user.id;
     const queryText = `
@@ -353,11 +353,11 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
         "is_time_sensitive",
         "due_date",
         "is_approved"
-        "photo_url"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,$13)
+
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-
+console.log('before first post');
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -370,9 +370,18 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       time_created,
       is_time_sensitive,
       due_date,
-      is_approved,
-      photo_url,
+      is_approved
     ]);
+
+    const add_photos_query = 
+    `INSERT INTO "photos" (
+      "task_id", 
+      "photo_url"
+      )VALUES ($1, $2);`;
+
+    for (let photo of photos) {
+      await pool.query(add_photos_query, [result.rows[0].id, photo]);
+    }
 
     const tags_per_task = `
     INSERT INTO "tags_per_task" (
@@ -401,14 +410,13 @@ router.post(`/post_comment`, (req, res) => {
   const queryText = `INSERT INTO comments (task_id, content, posted_by_id)
   VALUES ($1, $2, $3);`;
 
-  pool.query(queryText, [task_id, content, posted_by_id])
-  .then((response) => res.sendStatus(200))
-  .catch((err) => {
-    console.log("error adding comment", err);
-    res.sendStatus(500);
-  })
-
-
+  pool
+    .query(queryText, [task_id, content, posted_by_id])
+    .then((response) => res.sendStatus(200))
+    .catch((err) => {
+      console.log("error adding comment", err);
+      res.sendStatus(500);
+    });
 });
 
 /*BASIC USER PUT ROUTES*/
@@ -556,12 +564,13 @@ router.put(`/admin_edit_task`, async (req, res) => {
   let is_time_sensitive = req.body.is_time_sensitive;
   let due_date = req.body.due_date;
   let task_id = req.body.task_id;
+  let photos = req.body.photos;
 
   try {
+    //first edit the tasks table
     const queryText = `UPDATE "tasks"
   SET "title" =$1, "notes" =$2, "has_budget" =$3, "budget" =$4, "location_id" =$5, "is_time_sensitive" =$6, "due_date" =$7
   WHERE "id" = $8;`;
-
     await pool.query(queryText, [
       title,
       notes,
@@ -573,9 +582,27 @@ router.put(`/admin_edit_task`, async (req, res) => {
       task_id,
     ]);
 
+    //then delete all photos in the photos table with that task_id
+    const deletePhotosQuery = `DELETE FROM "photos" 
+    WHERE "task_id" = $1;`;
+    await pool.query(deletePhotosQuery, [task_id]);
+
+    //then add all updated photos to the photos table
+    const add_photos_query = 
+    `INSERT INTO "photos" (
+      "task_id", 
+      "photo_url"
+      )VALUES ($1, $2);`;
+
+    for (let photo of photos) {
+      await pool.query(add_photos_query, [task_id, photo]);
+    }
+
+    //then delete all current tags related to this task_id on the tags_per_task table
     const queryDelete = `DELETE FROM "tags_per_task" WHERE "task_id" = $1`;
     await pool.query(queryDelete, [task_id]);
 
+    //then add all updated tags for this task to the tags_per_task table
     const queryText2 = `INSERT INTO "tags_per_task" ("task_id", "tag_id")
   VALUES ($1, $2)`;
     for (let tag of tags) {
@@ -595,6 +622,11 @@ router.delete("/tasks/:id", async (req, res) => {
     if (task.rows.length === 0) {
       console.log("no task is found");
     }
+    //delete related photos from photos table
+    await pool.query(`DELETE FROM "photos" WHERE "task_id" = $1`, [id]);
+    //delete related tags from tags_per_task table
+    await pool.query(`DELETE FROM "tags_per_task" WHERE "task_id" = $1`, [id]);
+    //delete task from task table
     await pool.query(`DELETE FROM "tasks" WHERE id = $1`, [id]);
     console.log("task is deleted successfully");
     return res.sendStatus(204);
