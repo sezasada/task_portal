@@ -108,7 +108,9 @@ function UserPage() {
 											}}
 										>
 											<TableCell>{task.title}</TableCell>
-											<TableCell>{task.created_by_id}</TableCell>
+											<TableCell>
+												{task.created_by_first_name} {task.created_by_last_name}
+											</TableCell>
 											<TableCell>{task.time_created}</TableCell>
 										</TableRow>
 									))}
@@ -159,11 +161,12 @@ function UserPage() {
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Location: {infoOfSpecificTask.location_id}
+											Location: {infoOfSpecificTask.location_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Created By: {infoOfSpecificTask.created_by_id}
+											Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+											{infoOfSpecificTask.created_by_last_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
@@ -228,6 +231,7 @@ function UserPage() {
 											padding: "20px",
 										}}
 									>
+										<pre>{JSON.stringify(infoOfSpecificUser)}</pre>
 										<Typography
 											variant="h4"
 											component="h2"
@@ -284,7 +288,7 @@ function UserPage() {
 											}}
 										>
 											<TableCell>{task.title}</TableCell>
-											<TableCell>{task.location_id}</TableCell>
+											<TableCell>{task.location_name}</TableCell>
 											<TableCell>{task.due_date}</TableCell>
 											<TableCell>{task.status}</TableCell>
 										</TableRow>
@@ -336,11 +340,12 @@ function UserPage() {
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Location: {infoOfSpecificTask.location_id}
+											Location: {infoOfSpecificTask.location_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
-											Created By: {infoOfSpecificTask.created_by_id}
+											Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+											{infoOfSpecificTask.created_by_last_name}
 										</Typography>
 										<br />
 										<Typography variant="h6" component="h4">
