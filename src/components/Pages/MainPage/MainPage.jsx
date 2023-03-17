@@ -36,14 +36,16 @@ function UserPage() {
 	const allApprovedTasks = useSelector((store) => store.allTasksReducer);
 
 	// Access redux store for all tags
-	// const allTags = useSelector((store) => store.allTagsReducer);
+	const allTags = useSelector((store) => store.allTagsReducer);
 
-	const allTags = [
-		{ id: 1, tag_name: "maintenance" },
-		{ id: 2, tag_name: "cleaning" },
-		{ id: 3, tag_name: "farm work" },
-		{ id: 4, tag_name: "administrative" },
-	];
+	const specificTaskTags = infoOfSpecificTask.tags;
+
+	// const allTags = [
+	// 	{ id: 1, tag_name: "maintenance" },
+	// 	{ id: 2, tag_name: "cleaning" },
+	// 	{ id: 3, tag_name: "farm work" },
+	// 	{ id: 4, tag_name: "administrative" },
+	// ];
 
 	// Manage change in tabs
 	const [tabIndex, setTabIndex] = useState(0);
@@ -68,6 +70,7 @@ function UserPage() {
 		dispatch({ type: "FETCH_UNVERIFIED_USERS" });
 		dispatch({ type: "FETCH_INCOMING_TASKS" });
 		dispatch({ type: "FETCH_ALL_TASKS" });
+		dispatch({ type: "FETCH_ALL_TAGS" });
 	}, []);
 
 	return (
@@ -85,7 +88,7 @@ function UserPage() {
 						<h2>Welcome, {user.first_name}!</h2>
 						<p>Your ID is: {user.id}</p>
 						<Paper sx={{ p: 3 }}>
-							{/* <pre>{JSON.stringify(incomingTasks)}</pre> */}
+							<pre>{JSON.stringify(incomingTasks)}</pre>
 							<Typography>Tasks awaiting approval</Typography>
 							<Table>
 								<TableHead>
@@ -143,9 +146,13 @@ function UserPage() {
 											Title: {infoOfSpecificTask.title}
 										</Typography>
 										<br />
-										<Typography variant="h6" component="h4">
-											Tags: {infoOfSpecificTask.tags}
-										</Typography>
+										<ul>
+											Tags:
+											{specificTaskTags &&
+												specificTaskTags.map((tag) => (
+													<li key={tag.tag_id}>{tag.tag_name}</li>
+												))}
+										</ul>
 										<br />
 										<Typography variant="h6" component="h4">
 											Budget: ${infoOfSpecificTask.budget}
@@ -262,7 +269,6 @@ function UserPage() {
 								<TableHead>
 									<TableRow>
 										<TableCell>Title</TableCell>
-										<TableCell>Tags</TableCell>
 										<TableCell>Location</TableCell>
 										<TableCell>Due Date</TableCell>
 										<TableCell>Status</TableCell>
@@ -278,7 +284,6 @@ function UserPage() {
 											}}
 										>
 											<TableCell>{task.title}</TableCell>
-											<TableCell>{task.tags}</TableCell>
 											<TableCell>{task.location_id}</TableCell>
 											<TableCell>{task.due_date}</TableCell>
 											<TableCell>{task.status}</TableCell>
@@ -318,9 +323,13 @@ function UserPage() {
 											Title: {infoOfSpecificTask.title}
 										</Typography>
 										<br />
-										<Typography variant="h6" component="h4">
-											Tags: {infoOfSpecificTask.tags}
-										</Typography>
+										<ul>
+											Tags:
+											{specificTaskTags &&
+												specificTaskTags.map((tag) => (
+													<li key={tag.tag_id}>{tag.tag_name}</li>
+												))}
+										</ul>
 										<br />
 										<Typography variant="h6" component="h4">
 											Budget: ${infoOfSpecificTask.budget}
