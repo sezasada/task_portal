@@ -3,6 +3,9 @@ import errors from './errors.reducer';
 import user from './user.reducer';
 import unverifiedUsersReducer from './unverified.users.reducer';
 import viewAccountInfoReducer from './view.account.info.reducer';
+import allTasksReducer from './all.tasks.reducer';
+import incomingTasksReducer from './incoming.tasks.reducer';
+import viewTaskInfoReducer from './view.task.info.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -14,6 +17,9 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
   unverifiedUsersReducer,
   viewAccountInfoReducer,
+  allTasksReducer,
+  incomingTasksReducer,
+  viewTaskInfoReducer,
 });
 
 export default rootReducer;
