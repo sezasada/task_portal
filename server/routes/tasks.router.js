@@ -395,6 +395,9 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 //post route to add comments to tasks
 router.post(`/post_comment`, (req, res) => {
 
+  const queryText = `INSERT INTO comments (task_id, content, posted_by_id)
+  VALUES (5, 'Make sure to wear gloves and a mask!', 1);`;
+
 
 });
 
