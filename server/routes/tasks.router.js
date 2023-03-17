@@ -193,7 +193,7 @@ JOIN "tags" ON "tag_id" = "tags"."id"
 JOIN "comments" ON "tasks"."id" = "comments"."task_id"
 JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
 WHERE "is_approved" = true
-AND "status" = 'available'
+
 
 GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
     created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
@@ -394,9 +394,19 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 
 //post route to add comments to tasks
 router.post(`/post_comment`, (req, res) => {
+  let task_id = req.body.task_id;
+  let content = req.body.content;
+  let posted_by_id = req.user.id;
 
   const queryText = `INSERT INTO comments (task_id, content, posted_by_id)
-  VALUES (5, 'Make sure to wear gloves and a mask!', 1);`;
+  VALUES ($1, $2, $3);`;
+
+  pool.query(queryText, [task_id, content, posted_by_id])
+  .then((response) => res.sendStatus(200))
+  .catch((err) => {
+    console.log("error adding comment", err);
+    res.sendStatus(500);
+  })
 
 
 });
