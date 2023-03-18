@@ -44,10 +44,24 @@ function* fetchVerifiedUsersSaga() {
   }
 }
 
+function* reset_password(action) {
+
+  try {
+    let email = action.payload;
+    
+    const response = yield axios.put('/api/user/reset_password', email);
+    console.log(response);
+    //yield put({ type: 'SET_VERIFIED_USERS', payload: response.data });
+  } catch (error) {
+    console.log('reset password failed', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('FETCH_UNVERIFIED_USERS', fetchUnverifiedUsersSaga);
   yield takeLatest('FETCH_VERIFIED_USERS', fetchVerifiedUsersSaga);
+  yield takeLatest('RESET_PASSWORD', reset_password);
 }
 
 export default userSaga;

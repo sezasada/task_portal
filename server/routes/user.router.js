@@ -7,6 +7,9 @@ const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
+const crypto = require('crypto');
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -137,6 +140,45 @@ router.get('/verified', (req, res) => {
       console.log('Could not retrieve verified users: ', err);
       res.sendStatus(500);
     });
+});
+
+//router for reset password
+router.put('/reset_password', async (req, res) => {
+
+  try {
+  let randomToken = crypto.randomBytes(20).toString('hex');
+  console.log("randomToken", randomToken);
+  const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  console.log("timestamp", timestamp);
+  const email = req.body.email;
+
+  const queryText = `INSERT INTO password_reset_tokens (email, token, timestamp) 
+  VALUES ($1, $2, $3) RETURNING token;`
+
+  let response = await pool.query(queryText, [email, randomToken, timestamp]);
+  let token = response.rows[0].token;
+
+  const msg = {
+    to: email, // Change to your recipient
+    from: "kathrynszombatfalvy@gmail.com", // Change to your verified sender
+    subject: 'TESTING reset password',
+    text: 'hi!',
+    html: '<strong>oh yay! this is the token </strong>', token,
+  }
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log('Email sent')
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+    
+
+  }catch(error) {
+    console.log("error with reset password", error);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;
