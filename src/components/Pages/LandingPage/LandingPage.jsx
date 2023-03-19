@@ -59,6 +59,13 @@ function LandingPage() {
             <button className="btn btn_sizeSm" onClick={onLogin}>
               Login
             </button>
+
+            <button
+          type="button"
+          className="btn btn_sizeSm"
+          onClick={() => {
+            history.push("/request_reset");
+          }}>Reset Password</button>
           </center>
         </div>
       </div>

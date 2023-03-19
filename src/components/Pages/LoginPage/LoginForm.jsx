@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 function LoginForm() {
+  const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const errors = useSelector(store => store.errors);
@@ -59,6 +61,12 @@ function LoginForm() {
       <div>
         <input className="btn" type="submit" name="submit" value="Log In" />
       </div>
+      <button
+          type="button"
+          className="btn btn_sizeSm"
+          onClick={() => {
+            history.push("/request_reset");
+          }}>Reset Password</button>
     </form>
   );
 }

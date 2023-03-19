@@ -10,9 +10,7 @@ const router = express.Router();
 const crypto = require('crypto');
 require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
-const apiKey = process.env.SENDGRID_API_KEY;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-console.log("sendgrid key", apiKey);
 const moment = require('moment');
 
 // Handles Ajax request for user information if user is authenticated
