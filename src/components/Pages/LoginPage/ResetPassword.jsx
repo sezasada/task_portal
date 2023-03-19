@@ -3,11 +3,25 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { TokenSharp } from "@mui/icons-material";
 
 function ResetPassword() {
   const history = useHistory();
   const dispatch = useDispatch();
   const [newPassword, setNewPassword] = useState('');
+  const [isTokenValid, setIsTokenValid] = useState(false);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const token = url.href.slice((url.href.indexOf("?") + 1));
+    console.log(token); 
+
+    dispatch({type: "CHECK_IF_VALID", payload: {token: token, history: history}});
+  }, []);
+
+
+
   const handleChange = (event) => {
     setNewPassword(event.target.value);
   }

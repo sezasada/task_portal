@@ -8,8 +8,12 @@ const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
 const crypto = require('crypto');
-const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+require('dotenv').config();
+const sgMail = require('@sendgrid/mail');
+const apiKey = process.env.SENDGRID_API_KEY;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+console.log("sendgrid key", apiKey);
+const moment = require('moment');
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -142,14 +146,11 @@ router.get('/verified', (req, res) => {
     });
 });
 
-//router for reset password
+//initiate reset password. generate random token and send reset email link
 router.put('/reset_password', async (req, res) => {
-
   try {
   let randomToken = crypto.randomBytes(20).toString('hex');
-  console.log("randomToken", randomToken);
   const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  console.log("timestamp", timestamp);
   const email = req.body.email;
 
   const queryText = `INSERT INTO password_reset_tokens (email, token, timestamp) 
@@ -158,14 +159,21 @@ router.put('/reset_password', async (req, res) => {
   let response = await pool.query(queryText, [email, randomToken, timestamp]);
   let token = response.rows[0].token;
 
+  let link = `http://localhost:3000/#/reset?${token}`;
+
   const msg = {
-    to: email, // Change to your recipient
-    from: "kathrynszombatfalvy@gmail.com", // Change to your verified sender
-    subject: 'TESTING reset password',
-    text: 'hi!',
-    html: '<strong>oh yay! this is the token </strong>', token,
+    to: email, 
+    from: "kathrynszombatfalvy@gmail.com",
+    subject: 'FIDRRV reset password',
+    html: `
+    <p>Hello,</p>
+    <p>Please click the following link to reset your password:</p>
+    <a href="${link}">Click</a>
+    <p>Thank you.</p>`, 
+
+    
   }
-  console.log("email info", msg);
+
   sgMail
     .send(msg)
     .then(() => {
@@ -175,14 +183,13 @@ router.put('/reset_password', async (req, res) => {
       console.error(error)
     })
     
-
   }catch(error) {
     console.log("error with reset password", error);
     res.sendStatus(500);
   }
 });
 
-
+//router to encrypt new password and save it to the user table
 router.put('/set_new_password', async (req, res) => {
 
   try {
@@ -195,6 +202,44 @@ router.put('/set_new_password', async (req, res) => {
   WHERE "id" = 2;`;
 
   let response = await pool.query(queryText, [password]);
+ 
+  }catch(error) {
+    console.log("error with reset password", error);
+    res.sendStatus(500);
+  }
+});
+
+router.put('/check_if_valid', async (req, res) => {
+
+
+  try {
+    console.log(req.body);
+  const token = req.body.token;
+
+  const queryText = `SELECT * FROM password_reset_tokens WHERE token = $1;`;
+
+  let response = await pool.query(queryText, [token]);
+  console.log(response.rows)
+  
+  if (response.rows.length < 1){
+    //no matching token found
+    console.log("no matching token found");
+    res.send("invalid");
+  }else{
+    const timestamp = response.rows[0].timestamp;
+    const time_expired = moment(timestamp, 'YYYY-MM-DD HH:mm:ss').add(1, 'day').format('YYYY-MM-DD HH:mm:ss');
+    console.log(time_expired);
+    if (moment().isAfter(moment(time_expired,'YYYY-MM-DD HH:mm:ss'))){
+      //link is expired
+      console.log("link is expired :(")
+      res.send("expired");
+    } else{
+      //link is not expired, you can reset your password
+      console.log("you can update password!")
+      res.send("valid");
+    }
+    
+  }
  
   }catch(error) {
     console.log("error with reset password", error);
