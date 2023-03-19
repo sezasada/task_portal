@@ -18,6 +18,7 @@ import MainPage from "./Pages/MainPage/MainPage";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import LoginPage from "./Pages/LoginPage/LoginPage";
 import RegisterPage from "./Pages/RegisterPage/RegisterPage";
+import ResetPassword from "./Pages/LoginPage/ResetPassword";
 
 import "./App.css";
 
@@ -97,7 +98,12 @@ function App() {
 						<h1>404</h1>
 					</Route>
 				</Switch>
+
+				<Route path="/reset">
+					<ResetPassword />
+				</Route>
 				<Footer />
+				
 			</div>
 		</Router>
 	);

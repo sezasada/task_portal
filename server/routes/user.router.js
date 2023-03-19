@@ -165,6 +165,7 @@ router.put('/reset_password', async (req, res) => {
     text: 'hi!',
     html: '<strong>oh yay! this is the token </strong>', token,
   }
+  console.log("email info", msg);
   sgMail
     .send(msg)
     .then(() => {
@@ -175,6 +176,26 @@ router.put('/reset_password', async (req, res) => {
     })
     
 
+  }catch(error) {
+    console.log("error with reset password", error);
+    res.sendStatus(500);
+  }
+});
+
+
+router.put('/set_new_password', async (req, res) => {
+
+  try {
+    console.log(req.body);
+  const password = encryptLib.encryptPassword(req.body.password);
+  //const id = req.body.id
+
+  const queryText = `UPDATE "user"
+  SET "password" = $1 
+  WHERE "id" = 2;`;
+
+  let response = await pool.query(queryText, [password]);
+ 
   }catch(error) {
     console.log("error with reset password", error);
     res.sendStatus(500);

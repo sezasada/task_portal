@@ -57,11 +57,28 @@ function* reset_password(action) {
   }
 }
 
+function* set_new_password(action) {
+  try {
+    let password = action.payload.newPassword;
+    console.log("password", password);
+
+    
+    const response = yield axios.put('/api/user/set_new_password', {password});
+    console.log(response);
+  
+  } catch (error) {
+    console.log('reset password failed', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('FETCH_UNVERIFIED_USERS', fetchUnverifiedUsersSaga);
   yield takeLatest('FETCH_VERIFIED_USERS', fetchVerifiedUsersSaga);
   yield takeLatest('RESET_PASSWORD', reset_password);
+  yield takeLatest('NEW_PASSWORD', set_new_password);
+
+  
 }
 
 export default userSaga;
