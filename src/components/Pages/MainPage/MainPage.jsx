@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import LogOutButton from "../../Shared/LogOutButton/LogOutButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { Tab, Tabs } from "@mui/material";
 import { Box } from "@mui/system";
 import AdminDashboard from "./TabComponents/Admin/AdminDashboard";
 import AdminManageUsers from "./TabComponents/Admin/AdminManageUsers";
@@ -11,11 +9,8 @@ import AdminManageTasks from "./TabComponents/Admin/AdminManageTasks";
 function UserPage() {
 	const dispatch = useDispatch();
 
-	// Manage change in tabs
-	const [tabIndex, setTabIndex] = useState(0);
-	const handleTabChange = (event, newTabIndex) => {
-		setTabIndex(newTabIndex);
-	};
+	// Access tab index reducer
+	const tabIndex = useSelector((store) => store.tabIndexReducer);
 
 	// Grab all needed data on page load
 	useEffect(() => {
@@ -30,18 +25,10 @@ function UserPage() {
 	return (
 		<div className="container">
 			<Box>
-				<Tabs value={tabIndex} onChange={handleTabChange}>
-					<Tab label="Dashboard" />
-					<Tab label="Manage Users" />
-					<Tab label="Manage Tasks" />
-				</Tabs>
-			</Box>
-			<Box>
 				{tabIndex === 0 && <AdminDashboard />}
 				{tabIndex === 1 && <AdminManageUsers />}
 				{tabIndex === 2 && <AdminManageTasks />}
 			</Box>
-			<LogOutButton className="btn" />
 		</div>
 	);
 }
