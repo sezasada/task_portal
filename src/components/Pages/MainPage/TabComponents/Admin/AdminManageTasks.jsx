@@ -15,7 +15,15 @@ import {
 	TextField,
 	Autocomplete,
 	Box,
+	InputAdornment,
+	OutlinedInput,
+	InputLabel,
+	FormControl,
 } from "@mui/material";
+import moment from "moment";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function AdminManageTasks() {
 	const dispatch = useDispatch();
@@ -52,6 +60,35 @@ export default function AdminManageTasks() {
 	const [userLookupInput, setUserLookupInput] = useState("");
 	const [imageLink, setImageLink] = useState("");
 	const [notes, setNotes] = useState("");
+	const [dueDate, setDueDate] = useState("");
+
+	// Due date in valid format
+	const validDate = moment(dueDate).format("YYYY-MM-DD");
+
+	function determineIfHasBudget(num) {
+		let has_budget = false;
+		if (num > 0) {
+			has_budget = true;
+		}
+		return has_budget;
+	}
+
+	function handleSubmitTask(event) {
+		event.preventDefault();
+		const newTaskObj = {
+			title: title,
+			notes: notes,
+			has_budget: determineIfHasBudget(budget),
+			budget: Number(budget),
+			location_id: location.id,
+			status: "Available",
+			is_time_sensitive: moment(validDate).isValid(),
+			due_date: moment(validDate).isValid() ? validDate : "",
+			assigned_to_id: userLookup?.id,
+		};
+		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
+		console.log(newTaskObj);
+	}
 
 	const [state, setState] = useState({
       file_url: null,
@@ -106,7 +143,10 @@ export default function AdminManageTasks() {
 							>
 								<TableCell>{task.title}</TableCell>
 								<TableCell>{task.location_name}</TableCell>
-								<TableCell>{task.due_date}</TableCell>
+								<TableCell>
+									{" "}
+									{moment(task.due_date).format("MMMM Do YYYY, h:mm a")}
+								</TableCell>
 								<TableCell>{task.status}</TableCell>
 							</TableRow>
 						))}
@@ -182,7 +222,7 @@ export default function AdminManageTasks() {
 			<Paper>
 				<Stack>
 					<Typography>Create a New Task</Typography>
-					<form>
+					<form onSubmit={handleSubmitTask}>
 						<Stack>
 							<TextField
 								required
@@ -221,7 +261,7 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Search for Tags" />
+									<TextField {...params} label="Add Tags" />
 								)}
 							/>
 							<Autocomplete
@@ -250,7 +290,7 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Search for Locations" />
+									<TextField {...params} label="Add Location" />
 								)}
 							/>
 							<Autocomplete
@@ -279,21 +319,35 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Search for Users" />
+									<TextField {...params} label="Assign to User" />
 								)}
 							/>
+							<FormControl>
+								<InputLabel htmlFor="budget-input">Budget</InputLabel>
+								<OutlinedInput
+									type="number"
+									id="budget-input"
+									label="Budget"
+									value={budget}
+									sx={{
+										marginBottom: 1,
+										width: 300,
+									}}
+									onChange={(event) => setBudget(event.target.value)}
+									variant="outlined"
+									startAdornment={
+										<InputAdornment position="start">$</InputAdornment>
+									}
+								/>
+								<LocalizationProvider dateAdapter={AdapterMoment}>
+									<DatePicker
+										sx={{ marginBottom: 1, width: 300 }}
+										value={dueDate}
+										onChange={(newValue) => setDueDate(newValue)}
+									/>
+								</LocalizationProvider>
+							</FormControl>
 							<TextField
-								type="number"
-								label="Budget"
-								value={budget}
-								sx={{
-									marginBottom: 1,
-									width: 300,
-								}}
-								onChange={(event) => setBudget(event.target.value)}
-								variant="outlined"
-							/>
-							{/* <TextField
 								type="text"
 								label="Picture Upload"
 								value={imageLink}
@@ -324,6 +378,16 @@ export default function AdminManageTasks() {
 								onChange={(event) => setNotes(event.target.value)}
 								variant="outlined"
 							/>
+							<Button
+								variant="contained"
+								type="submit"
+								sx={{
+									marginBottom: 1,
+									width: 300,
+								}}
+							>
+								Submit
+							</Button>
 						</Stack>
 					</form>
 				</Stack>
