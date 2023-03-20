@@ -357,7 +357,7 @@ export default function AdminManageTasks() {
 								}}
 								onChange={(event) => setImageLink(event.target.value)}
 								variant="outlined"
-							/> */}
+							/>
 							<p>Upload New File</p>
             { /* This just sets up the window.cloudinary widget */ }
             {useScript('https://widget.cloudinary.com/v2.0/global/all.js')}
