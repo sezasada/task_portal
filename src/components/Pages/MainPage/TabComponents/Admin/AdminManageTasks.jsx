@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Stack } from "@mui/system";
+import { useScript } from '../../../../../hooks/useScript';
 import {
 	Paper,
 	Typography,
@@ -14,7 +15,15 @@ import {
 	TextField,
 	Autocomplete,
 	Box,
+	InputAdornment,
+	OutlinedInput,
+	InputLabel,
+	FormControl,
 } from "@mui/material";
+import moment from "moment";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function AdminManageTasks() {
 	const dispatch = useDispatch();
@@ -51,6 +60,64 @@ export default function AdminManageTasks() {
 	const [userLookupInput, setUserLookupInput] = useState("");
 	const [imageLink, setImageLink] = useState("");
 	const [notes, setNotes] = useState("");
+	const [dueDate, setDueDate] = useState("");
+
+	// Due date in valid format
+	const validDate = moment(dueDate).format("YYYY-MM-DD");
+
+	function determineIfHasBudget(num) {
+		let has_budget = false;
+		if (num > 0) {
+			has_budget = true;
+		}
+		return has_budget;
+	}
+
+	function handleSubmitTask(event) {
+		event.preventDefault();
+		const newTaskObj = {
+			title: title,
+			notes: notes,
+			has_budget: determineIfHasBudget(budget),
+			budget: Number(budget),
+			location_id: location.id,
+			status: "Available",
+			is_time_sensitive: moment(validDate).isValid(),
+			due_date: moment(validDate).isValid() ? validDate : "",
+			assigned_to_id: userLookup?.id,
+		};
+		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
+		console.log(newTaskObj);
+	}
+
+	const [state, setState] = useState({
+      file_url: null,
+   });
+
+	const openWidget = () => {
+      // Currently there is a bug with the Cloudinary <Widget /> component
+      // where the button defaults to a non type="button" which causes the form
+      // to submit when clicked. So for now just using the standard widget that
+      // is available on window.cloudinary
+      // See docs: https://cloudinary.com/documentation/upload_widget#look_and_feel_customization
+      !!window.cloudinary && window.cloudinary.createUploadWidget(
+         {
+            sources: ['local', 'url', 'camera'],
+            cloudName: process.env.REACT_APP_CLOUDINARY_NAME,
+            uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+         },
+         (error, result) => {
+            console.log(result);
+            if (!error && result && result.event === "success") {
+               // When an upload is successful, save the uploaded URL to local state!
+               setState({
+                  ...state,
+                  file_url: result.info.secure_url
+               })
+            }
+         },
+      ).open();
+   }
 
 	return (
 		<Stack spacing={3}>
@@ -76,7 +143,10 @@ export default function AdminManageTasks() {
 							>
 								<TableCell>{task.title}</TableCell>
 								<TableCell>{task.location_name}</TableCell>
-								<TableCell>{task.due_date}</TableCell>
+								<TableCell>
+									{" "}
+									{moment(task.due_date).format("MMMM Do YYYY, h:mm a")}
+								</TableCell>
 								<TableCell>{task.status}</TableCell>
 							</TableRow>
 						))}
@@ -152,7 +222,7 @@ export default function AdminManageTasks() {
 			<Paper>
 				<Stack>
 					<Typography>Create a New Task</Typography>
-					<form>
+					<form onSubmit={handleSubmitTask}>
 						<Stack>
 							<TextField
 								required
@@ -191,7 +261,7 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Search for Tags" />
+									<TextField {...params} label="Add Tags" />
 								)}
 							/>
 							<Autocomplete
@@ -220,7 +290,7 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Search for Locations" />
+									<TextField {...params} label="Add Location" />
 								)}
 							/>
 							<Autocomplete
@@ -249,20 +319,34 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Search for Users" />
+									<TextField {...params} label="Assign to User" />
 								)}
 							/>
-							<TextField
-								type="number"
-								label="Budget"
-								value={budget}
-								sx={{
-									marginBottom: 1,
-									width: 300,
-								}}
-								onChange={(event) => setBudget(event.target.value)}
-								variant="outlined"
-							/>
+							<FormControl>
+								<InputLabel htmlFor="budget-input">Budget</InputLabel>
+								<OutlinedInput
+									type="number"
+									id="budget-input"
+									label="Budget"
+									value={budget}
+									sx={{
+										marginBottom: 1,
+										width: 300,
+									}}
+									onChange={(event) => setBudget(event.target.value)}
+									variant="outlined"
+									startAdornment={
+										<InputAdornment position="start">$</InputAdornment>
+									}
+								/>
+								<LocalizationProvider dateAdapter={AdapterMoment}>
+									<DatePicker
+										sx={{ marginBottom: 1, width: 300 }}
+										value={dueDate}
+										onChange={(newValue) => setDueDate(newValue)}
+									/>
+								</LocalizationProvider>
+							</FormControl>
 							<TextField
 								type="text"
 								label="Picture Upload"
@@ -273,7 +357,16 @@ export default function AdminManageTasks() {
 								}}
 								onChange={(event) => setImageLink(event.target.value)}
 								variant="outlined"
-							/>
+							/> */}
+							<p>Upload New File</p>
+            { /* This just sets up the window.cloudinary widget */ }
+            {useScript('https://widget.cloudinary.com/v2.0/global/all.js')}
+
+            <button type="button" onClick={openWidget}>Pick File</button>
+            <br />
+            
+            {state.file_url && /* <p>Uploaded Image URL: {state.file_url} <br />*/<img src={state.file_url} width={100}/>}
+            <br />
 							<TextField
 								type="text"
 								label="Notes"
@@ -285,6 +378,16 @@ export default function AdminManageTasks() {
 								onChange={(event) => setNotes(event.target.value)}
 								variant="outlined"
 							/>
+							<Button
+								variant="contained"
+								type="submit"
+								sx={{
+									marginBottom: 1,
+									width: 300,
+								}}
+							>
+								Submit
+							</Button>
 						</Stack>
 					</form>
 				</Stack>
