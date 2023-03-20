@@ -5,6 +5,7 @@ CREATE TABLE "user" (
 	"username" TEXT NOT NULL,
 	"password" varchar(80) NOT NULL,
 	"phone_number" TEXT NOT NULL,
+	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 	"is_verified" BOOLEAN NOT NULL DEFAULT 'FALSE',
 	"is_admin" BOOLEAN NOT NULL DEFAULT 'FALSE'
 );
