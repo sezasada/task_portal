@@ -10,6 +10,8 @@ import allTagsReducer from './all.tags.reducer';
 import allLocationsReducer from './all.locations.reducer';
 import verifiedUsersReducer from './verified.users.reducer';
 import tabIndexReducer from './tab.index.reducer';
+
+
 import allTasksForAdminReducer from './all.tasks.for.admin.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -29,6 +31,8 @@ const rootReducer = combineReducers({
   allLocationsReducer,
   verifiedUsersReducer,
   tabIndexReducer,
+  allTasksForAdminReducer,
+
   allTasksForAdminReducer,
 
 });
