@@ -24,20 +24,26 @@ export default function AdminManageUsers() {
 	const infoOfSpecificUser = useSelector(
 		(store) => store.viewAccountInfoReducer
 	);
-	const [isPromoteDisplayed, setIsPromoteDisplayed] = useState(true);
-
+	// const [isPromoteDisplayed, setIsPromoteDisplayed] = useState(true);
+	// const [isPromoteDisplayed, setIsPromoteDisplayed] = useState(
+	// 	!infoOfSpecificUser.is_admin
+	//   );
 	// Manage opening and closing of details modal
+	// const [isAdmin, setIsAdmin] = useState(infoOfSpecificUser.is_admin);
+	const [buttonText, setButtonText] = useState(infoOfSpecificUser.is_admin ? "Demote" : "Promote");
+
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => {
 		setOpen(true);
 	};
 	const handleClose = () => setOpen(false);
+	
 
 
 	const handleApprove = () => {
 		console.log("Approve button clicked");
 		dispatch({ type: "APPROVE_USER_REQUEST", payload: infoOfSpecificUser });
-	
+
 		handleClose();
 	};
 
@@ -60,13 +66,13 @@ export default function AdminManageUsers() {
 	const handlePromote = () => {
 		console.log("Promote button clicked");
 		dispatch({ type: "PROMOTE_USER", payload: infoOfSpecificUser });
-		setIsPromoteDisplayed(false); 
+		handleClose(); 
 	}
 
 	const handleDemote = () => {
 		console.log("Demote button clicked");
 		dispatch({ type: "DEMOTE_USER", payload: infoOfSpecificUser });
-		setIsPromoteDisplayed(true);
+		handleClose(); 
 	}
 	return (
 		<div>
@@ -147,8 +153,9 @@ export default function AdminManageUsers() {
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
-										<Button variant="contained">Promote</Button>
-										<Button variant="contained">Delete</Button>
+										<Button variant="contained" onClick={infoOfSpecificUser.is_admin ? handleDemote : handlePromote}>
+											{infoOfSpecificUser.is_admin ? "Demote" : "Promote"}
+										</Button>
 									</>
 								) : (
 									<>
@@ -243,19 +250,11 @@ export default function AdminManageUsers() {
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
-										{infoOfSpecificUser.is_admin === false ? (
-											<>
-												<Button variant="contained" onClick={handlePromote}>
-													Promote
-												</Button>
-											</>
-										) : (
-											<>
-												<Button variant="contained" onClick={handleDemote}>
-													Demote
-												</Button>
-											</>
-										)}
+										<Button variant="contained" onClick={infoOfSpecificUser.is_admin ? handleDemote : handlePromote}>
+											{infoOfSpecificUser.is_admin ? "Demote" : "Promote"}
+										</Button>
+
+
 										<Button variant="contained" onClick={handleDeny}>Delete</Button>
 									</>
 								) : (
