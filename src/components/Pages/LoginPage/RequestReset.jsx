@@ -30,7 +30,7 @@ const handleSubmit = (event) => {
             Email:
             <input type="email" value={email} onChange={handleChange} />
           </label>
-          <button type="submit">Reset Password</button>
+          <button type="submit">send email to reset password</button>
         </form>
   </>);
 }
