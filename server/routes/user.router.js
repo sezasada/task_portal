@@ -10,9 +10,7 @@ const router = express.Router();
 const crypto = require('crypto');
 require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
-const apiKey = process.env.SENDGRID_API_KEY;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-console.log("sendgrid key", apiKey);
 const moment = require('moment');
 
 // Handles Ajax request for user information if user is authenticated
@@ -149,6 +147,8 @@ router.get('/verified', (req, res) => {
 //initiate reset password. generate random token and send reset email link
 router.put('/reset_password', async (req, res) => {
   try {
+
+    // first do a query to see if the email exists, only send email if it does
   let randomToken = crypto.randomBytes(20).toString('hex');
   const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const email = req.body.email;

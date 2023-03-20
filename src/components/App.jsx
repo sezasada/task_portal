@@ -19,6 +19,8 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 import LoginPage from "./Pages/LoginPage/LoginPage";
 import RegisterPage from "./Pages/RegisterPage/RegisterPage";
 import ResetPassword from "./Pages/LoginPage/ResetPassword";
+import RequestReset from "./Pages/LoginPage/RequestReset";
+import EmailSent from "./Pages/LoginPage/EmailSent";
 
 import "./App.css";
 
@@ -92,6 +94,15 @@ function App() {
 							<LandingPage />
 						)}
 					</Route>
+					<Route path="/reset">
+					<ResetPassword />
+				</Route>
+				<Route path="/request_reset">
+					<RequestReset />
+				</Route>
+				<Route path="/email_sent">
+					<EmailSent />
+				</Route>
 
 					{/* If none of the other routes matched, we will show a 404. */}
 					<Route>
@@ -99,9 +110,7 @@ function App() {
 					</Route>
 				</Switch>
 
-				<Route path="/reset">
-					<ResetPassword />
-				</Route>
+				
 				<Footer />
 				
 			</div>
