@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Stack } from "@mui/system";
 import {
 	Paper,
@@ -14,10 +14,6 @@ import {
 } from "@mui/material";
 
 export default function AdminManageUsers() {
-	useEffect(() => {
-		dispatch({ type: 'FETCH_UNVERIFIED_USERS_REQUEST' });
-		dispatch({ type: 'FETCH_VERIFIED_USERS_REQUEST' }); 
-	}, [dispatch]);
 
 	const dispatch = useDispatch();
 
@@ -28,6 +24,7 @@ export default function AdminManageUsers() {
 	const infoOfSpecificUser = useSelector(
 		(store) => store.viewAccountInfoReducer
 	);
+	const [isPromoteDisplayed, setIsPromoteDisplayed] = useState(true);
 
 	// Manage opening and closing of details modal
 	const [open, setOpen] = useState(false);
@@ -40,6 +37,7 @@ export default function AdminManageUsers() {
 	const handleApprove = () => {
 		console.log("Approve button clicked");
 		dispatch({ type: "APPROVE_USER_REQUEST", payload: infoOfSpecificUser });
+	
 		handleClose();
 	};
 
@@ -49,7 +47,27 @@ export default function AdminManageUsers() {
 		dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
 		handleClose();
 	};
+	// const handleClick = () => {
+	// 	for (let x = 0; x < verifiedUsers.length; x++) {
+	// 		if (verifiedUsers[x].is_admin === true) {
+	// 			handleDemote();
+	// 		}
+	// 		if (verifiedUsers[x].is_admin === false) {
+	// 			handlePromote();
+	// 		}
+	// 	}
+	// }
+	const handlePromote = () => {
+		console.log("Promote button clicked");
+		dispatch({ type: "PROMOTE_USER", payload: infoOfSpecificUser });
+		setIsPromoteDisplayed(false); 
+	}
 
+	const handleDemote = () => {
+		console.log("Demote button clicked");
+		dispatch({ type: "DEMOTE_USER", payload: infoOfSpecificUser });
+		setIsPromoteDisplayed(true);
+	}
 	return (
 		<div>
 			<Stack spacing={3}>
@@ -137,6 +155,7 @@ export default function AdminManageUsers() {
 										<Button variant="contained" onClick={handleApprove}>
 											Approve
 										</Button>
+
 										<Button variant="contained" onClick={handleDeny}>
 											Deny
 										</Button>
@@ -224,8 +243,20 @@ export default function AdminManageUsers() {
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
-										<Button variant="contained">Promote</Button>
-										<Button variant="contained">Delete</Button>
+										{infoOfSpecificUser.is_admin === false ? (
+											<>
+												<Button variant="contained" onClick={handlePromote}>
+													Promote
+												</Button>
+											</>
+										) : (
+											<>
+												<Button variant="contained" onClick={handleDemote}>
+													Demote
+												</Button>
+											</>
+										)}
+										<Button variant="contained" onClick={handleDeny}>Delete</Button>
 									</>
 								) : (
 									<>

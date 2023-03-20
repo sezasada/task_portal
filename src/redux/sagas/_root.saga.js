@@ -6,6 +6,7 @@ import tasksSaga from './tasks.saga';
 import tagsSaga from './tags.saga';
 import locationsSaga from './locations.saga';
 import approveDenySaga from './approve.deny.saga';
+import promoteDemoteSaga from './promote.demote.saga';
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
 // This is imported in index.js as rootSaga
@@ -21,6 +22,7 @@ export default function* rootSaga() {
     tasksSaga(),
     tagsSaga(),
     locationsSaga(),
-    approveDenySaga()
+    approveDenySaga(),
+    promoteDemoteSaga()
   ]);
 }

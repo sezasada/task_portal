@@ -82,7 +82,7 @@ router.put("/update_admin", (req, res) => {
   WHERE "id"=$2;`;
 
   pool
-    .query(queryText, [!current_admin_status, user_id])
+    .query(queryText, [current_admin_status, user_id])
     .then(res.sendStatus(200))
     .catch((err) => {
       console.log("update admin status failed", err);
