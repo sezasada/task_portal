@@ -129,10 +129,20 @@ function Nav() {
 							<Typography>About</Typography>
 						</MenuItem>
 					</Menu>
-					<Box>
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+						}}
+					>
 						<IconButton size="large" onClick={handleOpenNavMenu}>
 							<AccountCircleIcon />
 						</IconButton>
+						{user.id && (
+							<Typography>
+								{user.first_name} {user.last_name}
+							</Typography>
+						)}
 					</Box>
 				</Box>
 			</Container>
