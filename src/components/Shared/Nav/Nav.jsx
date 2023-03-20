@@ -7,7 +7,6 @@ import {
 	IconButton,
 	Menu,
 	MenuItem,
-	Toolbar,
 	Typography,
 	Tab,
 	Tabs,
