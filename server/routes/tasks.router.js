@@ -135,8 +135,7 @@ JOIN "tags_per_task" ON "task_id" = "tasks"."id"
 JOIN "tags" ON "tag_id" = "tags"."id"
 JOIN "comments" ON "tasks"."id" = "comments"."task_id"
 JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
-WHERE "status" = 'ongoing'
-AND "assigned_to_id" = $1 
+WHERE "assigned_to_id" = $1 AND "is_approved" = TRUE
 GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
     created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
@@ -334,7 +333,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       due_date,
       is_approved,
       assigned_to_id,
-      
+
     } = req.body;
     const photos = req.body.photos;
     const tags = req.body.tags;
@@ -357,7 +356,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-console.log('before first post');
+    console.log('before first post');
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -373,8 +372,8 @@ console.log('before first post');
       is_approved
     ]);
 
-    const add_photos_query = 
-    `INSERT INTO "photos" (
+    const add_photos_query =
+      `INSERT INTO "photos" (
       "task_id", 
       "photo_url"
       )VALUES ($1, $2);`;
@@ -504,16 +503,14 @@ router.put(`/admin_unassign`, (req, res) => {
 });
 // approve or deny new task - for admin
 router.put(`/admin_approve`, (req, res) => {
-  let user_id = req.body.user_id;
   let task_id = req.body.task_id;
-  let is_approved = req.body.is_approved;
 
   const queryText = `UPDATE "tasks"
-    SET "assigned_to_id" = $1, "is_approved" = $3
-    WHERE "id" = $2;`;
+    SET "is_approved" = TRUE
+    WHERE "id" = $1;`;
 
   pool
-    .query(queryText, [user_id, task_id, is_approved])
+    .query(queryText, [task_id])
     .then((result) => res.send(result.rows[0]))
     .catch((err) => {
       console.log("error assigning task to user", err);
@@ -588,8 +585,8 @@ router.put(`/admin_edit_task`, async (req, res) => {
     await pool.query(deletePhotosQuery, [task_id]);
 
     //then add all updated photos to the photos table
-    const add_photos_query = 
-    `INSERT INTO "photos" (
+    const add_photos_query =
+      `INSERT INTO "photos" (
       "task_id", 
       "photo_url"
       )VALUES ($1, $2);`;
@@ -615,13 +612,14 @@ router.put(`/admin_edit_task`, async (req, res) => {
   }
 });
 
-router.delete("/tasks/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const task = await pool.query("SELECT * FROM tasks WHERE id = $1", [id]);
     if (task.rows.length === 0) {
       console.log("no task is found");
     }
+    await pool.query(`DELETE FROM "comments" WHERE "task_id" = $1`, [id]);
     //delete related photos from photos table
     await pool.query(`DELETE FROM "photos" WHERE "task_id" = $1`, [id]);
     //delete related tags from tags_per_task table
