@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Stack } from "@mui/system";
-import { useScript } from '../../../../../hooks/useScript';
+import { useScript } from "../../../../../hooks/useScript";
 import {
 	Paper,
 	Typography,
@@ -360,10 +360,16 @@ export default function AdminManageTasks() {
 								}}
 								onChange={(event) => setImageLink(event.target.value)}
 								variant="outlined"
+							/>
 
 							<p>Upload New File</p>
-            { /* This just sets up the window.cloudinary widget */ }
-            {useScript('https://widget.cloudinary.com/v2.0/global/all.js')}
+							{/* This just sets up the window.cloudinary widget */}
+							{useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
+
+							<button type="button" onClick={openWidget}>
+								Pick File
+							</button>
+							<br />
 
             <button type="button" onClick={openWidget}>Pick File</button>
             <br />
