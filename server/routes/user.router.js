@@ -62,7 +62,7 @@ router.put('/update_verified', (req, res) => {
   SET "is_verified" = $1
   WHERE "id"=$2;`;
 
-  pool.query(queryText, [!current_verified_status, user_id]).then(res.sendStatus(200))
+  pool.query(queryText, [current_verified_status, user_id]).then(res.sendStatus(200))
     .catch((err) => {
       console.log("update verified status failed", err);
       res.sendStatus(500);

@@ -31,6 +31,7 @@ function* fetchUnverifiedUsersSaga() {
     const response = yield axios.get('/api/user/unverified');
     console.log(response);
     yield put({ type: 'SET_UNVERIFIED_USERS', payload: response.data });
+    console.log('this is response', response);
   } catch (error) {
     console.log('User get request failed', error);
   }

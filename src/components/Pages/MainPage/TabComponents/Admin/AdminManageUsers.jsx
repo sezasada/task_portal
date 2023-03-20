@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stack } from "@mui/system";
 import {
 	Paper,
@@ -14,6 +14,11 @@ import {
 } from "@mui/material";
 
 export default function AdminManageUsers() {
+	useEffect(() => {
+		dispatch({ type: 'FETCH_UNVERIFIED_USERS_REQUEST' });
+		dispatch({ type: 'FETCH_VERIFIED_USERS_REQUEST' }); 
+	}, [dispatch]);
+
 	const dispatch = useDispatch();
 
 	// Access redux stores for users
@@ -30,6 +35,21 @@ export default function AdminManageUsers() {
 		setOpen(true);
 	};
 	const handleClose = () => setOpen(false);
+
+
+	const handleApprove = () => {
+		console.log("Approve button clicked");
+		dispatch({ type: "APPROVE_USER_REQUEST", payload: infoOfSpecificUser });
+		handleClose();
+	};
+
+
+	const handleDeny = () => {
+		console.log("Deny button clicked");
+		dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
+		handleClose();
+	};
+
 	return (
 		<div>
 			<Stack spacing={3}>
@@ -114,10 +134,15 @@ export default function AdminManageUsers() {
 									</>
 								) : (
 									<>
-										<Button variant="contained">Approve</Button>
-										<Button variant="contained">Deny</Button>
+										<Button variant="contained" onClick={handleApprove}>
+											Approve
+										</Button>
+										<Button variant="contained" onClick={handleDeny}>
+											Deny
+										</Button>
 									</>
 								)}
+
 							</Paper>
 						</Stack>
 					</Modal>
@@ -204,8 +229,12 @@ export default function AdminManageUsers() {
 									</>
 								) : (
 									<>
-										<Button variant="contained">Approve</Button>
-										<Button variant="contained">Deny</Button>
+										<Button variant="contained" onClick={handleApprove}>
+											Approve
+										</Button>
+										<Button variant="contained" onClick={handleDeny}>
+											Deny
+										</Button>
 									</>
 								)}
 							</Paper>
