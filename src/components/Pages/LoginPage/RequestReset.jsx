@@ -13,10 +13,11 @@ const handleSubmit = (event) => {
     event.preventDefault();
 
     let newObject = {
-      email: email
+      email: email,
+      history: history
     }
     dispatch({type: 'RESET_PASSWORD', payload: newObject})
-    history.push('/email_sent');
+    //history.push('/email_sent');
 
   }
 
@@ -26,11 +27,13 @@ const handleSubmit = (event) => {
 
   return (<>
   <form onSubmit={handleSubmit}>
+    <h3>Need a password reset?</h3>
+    <p>Enter your email below to request reset.</p>
           <label>
             Email:
             <input type="email" value={email} onChange={handleChange} />
           </label>
-          <button type="submit">send email to reset password</button>
+          <button type="submit">Send</button>
         </form>
   </>);
 }

@@ -7,7 +7,8 @@ function EmailSent() {
 
   return (
     <>
-     <h1>Email sent to reset password</h1>
+     <h3>Check your email</h3>
+     <p>Email sent to your inbox to reset your password</p>
      <button
           type="button"
           className="btn btn_sizeSm"
