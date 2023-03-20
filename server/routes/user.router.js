@@ -149,9 +149,17 @@ router.put('/reset_password', async (req, res) => {
   try {
 
     // first do a query to see if the email exists, only send email if it does
+    const firstQueryText = `SELECT * FROM "user" WHERE "email" = $1;`;
+    const email = req.body.email;
+    const firstResponse = pool.query(firstQueryText, [email])
+
+    if (firstResponse.rows.length < 1){
+      
+    }
+
   let randomToken = crypto.randomBytes(20).toString('hex');
   const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  const email = req.body.email;
+  
 
   const queryText = `INSERT INTO password_reset_tokens (email, token, timestamp) 
   VALUES ($1, $2, $3) RETURNING token;`
