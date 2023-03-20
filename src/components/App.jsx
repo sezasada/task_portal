@@ -21,6 +21,7 @@ import RegisterPage from "./Pages/RegisterPage/RegisterPage";
 import ResetPassword from "./Pages/LoginPage/ResetPassword";
 import RequestReset from "./Pages/LoginPage/RequestReset";
 import EmailSent from "./Pages/LoginPage/EmailSent";
+import Cloudinary from "./Pages/Cloudinary";
 
 import "./App.css";
 
@@ -102,6 +103,9 @@ function App() {
 				</Route>
 				<Route path="/email_sent">
 					<EmailSent />
+				</Route>
+				<Route path="/cloudinary">
+					<Cloudinary />
 				</Route>
 
 					{/* If none of the other routes matched, we will show a 404. */}
