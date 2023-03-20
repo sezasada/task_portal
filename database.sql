@@ -5,11 +5,10 @@ CREATE TABLE "user" (
 	"username" TEXT NOT NULL,
 	"password" varchar(80) NOT NULL,
 	"phone_number" TEXT NOT NULL,
+	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 	"is_verified" BOOLEAN NOT NULL DEFAULT 'FALSE',
 	"is_admin" BOOLEAN NOT NULL DEFAULT 'FALSE'
 );
-
-
 
 CREATE TABLE "tags" (
 	"id" serial PRIMARY KEY NOT NULL,
@@ -59,6 +58,13 @@ CREATE TABLE "photos" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"task_id" int NOT NULL REFERENCES "tasks"("id"),
 	"photo_url" TEXT NOT NULL 
+);
+
+CREATE TABLE "password_reset_tokens" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"email" TEXT,
+	"token" TEXT,
+	"timestamp" TIMESTAMP
 );
 
 INSERT INTO "tags" ("tag_name")
