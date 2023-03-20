@@ -4,21 +4,20 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useSelector } from 'react-redux';
 
 function ResetPassword() {
   const history = useHistory();
   const dispatch = useDispatch();
   const [newPassword, setNewPassword] = useState('');
 
+
+
   useEffect(() => {
     const url = new URL(window.location.href);
-    const token = url.href.slice((url.href.indexOf("?") + 1));
-    console.log(token); 
-
+    let token = url.href.slice((url.href.indexOf("?") + 1));
     dispatch({type: "CHECK_IF_VALID", payload: {token: token, history: history}});
   }, []);
-
-
 
   const handleChange = (event) => {
     setNewPassword(event.target.value);
@@ -26,9 +25,11 @@ function ResetPassword() {
   
   const handleSubmit = (event) => {
     event.preventDefault();
+    const url = new URL(window.location.href);
 
     let newObject = {
-      newPassword
+      newPassword: newPassword,
+      token: url.href.slice((url.href.indexOf("?") + 1))
     }
     dispatch({type: 'NEW_PASSWORD', payload: newObject})
     history.push("/login");

@@ -19,6 +19,9 @@ function UserPage() {
 		dispatch({ type: "FETCH_ALL_TAGS" });
 		dispatch({ type: "FETCH_ALL_LOCATIONS" });
 		dispatch({ type: "FETCH_VERIFIED_USERS" });
+		dispatch({
+			type: "FETCH_ALL_TASKS_FOR_ADMIN",
+		});
 	}, []);
 
 	return (
