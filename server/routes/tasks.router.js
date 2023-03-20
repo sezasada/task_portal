@@ -314,7 +314,7 @@ GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", 
 });
 
 //post route to add new task
-router.post("/", rejectUnauthenticated, async (req, res) => {
+router.post("/admin", rejectUnauthenticated, async (req, res) => {
   console.log('beginning of post route');
   try {
     const {
@@ -324,12 +324,9 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       budget,
       location_id,
       status,
-      time_created,
       is_time_sensitive,
       due_date,
-      is_approved,
       assigned_to_id,
-
     } = req.body;
     const photos = req.body.photos;
     const tags = req.body.tags;
@@ -344,12 +341,10 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
         "status",
         "created_by_id",
         "assigned_to_id",
-        "time_created",
         "is_time_sensitive",
         "due_date",
         "is_approved"
-
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING "id"
     `;
     console.log('before first post');
@@ -362,10 +357,9 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       status,
       created_by_id,
       assigned_to_id,
-      time_created,
       is_time_sensitive,
       due_date,
-      is_approved
+      true
     ]);
 
     const add_photos_query =

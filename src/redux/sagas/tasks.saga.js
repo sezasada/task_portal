@@ -10,6 +10,15 @@ function* fetchAllTasksSaga() {
     }
 }
 
+function* addNewTaskAdminSaga(action) {
+    try {
+        yield axios.post('/api/tasks/admin', action.payload);
+        yield put({ type: 'FETCH_ALL_TASKS' });
+    } catch (error) {
+        console.log('Error posting task:', error);
+    }
+}
+
 function* fetchIncomingTasksSaga() {
     try {
         const response = yield axios.get('/api/tasks/not_approved');
@@ -47,13 +56,15 @@ function* denyTaskSaga(action) {
     }
 }
 
+
+
 function* tasksSaga() {
     yield takeLatest('FETCH_ALL_TASKS', fetchAllTasksSaga);
     yield takeLatest('FETCH_INCOMING_TASKS', fetchIncomingTasksSaga);
     yield takeLatest("FETCH_ALL_TASKS_FOR_ADMIN", fetchAllTasksForAdminSaga);
     yield takeLatest("MARK_TASK_APPROVED", markTaskApprovedSaga);
     yield takeLatest("DENY_TASK", denyTaskSaga);
-
+    yield takeLatest("ADD_NEW_TASK", addNewTaskAdminSaga);
 }
 
 export default tasksSaga;
