@@ -74,6 +74,8 @@ export default function AdminManageTasks() {
 	}
 
 	function handleSubmitTask(event) {
+
+		console.log("this is state", state);
 		event.preventDefault();
 		const newTaskObj = {
 			title: title,
@@ -85,14 +87,14 @@ export default function AdminManageTasks() {
 			is_time_sensitive: moment(validDate).isValid(),
 			due_date: moment(validDate).isValid() ? validDate : "",
 			assigned_to_id: userLookup?.id,
+			photos: state,
 		};
-		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
+		
+		// dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
 		console.log(newTaskObj);
 	}
 
-	const [state, setState] = useState({
-      file_url: null,
-   });
+	const [state, setState] = useState([]);
 
 	const openWidget = () => {
       // Currently there is a bug with the Cloudinary <Widget /> component
@@ -110,10 +112,11 @@ export default function AdminManageTasks() {
             console.log(result);
             if (!error && result && result.event === "success") {
                // When an upload is successful, save the uploaded URL to local state!
-               setState({
-                  ...state,
+               setState([...state, {
                   file_url: result.info.secure_url
-               })
+               }])
+			console.log(state);
+			   
             }
          },
       ).open();
@@ -347,7 +350,7 @@ export default function AdminManageTasks() {
 									/>
 								</LocalizationProvider>
 							</FormControl>
-							<TextField
+							{/* <TextField
 								type="text"
 								label="Picture Upload"
 								value={imageLink}
@@ -357,7 +360,7 @@ export default function AdminManageTasks() {
 								}}
 								onChange={(event) => setImageLink(event.target.value)}
 								variant="outlined"
-							/>
+
 							<p>Upload New File</p>
             { /* This just sets up the window.cloudinary widget */ }
             {useScript('https://widget.cloudinary.com/v2.0/global/all.js')}
@@ -365,7 +368,10 @@ export default function AdminManageTasks() {
             <button type="button" onClick={openWidget}>Pick File</button>
             <br />
             
-            {state.file_url && /* <p>Uploaded Image URL: {state.file_url} <br />*/<img src={state.file_url} width={100}/>}
+            {state.length != 0 && state.map((item) => {
+				console.log
+				return <img src={item.file_url} width={100}/>
+			})}
             <br />
 							<TextField
 								type="text"
