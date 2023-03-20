@@ -11,6 +11,7 @@ import {
 	TableBody,
 	Modal,
 	Button,
+	Box,
 } from "@mui/material";
 
 export default function AdminDashboard() {
@@ -30,8 +31,11 @@ export default function AdminDashboard() {
 	const handleClose = () => setOpen(false);
 	return (
 		<Stack spacing={3}>
-			<h2>Welcome, {user.first_name}!</h2>
-			<p>Your ID is: {user.id}</p>
+			<Box>
+				<Typography component="h2" variant="h4">
+					Welcome, {user.first_name}!
+				</Typography>
+			</Box>
 			<Paper sx={{ p: 3 }}>
 				{/* <pre>{JSON.stringify(incomingTasks)}</pre> */}
 				<Typography>Tasks awaiting approval</Typography>
