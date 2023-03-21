@@ -1,18 +1,6 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
 import axios from 'axios';
 import moment from 'moment';
-
-// function* completeTask(action) {
-  
-//     try {
-//     const updatedComplete = { ...action.payload, time_completed: new Date().toISOString(), status: "Completed", taskId: infoOfSpecificTask.task_id};
-//       yield call(axios.put, '/api/tasks/user_complete_task', updatedComplete)
-//       yield put({ type: 'SET_ALL_TASKS', payload: updatedComplete});
-//       console.log("this is updatedComplete", updatedComplete);
-//     } catch (error) {
-//       console.log('Error completing task:', error);
-//     }
-//   }
   
 function* takeTaskSaga(action) {
   console.log("in take task saga");
