@@ -311,24 +311,28 @@ GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", 
     res.sendStatus(500);
   }
 });
-// route to GET all tasks that have been approved by admin - for admin to track all compelted and ongoing tasks - master list
+// route to GET all tasks that have been approved by admin - for admin to track all completed and ongoing tasks - master list
 router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const queryText = `
-    SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status", 
-    created_by."id" AS "created_by_id", 
-    created_by."first_name" AS "created_by_first_name", 
-    created_by."last_name" AS "created_by_last_name", 
-    created_by."username" AS "created_by_username", 
-    created_by."phone_number" AS "created_by_phone_number", 
-    assigned_to."id" AS "assigned_to_id", 
-    assigned_to."first_name" AS "assigned_to_first_name", 
-    assigned_to."last_name" AS "assigned_to_last_name", 
-    assigned_to."username" AS "assigned_to_username", 
-    assigned_to."phone_number" AS "assigned_to_phone_number", 
-    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", 
+    const queryText = `SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status",
+    created_by."id" AS "created_by_id",
+    created_by."first_name" AS "created_by_first_name",
+    created_by."last_name" AS "created_by_last_name",
+    created_by."username" AS "created_by_username",
+    created_by."phone_number" AS "created_by_phone_number",
+    assigned_to."id" AS "assigned_to_id",
+    assigned_to."first_name" AS "assigned_to_first_name",
+    assigned_to."last_name" AS "assigned_to_last_name",
+    assigned_to."username" AS "assigned_to_username",
+    assigned_to."phone_number" AS "assigned_to_phone_number",
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
+    "comments"."id" AS "comment_id", "time_posted", "content",
+    posted_by."first_name" AS "posted_by_first_name",
+    posted_by."last_name" AS "posted_by_last_name",
+    posted_by."username" AS "posted_by_username",
+    posted_by."phone_number" AS "posted_by_phone_number",
     json_agg(
         json_build_object(
             'tag_id', "tags"."id",
@@ -337,15 +341,10 @@ router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
     ) AS "tags",
     json_agg(
         json_build_object(
-            'comment_id', "comments"."id",
-            'time_posted', "comments"."time_posted",
-            'content', "comments"."content",
-            'posted_by_first_name', posted_by."first_name",
-            'posted_by_last_name', posted_by."last_name",
-            'posted_by_username', posted_by."username",
-            'posted_by_phone_number', posted_by."phone_number"
+            'photo_id', "photos"."id",
+            'photo_url', "photos"."photo_url"
         )
-    ) AS "comments"
+    ) AS "photos"
 FROM "tasks"
 JOIN "locations" ON "location_id" = "locations"."id"
 JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
@@ -354,11 +353,11 @@ JOIN "tags_per_task" ON "task_id" = "tasks"."id"
 JOIN "tags" ON "tag_id" = "tags"."id"
 JOIN "comments" ON "tasks"."id" = "comments"."task_id"
 JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
-WHERE "is_approved" = true
-GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status", 
+LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
     created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
-    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"; 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name", "comments"."id", "posted_by_first_name", "posted_by_last_name", "posted_by_username", "posted_by_phone_number"; 
     `;
     const result = await pool.query(queryText);
     res.send(result.rows);
@@ -382,6 +381,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       is_time_sensitive,
       due_date,
       assigned_to_id,
+      time_assigned,
     } = req.body;
     const photos = req.body.photos;
     const tags = req.body.tags;
@@ -398,8 +398,9 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
         "assigned_to_id",
         "is_time_sensitive",
         "due_date",
-        "is_approved"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        "is_approved",
+        "time_assigned"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
     console.log('before first post');
@@ -414,7 +415,8 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       assigned_to_id,
       is_time_sensitive,
       due_date,
-      true
+      true,
+      time_assigned
     ]);
 
     const add_photos_query =
@@ -436,7 +438,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
     `;
 
     for (let tag of tags) {
-      await pool.query(tags_per_task, [result.rows[0].id, tag]);
+      await pool.query(tags_per_task, [result.rows[0].id, tag.id]);
     }
     res.send(result.rows[0]);
   } catch (error) {
@@ -497,15 +499,16 @@ router.put(`/user_unassign`, (req, res) => {
     });
 });
 //user marks task their task complete
-router.put(`/user_complete_task`, (req, res) => {
+router.put('/user_complete_task', (req, res) => {
   let time_completed = req.body.time_completed;
   let task_id = req.body.task_id;
+  let status = req.body.status;
   const queryText = `UPDATE "tasks"
-  SET "status" = 'completed', "time_completed"=$1
-  WHERE "id" = $2;`;
+  SET "status" = $1, "time_completed" = $2
+  WHERE "id" = $3;`;
 
   pool
-    .query(queryText, [time_completed, task_id])
+    .query(queryText, [status, time_completed, task_id])
     .then((result) => res.send(result.rows[0]))
     .catch((err) => {
       console.log("error marking task as complete", err);
