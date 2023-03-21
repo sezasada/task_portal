@@ -13,6 +13,8 @@ import {
 	Button,
 } from "@mui/material";
 
+import moment from "moment";
+
 export default function AdminManageUsers() {
 
 	const dispatch = useDispatch();
@@ -74,6 +76,8 @@ export default function AdminManageUsers() {
 		dispatch({ type: "DEMOTE_USER", payload: infoOfSpecificUser });
 		handleClose(); 
 	}
+
+	console.log(infoOfSpecificUser)
 	return (
 		<div>
 			<Stack spacing={3}>
@@ -149,7 +153,7 @@ export default function AdminManageUsers() {
 								</Typography>
 								<br />
 								<Typography variant="h6" component="h4">
-									Created at:
+									Created at: {moment(infoOfSpecificUser.created_at).format("MMMM Do YYYY")}
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
@@ -246,7 +250,7 @@ export default function AdminManageUsers() {
 								</Typography>
 								<br />
 								<Typography variant="h6" component="h4">
-									Created at:
+									Created at: {moment(infoOfSpecificUser.created_at).format("MMMM Do YYYY")}
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
