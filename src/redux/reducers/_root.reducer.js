@@ -13,6 +13,7 @@ import tabIndexReducer from './tab.index.reducer';
 import approveDenyUserReducer from './approve.deny.user.reducer';
 import allTasksForAdminReducer from './all.tasks.for.admin.reducer';
 import allCompletedTasksReducer from './all.completed.tasks.reducer';
+import tasksReducer from './take.drop.task.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   approveDenyUserReducer,
   allTasksForAdminReducer,
   allCompletedTasksReducer,
+  tasksReducer,
 });
 
 export default rootReducer;

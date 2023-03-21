@@ -560,6 +560,22 @@ router.put('/user_complete_task', (req, res) => {
     });
 });
 
+router.put('/user_status_change', (req, res) => {
+  let task_id = req.body.task_id;
+  let status = req.body.status;
+  const queryText = `UPDATE "tasks"
+  SET "status" = $1
+  WHERE "id" = $2;`;
+
+  pool
+    .query(queryText, [status, task_id])
+    .then((result) => res.send(result.rows[0]))
+    .catch((err) => {
+      console.log("error marking task as complete", err);
+      res.sendStatus(500);
+    });
+});
+
 /*ADMIN USER PUT ROUTES*/
 //admin assigns task
 router.put(`/admin_assign`, (req, res) => {

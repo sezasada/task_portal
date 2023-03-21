@@ -160,17 +160,22 @@ export default function AdminManageTasks() {
 
 	const handleCompleteTask = () => {
 		console.log("infoOfSpecificTask:", infoOfSpecificTask);
-		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask});
+		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
 		handleClose();
 
 	};
 
 	const handleTakeTask = () => {
-		console.log("take task button is clicked", infoOfSpecificTask );
-		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask});
-	}
-	  
-	  
+		console.log("take task button is clicked", infoOfSpecificTask);
+		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask });
+		handleClose();
+	};
+
+	const handleDropTask = () => {
+		console.log("drop task clicked", infoOfSpecificTask);
+		dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask })
+		handleClose();
+	};
 	const handleDeny = () => {
 		console.log("Deny button clicked");
 		dispatch({
@@ -179,7 +184,8 @@ export default function AdminManageTasks() {
 		});
 		handleClose();
 	};
-	
+	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
+
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -271,16 +277,25 @@ export default function AdminManageTasks() {
 							</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
+								Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
+								{infoOfSpecificTask.assigned_to_last_name}
+							</Typography>
+							<br />
+							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 							{photosForTask &&
-							photosForTask.map((item) => {
+								photosForTask.map((item) => {
 									return <img src={item.photo_url} width={100} />;
 								})}
-							<Button variant="contained" onClick={handleTakeTask}
+
+							<Button variant="contained" onClick={infoOfSpecificTask.assigned_to_first_name ? handleDropTask : handleTakeTask}>
+								{infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
+							</Button>
+							{/* <Button variant="contained" onClick={handleTakeTask}
 							>
 								Take
-							</Button>
+							</Button> */}
 							<Button variant="contained" onClick={handleCompleteTask}
 							>Mark Complete
 							</Button>
@@ -554,20 +569,25 @@ export default function AdminManageTasks() {
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
 								{infoOfSpecificTask.created_by_last_name}
 							</Typography>
+							<Typography variant="h6" component="h4">
+								Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
+								{infoOfSpecificTask.assigned_to_last_name}
+							</Typography>
+							<br />
 							<br />
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
-							{photosForTask ? 
-							<Typography variant="h6" component="h4">
-								Photos: 
-							</Typography> : "" }
+							{photosForTask ?
+								<Typography variant="h6" component="h4">
+									Photos:
+								</Typography> : ""}
 							{photosForTask &&
-							 photosForTask.map((item) => {
+								photosForTask.map((item) => {
 									return <img src={item.photo_url} width={100} />;
 								})}
 							<Typography variant="h6" component="h4">
-								Comments: 
+								Comments:
 							</Typography>
 							<ul>
 								{commentsForSpecificTask &&
