@@ -28,6 +28,7 @@ export default function AdminDashboard() {
 	// Access specific task reducer and tags
 	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
 	const specificTaskTags = infoOfSpecificTask.tags;
+	const photosForTask = infoOfSpecificTask.photos;
 
 	// Manage opening and closing of first details modal
 	const [open, setOpen] = useState(false);
@@ -141,6 +142,10 @@ export default function AdminDashboard() {
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
+							{photosForTask &&
+							photosForTask.map((item) => {
+									return <img src={item.photo_url} width={100} />;
+								})}
 							<Button
 								variant="contained"
 								onClick={() =>
@@ -258,6 +263,10 @@ export default function AdminDashboard() {
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
+							{photosForTask &&
+							photosForTask.map((item) => {
+									return <img src={item.photo_url} width={100} />;
+								})}
 							<Button variant="contained">Add Comment</Button>
 							<Button variant="contained">Finish</Button>
 							<Button variant="contained">Didn't Finish</Button>
