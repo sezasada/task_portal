@@ -12,6 +12,7 @@ import {
 	Modal,
 	Button,
 	Box,
+	TextField,
 } from "@mui/material";
 import moment from "moment";
 
@@ -30,6 +31,8 @@ export default function AdminDashboard() {
 	const specificTaskTags = infoOfSpecificTask.tags;
 	const photosForTask = infoOfSpecificTask.photos;
 
+	const [comment, setComment] = useState("");
+
 	// Manage opening and closing of first details modal
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => {
@@ -43,6 +46,20 @@ export default function AdminDashboard() {
 		setOpen2(true);
 	};
 	const handleClose2 = () => setOpen2(false);
+
+	// Manage opening and closing of child modal for comments modal
+	const [openChild, setOpenChild] = useState(false);
+	const handleOpenChild = () => {
+		setOpenChild(true);
+	};
+	const handleCloseChild = () => setOpenChild(false);
+
+	function handleSubmitComment() {
+		const commentObj = {
+			task_id,
+			content: comment,
+		};
+	}
 
 	return (
 		<Stack spacing={3}>
@@ -143,7 +160,7 @@ export default function AdminDashboard() {
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 							{photosForTask &&
-							photosForTask.map((item) => {
+								photosForTask.map((item) => {
 									return <img src={item.photo_url} width={100} />;
 								})}
 							<Button
@@ -264,13 +281,69 @@ export default function AdminDashboard() {
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 							{photosForTask &&
-							photosForTask.map((item) => {
+								photosForTask.map((item) => {
 									return <img src={item.photo_url} width={100} />;
 								})}
-							<Button variant="contained">Add Comment</Button>
+							<Button
+								variant="contained"
+								onClick={() => {
+									handleOpenChild();
+								}}
+							>
+								Add Comment
+							</Button>
 							<Button variant="contained">Finish</Button>
 							<Button variant="contained">Didn't Finish</Button>
 						</Paper>
+						<Modal
+							open={openChild}
+							onClose={() => {
+								handleCloseChild();
+							}}
+						>
+							<Stack
+								sx={{
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
+								<Paper
+									sx={{
+										display: "flex",
+										flexDirection: "column",
+										padding: "20px",
+									}}
+									elevation={3}
+								>
+									<Typography
+										variant="h4"
+										component="h2"
+										sx={{ textDecoration: "underline" }}
+									>
+										Add a comment
+									</Typography>
+									<br />
+									<Typography variant="h4" component="h2">
+										Previous comments go here
+									</Typography>
+									<br />
+									<TextField
+										type="text"
+										label="Comment"
+										value={comment}
+										sx={{
+											marginBottom: 1,
+											width: 300,
+										}}
+										onChange={(event) => setComment(event.target.value)}
+										variant="outlined"
+									/>
+									<Button variant="contained" onClick={handleSubmitComment}>
+										Add Comment
+									</Button>
+								</Paper>
+							</Stack>
+						</Modal>
 					</Stack>
 				</Modal>
 			</Paper>

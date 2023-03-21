@@ -86,11 +86,11 @@ export default function AdminManageTasks() {
 	}
 
 	function determineTimeAssigned(userId) {
-		let time_assigned
+		let time_assigned;
 		if (userId) {
 			time_assigned = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
 		}
-		return time_assigned
+		return time_assigned;
 	}
 
 	function handleSubmitTask(event) {
@@ -107,7 +107,7 @@ export default function AdminManageTasks() {
 			assigned_to_id: userLookup?.id,
 			photos: state,
 			tags: tags,
-			time_assigned: determineTimeAssigned(userLookup?.id)
+			time_assigned: determineTimeAssigned(userLookup?.id),
 		};
 
 		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
@@ -160,17 +160,15 @@ export default function AdminManageTasks() {
 
 	const handleCompleteTask = () => {
 		console.log("infoOfSpecificTask:", infoOfSpecificTask);
-		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask});
+		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
 		handleClose();
-
 	};
 
 	const handleTakeTask = () => {
-		console.log("take task button is clicked", infoOfSpecificTask );
-		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask});
-	}
-	  
-	  
+		console.log("take task button is clicked", infoOfSpecificTask);
+		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask });
+	};
+
 	const handleDeny = () => {
 		console.log("Deny button clicked");
 		dispatch({
@@ -179,7 +177,7 @@ export default function AdminManageTasks() {
 		});
 		handleClose();
 	};
-	
+
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -200,6 +198,7 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpen();
 									dispatch({ type: "VIEW_TASK_INFO", payload: task });
+									console.log(task);
 								}}
 							>
 								<TableCell>{task.title}</TableCell>
@@ -274,15 +273,15 @@ export default function AdminManageTasks() {
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 							{photosForTask &&
-							photosForTask.map((item) => {
-									return <img src={item.photo_url} width={100} />;
+								photosForTask.map((item, index) => {
+									console.log(item);
+									return <img key={index} src={item.photo_url} width={100} />;
 								})}
-							<Button variant="contained" onClick={handleTakeTask}
-							>
+							<Button variant="contained" onClick={handleTakeTask}>
 								Take
 							</Button>
-							<Button variant="contained" onClick={handleCompleteTask}
-							>Mark Complete
+							<Button variant="contained" onClick={handleCompleteTask}>
+								Mark Complete
 							</Button>
 							<Button variant="contained">Edit</Button>
 
@@ -558,16 +557,19 @@ export default function AdminManageTasks() {
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
-							{photosForTask ? 
-							<Typography variant="h6" component="h4">
-								Photos: 
-							</Typography> : "" }
+							{photosForTask ? (
+								<Typography variant="h6" component="h4">
+									Photos:
+								</Typography>
+							) : (
+								""
+							)}
 							{photosForTask &&
-							 photosForTask.map((item) => {
+								photosForTask.map((item) => {
 									return <img src={item.photo_url} width={100} />;
 								})}
 							<Typography variant="h6" component="h4">
-								Comments: 
+								Comments:
 							</Typography>
 							<ul>
 								{commentsForSpecificTask &&
