@@ -86,11 +86,11 @@ export default function AdminManageTasks() {
 	}
 
 	function determineTimeAssigned(userId) {
-		let time_assigned
+		let time_assigned;
 		if (userId) {
 			time_assigned = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
 		}
-		return time_assigned
+		return time_assigned;
 	}
 
 	function handleSubmitTask(event) {
@@ -107,7 +107,7 @@ export default function AdminManageTasks() {
 			assigned_to_id: userLookup?.id,
 			photos: state,
 			tags: tags,
-			time_assigned: determineTimeAssigned(userLookup?.id)
+			time_assigned: determineTimeAssigned(userLookup?.id),
 		};
 
 		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
@@ -162,7 +162,6 @@ export default function AdminManageTasks() {
 		console.log("infoOfSpecificTask:", infoOfSpecificTask);
 		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
 		handleClose();
-
 	};
 
 	const handleTakeTask = () => {
@@ -184,8 +183,8 @@ export default function AdminManageTasks() {
 		});
 		handleClose();
 	};
-	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
 
+	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -206,6 +205,7 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpen();
 									dispatch({ type: "VIEW_TASK_INFO", payload: task });
+									console.log(task);
 								}}
 							>
 								<TableCell>{task.title}</TableCell>
