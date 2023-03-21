@@ -206,7 +206,9 @@ export default function AdminManageTasks() {
 								<TableCell>{task.location_name}</TableCell>
 								<TableCell>
 									{" "}
-									{moment(task.due_date).format("MMMM Do YYYY, h:mm a")}
+									{task.due_date != null ? 
+									moment(task.due_date).format("MMMM Do YYYY, h:mm a")
+								: " "}
 								</TableCell>
 								<TableCell>{task.status}</TableCell>
 							</TableRow>
@@ -264,6 +266,12 @@ export default function AdminManageTasks() {
 							<Typography variant="h6" component="h4">
 								Location: {infoOfSpecificTask.location_name}
 							</Typography>
+							<br />
+							<Typography>
+							Due Date: {infoOfSpecificTask.due_date != null ? 
+									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
+								: " "}
+								</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
@@ -549,6 +557,12 @@ export default function AdminManageTasks() {
 							<Typography variant="h6" component="h4">
 								Location: {infoOfSpecificTask.location_name}
 							</Typography>
+							<br />
+							<Typography>
+							Due Date: {infoOfSpecificTask.due_date != null ? 
+									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
+								: " "}
+								</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
