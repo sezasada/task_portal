@@ -130,7 +130,7 @@ router.delete(`/delete_user/:id`, (req, res) => {
 
 // Grab all unverified users
 router.get("/unverified", (req, res) => {
-  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = FALSE;`;
+  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "created_at", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = FALSE;`;
   pool
     .query(queryText)
     .then((results) => res.send(results.rows))
@@ -142,7 +142,7 @@ router.get("/unverified", (req, res) => {
 
 // Grab all verified users
 router.get("/verified", (req, res) => {
-  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = TRUE;`;
+  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "created_at", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = TRUE;`;
   pool
     .query(queryText)
     .then((results) => res.send(results.rows))
