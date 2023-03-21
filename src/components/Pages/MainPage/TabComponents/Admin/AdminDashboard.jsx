@@ -151,6 +151,12 @@ export default function AdminDashboard() {
 								Location: {infoOfSpecificTask.location_name}
 							</Typography>
 							<br />
+							<Typography>
+							Due Date: {infoOfSpecificTask.due_date != null ? 
+									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
+								: " "}
+								</Typography>
+							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
 								{infoOfSpecificTask.created_by_last_name}
@@ -271,6 +277,12 @@ export default function AdminDashboard() {
 							<Typography variant="h6" component="h4">
 								Location: {infoOfSpecificTask.location_name}
 							</Typography>
+							<br />
+							<Typography>
+							Due Date: {infoOfSpecificTask.due_date != null ? 
+									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
+								: " "}
+								</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
