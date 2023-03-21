@@ -14,24 +14,23 @@ import moment from 'moment';
 //     }
 //   }
   
-function* completeTask(action) {
-  console.log("in complete task saga", moment().format("YYYY-MM-DD HH:mm:ss"));
+function* takeTaskSaga(action) {
+  console.log("in take task saga");
 
     try {
-      const { task_id  } = action.payload;  
-      const status = "Completed";
+      const { task_id, assigned_to_id  } = action.payload;  
+      const status = "In Progress";
       const time_completed = moment().format("YYYY-MM-DD HH:mm:ss");
-          
-      console.log("saga id, time and status", task_id, time_completed, status );
-      yield call(axios.put, '/api/tasks/user_complete_task', { task_id, time_completed, status });  
+      console.log("saga id and status", task_id, status, assigned_to_id, time_completed );
+      yield call(axios.put, '/api/tasks/user_assign', { task_id, status, assigned_to_id, time_completed });  
       yield put({ type: 'FETCH_ALL_TASKS' });
 
     } catch (error) {
       console.log('Error completing task:', error);
     }
 }
-function* allCompletedTasksSaga() {
-  yield takeEvery('COMPLETE_TASK', completeTask);
+function* takeTasksSaga() {
+  yield takeEvery('TAKE_TASK', takeTaskSaga);
 }
 
-export default allCompletedTasksSaga;
+export default takeTasksSaga;
