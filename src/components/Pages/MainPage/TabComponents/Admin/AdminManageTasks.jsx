@@ -42,12 +42,24 @@ export default function AdminManageTasks() {
 	// Access redux store for all users
 	const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
 
+	const allCompletedTasks = useSelector(
+		(store) => store.allCompletedTasksReducer
+	);
+	const commentsForSpecificTask = infoOfSpecificTask.comments;
+
 	// Manage opening and closing of details modal
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => {
 		setOpen(true);
 	};
 	const handleClose = () => setOpen(false);
+
+	// Manage opening and closing of second details modal
+	const [open2, setOpen2] = useState(false);
+	const handleOpen2 = () => {
+		setOpen2(true);
+	};
+	const handleClose2 = () => setOpen2(false);
 
 	// Manage Local state for task submission
 	const [title, setTitle] = useState("");
@@ -74,7 +86,6 @@ export default function AdminManageTasks() {
 	}
 
 	function handleSubmitTask(event) {
-
 		console.log("this is state", state);
 		event.preventDefault();
 		const newTaskObj = {
@@ -89,7 +100,7 @@ export default function AdminManageTasks() {
 			assigned_to_id: userLookup?.id,
 			photos: state,
 		};
-		
+
 		// dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
 		console.log(newTaskObj);
 	}
@@ -97,30 +108,35 @@ export default function AdminManageTasks() {
 	const [state, setState] = useState([]);
 
 	const openWidget = () => {
-      // Currently there is a bug with the Cloudinary <Widget /> component
-      // where the button defaults to a non type="button" which causes the form
-      // to submit when clicked. So for now just using the standard widget that
-      // is available on window.cloudinary
-      // See docs: https://cloudinary.com/documentation/upload_widget#look_and_feel_customization
-      !!window.cloudinary && window.cloudinary.createUploadWidget(
-         {
-            sources: ['local', 'url', 'camera'],
-            cloudName: process.env.REACT_APP_CLOUDINARY_NAME,
-            uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-         },
-         (error, result) => {
-            console.log(result);
-            if (!error && result && result.event === "success") {
-               // When an upload is successful, save the uploaded URL to local state!
-               setState([...state, {
-                  file_url: result.info.secure_url
-               }])
-			console.log(state);
-			   
-            }
-         },
-      ).open();
-   }
+		// Currently there is a bug with the Cloudinary <Widget /> component
+		// where the button defaults to a non type="button" which causes the form
+		// to submit when clicked. So for now just using the standard widget that
+		// is available on window.cloudinary
+		// See docs: https://cloudinary.com/documentation/upload_widget#look_and_feel_customization
+		!!window.cloudinary &&
+			window.cloudinary
+				.createUploadWidget(
+					{
+						sources: ["local", "url", "camera"],
+						cloudName: process.env.REACT_APP_CLOUDINARY_NAME,
+						uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
+					},
+					(error, result) => {
+						console.log(result);
+						if (!error && result && result.event === "success") {
+							// When an upload is successful, save the uploaded URL to local state!
+							setState([
+								...state,
+								{
+									file_url: result.info.secure_url,
+								},
+							]);
+							console.log(state);
+						}
+					}
+				)
+				.open();
+	};
 
 	return (
 		<Stack spacing={3}>
@@ -371,14 +387,12 @@ export default function AdminManageTasks() {
 							</button>
 							<br />
 
-            <button type="button" onClick={openWidget}>Pick File</button>
-            <br />
-            
-            {state.length != 0 && state.map((item) => {
-				console.log
-				return <img src={item.file_url} width={100}/>
-			})}
-            <br />
+							{state.length != 0 &&
+								state.map((item) => {
+									console.log;
+									return <img src={item.file_url} width={100} />;
+								})}
+							<br />
 							<TextField
 								type="text"
 								label="Notes"
@@ -403,6 +417,112 @@ export default function AdminManageTasks() {
 						</Stack>
 					</form>
 				</Stack>
+			</Paper>
+			<Paper sx={{ p: 3 }} elevation={3}>
+				{/* <pre>{JSON.stringify(allCompletedTasks)}</pre> */}
+				<Typography>All Completed Tasks</Typography>
+				<Table>
+					<TableHead>
+						<TableRow>
+							<TableCell>Title</TableCell>
+							<TableCell>Completed At</TableCell>
+							<TableCell>Completed By</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{allCompletedTasks.map((task) => (
+							<TableRow
+								key={task.id}
+								onClick={() => {
+									handleOpen2();
+									dispatch({ type: "VIEW_TASK_INFO", payload: task });
+								}}
+							>
+								<TableCell>{task.title}</TableCell>
+								<TableCell>
+									{task.assigned_to_first_name} {task.assigned_to_last_name}
+								</TableCell>
+								<TableCell>
+									{moment(task.time_completed).format("MMMM Do YYYY, h:mm a")}
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+				<Modal
+					open={open2}
+					onClose={() => {
+						handleClose2();
+						dispatch({ type: "UNVIEW_TASK_INFO" });
+					}}
+				>
+					<Stack
+						sx={{
+							display: "flex",
+							alignItems: "center",
+						}}
+					>
+						<Paper
+							sx={{
+								display: "flex",
+								flexDirection: "column",
+								padding: "20px",
+							}}
+							elevation={3}
+						>
+							<Typography
+								variant="h4"
+								component="h2"
+								sx={{ textDecoration: "underline" }}
+							>
+								Task Info
+							</Typography>
+							<br />
+							<Typography variant="h6" component="h4">
+								Title: {infoOfSpecificTask.title}
+							</Typography>
+							<br />
+							<Typography variant="h6" component="h4">
+								Tags:
+							</Typography>
+
+							<ul>
+								{specificTaskTags &&
+									specificTaskTags.map((tag) => (
+										<li key={tag.tag_id}>{tag.tag_name}</li>
+									))}
+							</ul>
+							<br />
+							<Typography variant="h6" component="h4">
+								Budget: ${infoOfSpecificTask.budget}
+							</Typography>
+							<br />
+							<Typography variant="h6" component="h4">
+								Location: {infoOfSpecificTask.location_name}
+							</Typography>
+							<br />
+							<Typography variant="h6" component="h4">
+								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+								{infoOfSpecificTask.created_by_last_name}
+							</Typography>
+							<br />
+							<Typography variant="h6" component="h4">
+								Notes: {infoOfSpecificTask.notes}
+							</Typography>
+							<ul>
+								{commentsForSpecificTask &&
+									commentsForSpecificTask.map((comment) => (
+										<li key={comment.comment_id}>
+											{comment.posted_by_first_name} said: {comment.content} on{" "}
+											{moment(comment.time_posted).format(
+												"MMMM Do YYYY, h:mm a"
+											)}
+										</li>
+									))}
+							</ul>
+						</Paper>
+					</Stack>
+				</Modal>
 			</Paper>
 		</Stack>
 	);
