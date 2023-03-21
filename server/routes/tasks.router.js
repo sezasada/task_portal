@@ -424,7 +424,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       )VALUES ($1, $2);`;
 
     for (let photo of photos) {
-      await pool.query(add_photos_query, [result.rows[0].id, photo]);
+      await pool.query(add_photos_query, [result.rows[0].id, photo.file_url]);
     }
 
     const tags_per_task = `

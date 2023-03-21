@@ -63,14 +63,13 @@ export default function AdminManageTasks() {
 
 	// Manage Local state for task submission
 	const [title, setTitle] = useState("");
-	const [tag, setTag] = useState([]);
+	const [tags, setTags] = useState([]);
 	const [tagInput, setTagInput] = useState("");
 	const [location, setLocation] = useState(allLocations[0]);
 	const [locationInput, setLocationInput] = useState("");
 	const [budget, setBudget] = useState("");
 	const [userLookup, setUserLookup] = useState(verifiedUsers[0]);
 	const [userLookupInput, setUserLookupInput] = useState("");
-	const [imageLink, setImageLink] = useState("");
 	const [notes, setNotes] = useState("");
 	const [dueDate, setDueDate] = useState("");
 
@@ -99,6 +98,7 @@ export default function AdminManageTasks() {
 			due_date: moment(validDate).isValid() ? validDate : "",
 			assigned_to_id: userLookup?.id,
 			photos: state,
+			tags: tags,
 		};
 
 		// dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
@@ -138,6 +138,14 @@ export default function AdminManageTasks() {
 				.open();
 	};
 
+	const handleDeny = () => {
+		console.log("Deny button clicked");
+		dispatch({
+			type: "DENY_TASK",
+			payload: infoOfSpecificTask.task_id,
+		});
+		handleClose();
+	};
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -233,7 +241,9 @@ export default function AdminManageTasks() {
 							<Button variant="contained">Take</Button>
 							<Button variant="contained">Mark Complete</Button>
 							<Button variant="contained">Edit</Button>
-							<Button variant="contained">Delete</Button>
+							<Button variant="contained" onClick={handleDeny}>
+								Delete
+							</Button>
 						</Paper>
 					</Stack>
 				</Modal>
@@ -261,8 +271,8 @@ export default function AdminManageTasks() {
 									marginBottom: 1,
 								}}
 								multiple
-								value={tag}
-								onChange={(event, newValue) => setTag(newValue)}
+								value={tags}
+								onChange={(event, newValue) => setTags(newValue)}
 								inputValue={tagInput}
 								onInputChange={(event, newInputValue) =>
 									setTagInput(newInputValue)
@@ -366,25 +376,19 @@ export default function AdminManageTasks() {
 									/>
 								</LocalizationProvider>
 							</FormControl>
-							{/* <TextField
-								type="text"
-								label="Picture Upload"
-								value={imageLink}
-								sx={{
-									marginBottom: 1,
-									width: 300,
-								}}
-								onChange={(event) => setImageLink(event.target.value)}
-								variant="outlined"
-							/>
 
 							<p>Upload New File</p>
 							{/* This just sets up the window.cloudinary widget */}
 							{useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
 
-							<button type="button" onClick={openWidget}>
+							<Button
+								variant="contained"
+								type="button"
+								onClick={openWidget}
+								sx={{ width: 300 }}
+							>
 								Pick File
-							</button>
+							</Button>
 							<br />
 
 							{state.length != 0 &&
