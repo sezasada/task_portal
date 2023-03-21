@@ -84,8 +84,15 @@ export default function AdminManageTasks() {
 		return has_budget;
 	}
 
+	function determineTimeAssigned(userId) {
+		let time_assigned
+		if (userId) {
+			time_assigned = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
+		}
+		return time_assigned
+	}
+
 	function handleSubmitTask(event) {
-		console.log("this is state", state);
 		event.preventDefault();
 		const newTaskObj = {
 			title: title,
@@ -93,15 +100,16 @@ export default function AdminManageTasks() {
 			has_budget: determineIfHasBudget(budget),
 			budget: Number(budget),
 			location_id: location.id,
-			status: "Available",
+			status: userLookup?.id ? "In Progress" : "Available",
 			is_time_sensitive: moment(validDate).isValid(),
-			due_date: moment(validDate).isValid() ? validDate : "",
+			due_date: moment(validDate).isValid() ? validDate : null,
 			assigned_to_id: userLookup?.id,
 			photos: state,
 			tags: tags,
+			time_assigned: determineTimeAssigned(userLookup?.id)
 		};
 
-		// dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
+		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
 		console.log(newTaskObj);
 	}
 
@@ -138,6 +146,13 @@ export default function AdminManageTasks() {
 				.open();
 	};
 
+	const handleCompleteTask = () => {
+		console.log("infoOfSpecificTask:", infoOfSpecificTask);
+		dispatch({ type: "COMPLETE_TASK", payload: { taskId: infoOfSpecificTask.task_id, status: "Completed" } });
+		
+	  };
+	  
+	  
 	const handleDeny = () => {
 		console.log("Deny button clicked");
 		dispatch({
@@ -239,8 +254,11 @@ export default function AdminManageTasks() {
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 							<Button variant="contained">Take</Button>
-							<Button variant="contained">Mark Complete</Button>
+							<Button variant="contained" onClick={handleCompleteTask}
+							>Mark Complete
+							</Button>
 							<Button variant="contained">Edit</Button>
+
 							<Button variant="contained" onClick={handleDeny}>
 								Delete
 							</Button>
