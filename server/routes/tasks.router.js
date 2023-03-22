@@ -52,45 +52,57 @@ router.get("/user_completed", rejectUnauthenticated, async (req, res) => {
     assigned_to."username" AS "assigned_to_username",
     assigned_to."phone_number" AS "assigned_to_phone_number",
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
-    json_agg(
-      json_build_object(
-        'tag_id', "tags"."id",
-        'tag_name', "tags"."tag_name"
+   (SELECT json_agg(
+         json_build_object(
+          'tag_id', "tags"."id",
+          'tag_name', "tags"."tag_name"
+        )
       )
-    ) AS "tags",
-    json_agg(
-      json_build_object(
-        'photo_id', "photos"."id",
-        'photo_url', "photos"."photo_url"
+      FROM "tags_per_task"
+      LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "tags",
+   (SELECT json_agg(
+         json_build_object(
+          'photo_id', "photos"."id",
+          'photo_url', "photos"."photo_url"
+        )
       )
-    ) AS "photos",
-    json_agg(
-      json_build_object(
-        'comment_id', "comments"."id",
-        'time_posted', "comments"."time_posted",
-        'content', "comments"."content",
-        'posted_by_first_name', posted_by."first_name",
-        'posted_by_last_name', posted_by."last_name",
-        'posted_by_username', posted_by."username",
-        'posted_by_phone_number', posted_by."phone_number"
+      FROM "photos"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "photos"
+  ,
+  (SELECT json_agg(
+         json_build_object(
+          'comment_id', "comments"."id",
+          'time_posted', "comments"."time_posted",
+          'content', "comments"."content",
+          'posted_by_first_name', posted_by."first_name",
+          'posted_by_last_name', posted_by."last_name",
+          'posted_by_username', posted_by."username",
+          'posted_by_phone_number', posted_by."phone_number"
+        )
       )
-    ) AS "comments"
+      FROM "comments"
+      LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "comments"
+  
   FROM "tasks"
+  
   LEFT JOIN "locations" ON "location_id" = "locations"."id"
   LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
   LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
-  LEFT JOIN "tags_per_task" ON "task_id" = "tasks"."id"
-  LEFT JOIN "tags" ON "tag_id" = "tags"."id"
   LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
   LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
   LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
   WHERE "status" = 'Completed'
-  AND "assigned_to_id" = $1 
   GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
     created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
-    `;
+  ;
+  `;
     const result = await pool.query(queryText, [userId]);
     res.send(result.rows);
   } catch (error) {
@@ -115,35 +127,47 @@ router.get("/admin_completed", rejectUnauthenticated, async (req, res) => {
     assigned_to."username" AS "assigned_to_username",
     assigned_to."phone_number" AS "assigned_to_phone_number",
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
-    json_agg(
-      json_build_object(
-        'tag_id', "tags"."id",
-        'tag_name', "tags"."tag_name"
+   (SELECT json_agg(
+         json_build_object(
+          'tag_id', "tags"."id",
+          'tag_name', "tags"."tag_name"
+        )
       )
-    ) AS "tags",
-    json_agg(
-      json_build_object(
-        'photo_id', "photos"."id",
-        'photo_url', "photos"."photo_url"
+      FROM "tags_per_task"
+      LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "tags",
+   (SELECT json_agg(
+         json_build_object(
+          'photo_id', "photos"."id",
+          'photo_url', "photos"."photo_url"
+        )
       )
-    ) AS "photos",
-    json_agg(
-      json_build_object(
-        'comment_id', "comments"."id",
-        'time_posted', "comments"."time_posted",
-        'content', "comments"."content",
-        'posted_by_first_name', posted_by."first_name",
-        'posted_by_last_name', posted_by."last_name",
-        'posted_by_username', posted_by."username",
-        'posted_by_phone_number', posted_by."phone_number"
+      FROM "photos"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "photos"
+  ,
+  (SELECT json_agg(
+         json_build_object(
+          'comment_id', "comments"."id",
+          'time_posted', "comments"."time_posted",
+          'content', "comments"."content",
+          'posted_by_first_name', posted_by."first_name",
+          'posted_by_last_name', posted_by."last_name",
+          'posted_by_username', posted_by."username",
+          'posted_by_phone_number', posted_by."phone_number"
+        )
       )
-    ) AS "comments"
+      FROM "comments"
+      LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "comments"
+  
   FROM "tasks"
+  
   LEFT JOIN "locations" ON "location_id" = "locations"."id"
   LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
   LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
-  LEFT JOIN "tags_per_task" ON "task_id" = "tasks"."id"
-  LEFT JOIN "tags" ON "tag_id" = "tags"."id"
   LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
   LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
   LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
@@ -152,7 +176,9 @@ router.get("/admin_completed", rejectUnauthenticated, async (req, res) => {
     created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
-    `;
+  ;
+  
+  `;
     const result = await pool.query(queryText);
     res.send(result.rows);
   } catch (error) {
@@ -168,31 +194,39 @@ router.get("/user_assigned_tasks", rejectUnauthenticated, async (req, res) => {
   try {
     const queryText = `
     SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status",
-    created_by."id" AS "created_by_id",
-    created_by."first_name" AS "created_by_first_name",
-    created_by."last_name" AS "created_by_last_name",
-    created_by."username" AS "created_by_username",
-    created_by."phone_number" AS "created_by_phone_number",
-    assigned_to."id" AS "assigned_to_id",
-    assigned_to."first_name" AS "assigned_to_first_name",
-    assigned_to."last_name" AS "assigned_to_last_name",
-    assigned_to."username" AS "assigned_to_username",
-    assigned_to."phone_number" AS "assigned_to_phone_number",
-    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
-    json_agg(
-      json_build_object(
+  created_by."id" AS "created_by_id",
+  created_by."first_name" AS "created_by_first_name",
+  created_by."last_name" AS "created_by_last_name",
+  created_by."username" AS "created_by_username",
+  created_by."phone_number" AS "created_by_phone_number",
+  assigned_to."id" AS "assigned_to_id",
+  assigned_to."first_name" AS "assigned_to_first_name",
+  assigned_to."last_name" AS "assigned_to_last_name",
+  assigned_to."username" AS "assigned_to_username",
+  assigned_to."phone_number" AS "assigned_to_phone_number",
+  "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
+ (SELECT json_agg(
+       json_build_object(
         'tag_id', "tags"."id",
         'tag_name', "tags"."tag_name"
       )
-    ) AS "tags",
-    json_agg(
-      json_build_object(
+    )
+    FROM "tags_per_task"
+    LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+    WHERE "task_id" = "tasks"."id"
+) AS "tags",
+ (SELECT json_agg(
+       json_build_object(
         'photo_id', "photos"."id",
         'photo_url', "photos"."photo_url"
       )
-    ) AS "photos",
-    json_agg(
-      json_build_object(
+    )
+    FROM "photos"
+    WHERE "task_id" = "tasks"."id"
+) AS "photos"
+,
+(SELECT json_agg(
+       json_build_object(
         'comment_id', "comments"."id",
         'time_posted', "comments"."time_posted",
         'content', "comments"."content",
@@ -201,29 +235,34 @@ router.get("/user_assigned_tasks", rejectUnauthenticated, async (req, res) => {
         'posted_by_username', posted_by."username",
         'posted_by_phone_number', posted_by."phone_number"
       )
-    ) AS "comments"
-  FROM "tasks"
-  LEFT JOIN "locations" ON "location_id" = "locations"."id"
-  LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
-  LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
-  LEFT JOIN "tags_per_task" ON "task_id" = "tasks"."id"
-  LEFT JOIN "tags" ON "tag_id" = "tags"."id"
-  LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
-  LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
-  LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
-  WHERE "assigned_to_id" = $1 AND "is_approved" = TRUE AND NOT "status" = 'Completed'
-  GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
-    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
-    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
-    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
-  ;
-`;
-const result = await pool.query(queryText, [userId]);
-res.send(result.rows);
-} catch (error) {
-  console.log("error getting task", error);
-  res.sendStatus(500);
-}
+    )
+    FROM "comments"
+    LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+    WHERE "task_id" = "tasks"."id"
+) AS "comments"
+
+FROM "tasks"
+
+LEFT JOIN "locations" ON "location_id" = "locations"."id"
+LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
+WHERE "assigned_to_id" = $1 AND "is_approved" = TRUE AND NOT "status" = 'Completed'
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
+  created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+  assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+  "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
+;
+
+    `;
+    const result = await pool.query(queryText, [userId]);
+    res.send(result.rows);
+  } catch (error) {
+    console.log("error getting task", error);
+    res.sendStatus(500);
+  }
 });
 // route to GET all tasks that have been approved by admin and are available to be selected for work
 router.get("/approved", rejectUnauthenticated, async (req, res) => {
@@ -241,35 +280,47 @@ router.get("/approved", rejectUnauthenticated, async (req, res) => {
     assigned_to."username" AS "assigned_to_username",
     assigned_to."phone_number" AS "assigned_to_phone_number",
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
-    json_agg(
-      json_build_object(
-        'tag_id', "tags"."id",
-        'tag_name', "tags"."tag_name"
+   (SELECT json_agg(
+         json_build_object(
+          'tag_id', "tags"."id",
+          'tag_name', "tags"."tag_name"
+        )
       )
-    ) AS "tags",
-    json_agg(
-      json_build_object(
-        'photo_id', "photos"."id",
-        'photo_url', "photos"."photo_url"
+      FROM "tags_per_task"
+      LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "tags",
+   (SELECT json_agg(
+         json_build_object(
+          'photo_id', "photos"."id",
+          'photo_url', "photos"."photo_url"
+        )
       )
-    ) AS "photos",
-    json_agg(
-      json_build_object(
-        'comment_id', "comments"."id",
-        'time_posted', "comments"."time_posted",
-        'content', "comments"."content",
-        'posted_by_first_name', posted_by."first_name",
-        'posted_by_last_name', posted_by."last_name",
-        'posted_by_username', posted_by."username",
-        'posted_by_phone_number', posted_by."phone_number"
+      FROM "photos"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "photos"
+  ,
+  (SELECT json_agg(
+         json_build_object(
+          'comment_id', "comments"."id",
+          'time_posted', "comments"."time_posted",
+          'content', "comments"."content",
+          'posted_by_first_name', posted_by."first_name",
+          'posted_by_last_name', posted_by."last_name",
+          'posted_by_username', posted_by."username",
+          'posted_by_phone_number', posted_by."phone_number"
+        )
       )
-    ) AS "comments"
+      FROM "comments"
+      LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "comments"
+  
   FROM "tasks"
+  
   LEFT JOIN "locations" ON "location_id" = "locations"."id"
   LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
   LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
-  LEFT JOIN "tags_per_task" ON "task_id" = "tasks"."id"
-  LEFT JOIN "tags" ON "tag_id" = "tags"."id"
   LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
   LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
   LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
@@ -279,6 +330,7 @@ router.get("/approved", rejectUnauthenticated, async (req, res) => {
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
   ;
+  
     `;
     const result = await pool.query(queryText);
     res.send(result.rows);
@@ -292,31 +344,39 @@ router.get("/not_approved", rejectUnauthenticated, async (req, res) => {
   try {
     const queryText = `
     SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status",
-    created_by."id" AS "created_by_id",
-    created_by."first_name" AS "created_by_first_name",
-    created_by."last_name" AS "created_by_last_name",
-    created_by."username" AS "created_by_username",
-    created_by."phone_number" AS "created_by_phone_number",
-    assigned_to."id" AS "assigned_to_id",
-    assigned_to."first_name" AS "assigned_to_first_name",
-    assigned_to."last_name" AS "assigned_to_last_name",
-    assigned_to."username" AS "assigned_to_username",
-    assigned_to."phone_number" AS "assigned_to_phone_number",
-    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
-    json_agg(
-      json_build_object(
+  created_by."id" AS "created_by_id",
+  created_by."first_name" AS "created_by_first_name",
+  created_by."last_name" AS "created_by_last_name",
+  created_by."username" AS "created_by_username",
+  created_by."phone_number" AS "created_by_phone_number",
+  assigned_to."id" AS "assigned_to_id",
+  assigned_to."first_name" AS "assigned_to_first_name",
+  assigned_to."last_name" AS "assigned_to_last_name",
+  assigned_to."username" AS "assigned_to_username",
+  assigned_to."phone_number" AS "assigned_to_phone_number",
+  "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
+ (SELECT json_agg(
+       json_build_object(
         'tag_id', "tags"."id",
         'tag_name', "tags"."tag_name"
       )
-    ) AS "tags",
-    json_agg(
-      json_build_object(
+    )
+    FROM "tags_per_task"
+    LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+    WHERE "task_id" = "tasks"."id"
+) AS "tags",
+ (SELECT json_agg(
+       json_build_object(
         'photo_id', "photos"."id",
         'photo_url', "photos"."photo_url"
       )
-    ) AS "photos",
-    json_agg(
-      json_build_object(
+    )
+    FROM "photos"
+    WHERE "task_id" = "tasks"."id"
+) AS "photos"
+,
+(SELECT json_agg(
+       json_build_object(
         'comment_id', "comments"."id",
         'time_posted', "comments"."time_posted",
         'content', "comments"."content",
@@ -325,22 +385,27 @@ router.get("/not_approved", rejectUnauthenticated, async (req, res) => {
         'posted_by_username', posted_by."username",
         'posted_by_phone_number', posted_by."phone_number"
       )
-    ) AS "comments"
-  FROM "tasks"
-  LEFT JOIN "locations" ON "location_id" = "locations"."id"
-  LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
-  LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
-  LEFT JOIN "tags_per_task" ON "task_id" = "tasks"."id"
-  LEFT JOIN "tags" ON "tag_id" = "tags"."id"
-  LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
-  LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
-  LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
-  WHERE "is_approved" = false
-  GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
-    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
-    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
-    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
-  ;
+    )
+    FROM "comments"
+    LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+    WHERE "task_id" = "tasks"."id"
+) AS "comments"
+
+FROM "tasks"
+
+LEFT JOIN "locations" ON "location_id" = "locations"."id"
+LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
+WHERE "is_approved" = false
+GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
+  created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+  assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+  "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
+;
+
     `;
     const result = await pool.query(queryText);
     res.send(result.rows);
@@ -364,35 +429,47 @@ router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
     assigned_to."username" AS "assigned_to_username",
     assigned_to."phone_number" AS "assigned_to_phone_number",
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
-    json_agg(
-      json_build_object(
-        'tag_id', "tags"."id",
-        'tag_name', "tags"."tag_name"
+   (SELECT json_agg(
+         json_build_object(
+          'tag_id', "tags"."id",
+          'tag_name', "tags"."tag_name"
+        )
       )
-    ) AS "tags",
-    json_agg(
-      json_build_object(
-        'photo_id', "photos"."id",
-        'photo_url', "photos"."photo_url"
+      FROM "tags_per_task"
+      LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "tags",
+   (SELECT json_agg(
+         json_build_object(
+          'photo_id', "photos"."id",
+          'photo_url', "photos"."photo_url"
+        )
       )
-    ) AS "photos",
-    json_agg(
-      json_build_object(
-        'comment_id', "comments"."id",
-        'time_posted', "comments"."time_posted",
-        'content', "comments"."content",
-        'posted_by_first_name', posted_by."first_name",
-        'posted_by_last_name', posted_by."last_name",
-        'posted_by_username', posted_by."username",
-        'posted_by_phone_number', posted_by."phone_number"
+      FROM "photos"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "photos"
+  ,
+  (SELECT json_agg(
+         json_build_object(
+          'comment_id', "comments"."id",
+          'time_posted', "comments"."time_posted",
+          'content', "comments"."content",
+          'posted_by_first_name', posted_by."first_name",
+          'posted_by_last_name', posted_by."last_name",
+          'posted_by_username', posted_by."username",
+          'posted_by_phone_number', posted_by."phone_number"
+        )
       )
-    ) AS "comments"
+      FROM "comments"
+      LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "comments"
+  
   FROM "tasks"
+  
   LEFT JOIN "locations" ON "location_id" = "locations"."id"
   LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
   LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
-  LEFT JOIN "tags_per_task" ON "task_id" = "tasks"."id"
-  LEFT JOIN "tags" ON "tag_id" = "tags"."id"
   LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
   LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
   LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
@@ -402,7 +479,8 @@ router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
     "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
   ;
-    `;
+  
+  `;
     const result = await pool.query(queryText);
     res.send(result.rows);
   } catch (error) {
@@ -413,7 +491,7 @@ router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
 
 //post route to add new task
 router.post("/admin", rejectUnauthenticated, async (req, res) => {
-  console.log('beginning of post route');
+  console.log("beginning of post route");
   try {
     const {
       title,
@@ -447,7 +525,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-    console.log('before first post');
+    console.log("before first post");
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -460,11 +538,10 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       is_time_sensitive,
       due_date,
       true,
-      time_assigned
+      time_assigned,
     ]);
 
-    const add_photos_query =
-      `INSERT INTO "photos" (
+    const add_photos_query = `INSERT INTO "photos" (
       "task_id", 
       "photo_url"
       )VALUES ($1, $2);`;
@@ -498,13 +575,29 @@ router.post(`/post_comment`, (req, res) => {
   let posted_by_id = req.user.id;
 
   const queryText = `INSERT INTO comments (task_id, content, posted_by_id)
-  VALUES ($1, $2, $3);`;
+  VALUES ($1, $2, $3)
+  RETURNING "task_id"
+  ;`;
 
   pool
     .query(queryText, [task_id, content, posted_by_id])
-    .then((response) => res.sendStatus(200))
+    .then((response) => res.send(response.rows).status(201))
     .catch((err) => {
       console.log("error adding comment", err);
+      res.sendStatus(500);
+    });
+});
+
+router.get(`/comments/:task_id`, (req, res) => {
+  const task_id = req.params.task_id;
+  const queryText = `SELECT "task_id", "comments"."id" AS "comment_id", "time_posted", "content", "posted_by_id", "first_name" AS "posted_by_first_name", "last_name" AS "posted_by_last_name", "username" AS "posted_by_username", "phone_number" AS "posted_by_phone_number" FROM "comments"
+  JOIN "user" ON "posted_by_id" = "user"."id"
+  WHERE "task_id" = $1;`;
+  pool
+    .query(queryText, [task_id])
+    .then((response) => res.send(response.rows).status(200))
+    .catch((err) => {
+      console.log("error getting comments", err);
       res.sendStatus(500);
     });
 });
@@ -543,7 +636,7 @@ router.put(`/user_unassign`, (req, res) => {
     });
 });
 //user marks task their task complete
-router.put('/user_complete_task', (req, res) => {
+router.put("/user_complete_task", (req, res) => {
   let time_completed = req.body.time_completed;
   let task_id = req.body.task_id;
   let status = req.body.status;
@@ -560,7 +653,7 @@ router.put('/user_complete_task', (req, res) => {
     });
 });
 
-router.put('/user_status_change', (req, res) => {
+router.put("/user_status_change", (req, res) => {
   let task_id = req.body.task_id;
   let status = req.body.status;
   const queryText = `UPDATE "tasks"
@@ -693,8 +786,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
     await pool.query(deletePhotosQuery, [task_id]);
 
     //then add all updated photos to the photos table
-    const add_photos_query =
-      `INSERT INTO "photos" (
+    const add_photos_query = `INSERT INTO "photos" (
       "task_id", 
       "photo_url"
       )VALUES ($1, $2);`;
