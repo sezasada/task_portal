@@ -61,6 +61,21 @@ export default function AdminDashboard() {
 		};
 	}
 
+	// const refreshTasks = () => {
+	// 	dispatch({ type: "SET_ALL_TASKS_FOR_ADMIN" });
+	//   };
+
+	const handleDropTask = () => {
+		console.log("drop task clicked", infoOfSpecificTask);
+		dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask })
+		handleClose2();
+	};
+
+	const handleCompleteTask = () => {
+		console.log("infoOfSpecificTask:", infoOfSpecificTask);
+		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
+		handleClose2();
+	};
 	return (
 		<Stack spacing={3}>
 			<Box>
@@ -304,8 +319,8 @@ export default function AdminDashboard() {
 							>
 								Add Comment
 							</Button>
-							<Button variant="contained">Finish</Button>
-							<Button variant="contained">Didn't Finish</Button>
+							<Button variant="contained" onClick={ handleCompleteTask}>Finish</Button>
+							<Button variant="contained" onClick={ handleDropTask}>Didn't Finish</Button>
 						</Paper>
 						<Modal
 							open={openChild}
