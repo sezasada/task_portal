@@ -23,6 +23,7 @@ function UserPage() {
 			type: "FETCH_ALL_TASKS_FOR_ADMIN",
 		});
 		dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
+		dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
 	}, []);
 
 	return (
