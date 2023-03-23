@@ -15,6 +15,8 @@ import allTasksForAdminReducer from './all.tasks.for.admin.reducer';
 import allCompletedTasksReducer from './all.completed.tasks.reducer';
 import tasksReducer from './take.drop.task.reducer';
 import commentsForTaskReducer from './comments.for.task.reducer';
+import allCompletedUserTaskReducer from './all.completed.user.tasks.reducer';
+import allTasksForUserReducer from './all.tasks.for.user.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -39,6 +41,9 @@ const rootReducer = combineReducers({
   allCompletedTasksReducer,
   tasksReducer,
   commentsForTaskReducer,
+  allCompletedUserTaskReducer,
+  allTasksForUserReducer,
+
 });
 
 export default rootReducer;

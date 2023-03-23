@@ -37,12 +37,30 @@ function* fetchAllTasksForAdminSaga() {
   }
 }
 
+function* fetchAllTasksForUserSaga() {
+  try {
+    const response = yield axios.get("/api/tasks/user_assigned_tasks");
+    yield put({ type: "SET_ALL_TASKS_FOR_USER", payload: response.data });
+  } catch (error) {
+    console.log("Error with fetching all tasks for admin:", error);
+  }
+}
+
 function* fetchAllCompletedTasksSaga() {
   try {
     const response = yield axios.get("/api/tasks/admin_completed");
     yield put({ type: "SET_ALL_COMPLETED_TASKS", payload: response.data });
   } catch (error) {
     console.log("Error with fetching all completed tasks:", error);
+  }
+}
+
+function* fetchAllCompletedTasksForUserSaga() {
+  try {
+    const response = yield axios.get("/api/tasks/user_completed");
+    yield put({ type: "SET_ALL_COMPLETED_TASKS_FOR_USER", payload: response.data });
+  } catch (error) {
+    console.log("Error with fetching all completed tasks for user:", error);
   }
 }
 
@@ -95,11 +113,13 @@ function* tasksSaga() {
   yield takeLatest("FETCH_ALL_TASKS", fetchAllTasksSaga);
   yield takeLatest("FETCH_INCOMING_TASKS", fetchIncomingTasksSaga);
   yield takeLatest("FETCH_ALL_TASKS_FOR_ADMIN", fetchAllTasksForAdminSaga);
+  yield takeLatest("FETCH_ALL_TASKS_FOR_USER", fetchAllTasksForUserSaga);
   yield takeLatest("FETCH_ALL_COMPLETED_TASKS", fetchAllCompletedTasksSaga);
   yield takeLatest("MARK_TASK_APPROVED", markTaskApprovedSaga);
   yield takeLatest("DENY_TASK", denyTaskSaga);
   yield takeLatest("ADD_NEW_TASK", addNewTaskAdminSaga);
   yield takeLatest("SUBMIT_EDITS", submitEditsSaga)
+  yield takeLatest("FETCH_COMPLETED_USER_TASKS", fetchAllCompletedTasksForUserSaga);
 }
 
 export default tasksSaga;
