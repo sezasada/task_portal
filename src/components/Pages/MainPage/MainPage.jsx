@@ -30,19 +30,21 @@ function UserPage() {
 	return (
 		<div className="container">
 			<Box>
-				{user.is_admin ? (
+
+				{/* {infoOfSpecificUser.is_admin ( */}
+
 					<>
 						{tabIndex === 0 && <AdminDashboard />}
 						{tabIndex === 1 && <AdminManageUsers />}
 						{tabIndex === 2 && <AdminManageTasks />}
 					</>
-				) : (
-					<>
-						{tabIndex === 0 && <UserDashboard />}
+			
+				
+						{/* {tabIndex === 0 && <UserDashboard />}
 						{tabIndex === 1 && <UserCreateTask />}
-						{tabIndex === 2 && <UserTaskList />}
-					</>
-				)}
+						{tabIndex === 2 && <UserTaskList />} */}
+					{/* </>
+				)} */}
 			</Box>
 		</div>
 	);

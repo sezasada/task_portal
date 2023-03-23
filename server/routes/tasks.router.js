@@ -756,11 +756,13 @@ router.put(`/admin_edit_task`, async (req, res) => {
 
   console.log("in edit router req.body", req.body);
   let title = req.body.title;
-  let tags = req.body.tags;
+  let tagObjects = req.body.tags;
+  let tags = [];
+  tagObjects.map((tag) => tags.push(tag.id));
   let notes = req.body.notes;
   let has_budget = req.body.has_budget;
   let budget = req.body.budget;
-  let location_id = req.body.location_id;
+  let location_id = req.body.location_id.id;
   let is_time_sensitive = req.body.is_time_sensitive;
   let due_date = req.body.due_date;
   let task_id = req.body.task_id;
