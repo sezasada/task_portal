@@ -16,6 +16,8 @@ function* takeTaskSaga(action) {
 
     yield put({ type: 'FETCH_ALL_TASKS' });
     yield put({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
+    yield put({ type: "FETCH_ALL_AVAILABLE_TASKS" });
+
 
   } catch (error) {
     console.log('Error completing task:', error);
@@ -35,6 +37,7 @@ function* dropTaskSaga(action) {
 
     yield put({ type: 'FETCH_ALL_TASKS' });
     yield put({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
+    yield put({ type: "FETCH_ALL_AVAILABLE_TASKS" });
 
 
 
