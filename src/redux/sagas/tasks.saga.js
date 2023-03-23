@@ -44,7 +44,6 @@ function* fetchIncomingTasksSaga() {
     const response = yield axios.get("/api/tasks/not_approved");
     yield put({ type: "SET_INCOMING_TASKS", payload: response.data });
     yield put({ type: "FETCH_ALL_AVAILABLE_TASKS" });
-
   } catch (error) {
     console.log("Error with fetching incoming tasks:", error);
   }
@@ -81,7 +80,6 @@ function* fetchAllCompletedTasksForUserSaga() {
   try {
     const response = yield axios.get("/api/tasks/user_completed");
     yield put({ type: "SET_ALL_COMPLETED_TASKS_FOR_USER", payload: response.data });
-    yield put({ type: "FETCH_COMPLETED_USER_TASKS" });
   } catch (error) {
     console.log("Error with fetching all completed tasks for user:", error);
   }
@@ -125,10 +123,10 @@ function* completeTaskSaga(action) {
 }
 
 function* submitEditsSaga(action){
-  
+  console.log("submit edits saga, action.payload", action.payload);
   try{
     yield axios.put('/api/tasks/admin_edit_task', action.payload);
-    yield put({ type: "FETCH_ALL_TASKS" });
+    //call redux to pull in the updated information
 
   } catch (error){
     console.log("error in edit task saga", error);

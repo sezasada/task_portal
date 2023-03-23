@@ -28,7 +28,7 @@ function* completeTask(action) {
       yield put({ type: 'FETCH_ALL_TASKS_FOR_ADMIN' });
       yield put({ type: 'FETCH_ALL_TASKS_FOR_USER' });
       yield put({ type: 'FETCH_ALL_COMPLETED_TASKS' });
-      
+      yield put({ type: 'FETCH_COMPLETED_USER_TASKS' });      
 
     } catch (error) {
       console.log('Error completing task:', error);

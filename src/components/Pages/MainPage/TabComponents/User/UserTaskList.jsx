@@ -77,7 +77,7 @@ export default function UserTaskList() {
 		handleClose();
 	};
 
-	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
+	// console.log("this is all available tasks:", allAvailableTasks);
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -87,8 +87,7 @@ export default function UserTaskList() {
 						<TableRow>
 							<TableCell>Title</TableCell>
 							<TableCell>Location</TableCell>
-							<TableCell>Due Date</TableCell>
-							<TableCell>Status</TableCell>
+							<TableCell>Tags</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -103,13 +102,7 @@ export default function UserTaskList() {
 							>
 								<TableCell>{task.title}</TableCell>
 								<TableCell>{task.location_name}</TableCell>
-								<TableCell>
-									{" "}
-									{task.due_date != null ? 
-									moment(task.due_date).format("MMMM Do YYYY, h:mm a")
-								: " "}
-								</TableCell>
-								<TableCell>{task.status}</TableCell>
+								<TableCell>{task.location_name}</TableCell>
 							</TableRow>
 						))}
 					</TableBody>

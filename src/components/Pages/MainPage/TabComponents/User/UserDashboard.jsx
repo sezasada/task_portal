@@ -116,7 +116,6 @@ export default function UserDashboard() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
-                            <TableCell>Created By</TableCell>
                             <TableCell>Created At</TableCell>
                         </TableRow>
                     </TableHead>
@@ -130,9 +129,6 @@ export default function UserDashboard() {
                                 }}
                             >
                                 <TableCell>{task.title}</TableCell>
-                                <TableCell>
-                                    {task.created_by_first_name} {task.created_by_last_name}
-                                </TableCell>
                                 <TableCell>
                                     {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
                                 </TableCell>
@@ -224,7 +220,6 @@ export default function UserDashboard() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
-                            <TableCell>Created By</TableCell>
                             <TableCell>Created At</TableCell>
                         </TableRow>
                     </TableHead>
@@ -238,9 +233,6 @@ export default function UserDashboard() {
                                 }}
                             >
                                 <TableCell>{task.title}</TableCell>
-                                <TableCell>
-                                    {task.created_by_first_name} {task.created_by_last_name}
-                                </TableCell>
                                 <TableCell>
                                     {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
                                 </TableCell>
