@@ -75,7 +75,7 @@ export default function AdminManageTasks() {
 			setEditedNotes(infoOfSpecificTask.notes);
 			setEditedDueDate("");
 			setEditedTaskID(infoOfSpecificTask.task_id);
-			setEditedPhotos(infoOfSpecificTask.photos);
+			setEditedPhotos([]);
 		} else {
 			setEditedTitle("");
 			setEditedBudget("");
@@ -209,7 +209,7 @@ export default function AdminManageTasks() {
 					(error, result) => {
 						console.log(result);
 						if (!error && result && result.event === "success") {
-							const newPhoto = { file_url: result.info.secure_url };
+							const newPhoto = { photo_url: result.info.secure_url };
 
 							if (!editMode) {
 								// When an upload is successful, save the uploaded URL to local state!
@@ -546,14 +546,17 @@ export default function AdminManageTasks() {
 									>
 										Pick File
 									</Button>
+									
 									{editedPhotos &&
 										editedPhotos.map((item) => {
 											return <img src={item.photo_url} width={100} />;
-										})}
+										})
+									
+										}
 								</>
 							) : (
 								<>
-									{photosForTask &&
+									{photosForTask != null &&
 										photosForTask.map((item) => {
 											return <img src={item.photo_url} width={100} />;
 										})}
@@ -740,11 +743,11 @@ export default function AdminManageTasks() {
 								Pick File
 							</Button>
 							<br />
-
-							{state.length != 0 &&
+							{console.log("state", state)}
+							{state &&
 								state.map((item) => {
 									console.log;
-									return <img src={item.file_url} width={100} />;
+									return <img src={item.photo_url} width={100} />;
 								})}
 							<br />
 							<TextField

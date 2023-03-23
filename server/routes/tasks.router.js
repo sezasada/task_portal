@@ -492,7 +492,6 @@ router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
 
 //post route to add new task
 router.post("/admin", rejectUnauthenticated, async (req, res) => {
-  console.log("beginning of post route");
   try {
     const {
       title,
@@ -526,7 +525,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-    console.log("before first post");
+    
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -548,7 +547,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       )VALUES ($1, $2);`;
 
     for (let photo of photos) {
-      await pool.query(add_photos_query, [result.rows[0].id, photo.file_url]);
+      await pool.query(add_photos_query, [result.rows[0].id, photo.photo_url]);
     }
 
     const tags_per_task = `
@@ -863,21 +862,21 @@ router.put(`/admin_edit_task`, async (req, res) => {
       task_id,
     ]);
 
-    //then delete all photos in the photos table with that task_id
-    //TODO issue with edit photo function
-    // const deletePhotosQuery = `DELETE FROM "photos" 
-    // WHERE "task_id" = $1;`;
-    // await pool.query(deletePhotosQuery, [task_id]);
+    // then delete all photos in the photos table with that task_id
+    // TODO issue with edit photo function
+    const deletePhotosQuery = `DELETE FROM "photos" 
+    WHERE "task_id" = $1;`;
+    await pool.query(deletePhotosQuery, [task_id]);
 
-    //then add all updated photos to the photos table
-    // const add_photos_query = `INSERT INTO "photos" (
-    //   "task_id", 
-    //   "photo_url"
-    //   )VALUES ($1, $2);`;
+    // then add all updated photos to the photos table
+    const add_photos_query = `INSERT INTO "photos" (
+      "task_id", 
+      "photo_url"
+      )VALUES ($1, $2);`;
 
-    // for (let photo of photos) {
-    //   await pool.query(add_photos_query, [task_id, photo]);
-    // }
+    for (let photo of photos) {
+      await pool.query(add_photos_query, [task_id, photo.photo_url]);
+    }
      console.log("assigned to id", assigned_to_id);
     if(assigned_to_id ){
       //if there is an assiged to, update the assigned to id and time assigned in db
