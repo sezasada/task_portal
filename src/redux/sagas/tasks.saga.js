@@ -22,7 +22,7 @@ function* addNewTaskAdminSaga(action) {
 function* addNewTaskUserSaga(action) {
   try {
     yield axios.post("/api/tasks/user", action.payload);
-    yield put({ type: "FETCH_ALL_TASKS" });
+    yield put({ type: "FETCH_INCOMING_TASKS" });
   } catch (error) {
     console.log("Error posting task:", error);
   }
