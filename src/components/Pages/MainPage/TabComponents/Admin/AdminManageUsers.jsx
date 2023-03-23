@@ -16,7 +16,6 @@ import {
 import moment from "moment";
 
 export default function AdminManageUsers() {
-
 	const dispatch = useDispatch();
 
 	// Access redux stores for users
@@ -26,21 +25,12 @@ export default function AdminManageUsers() {
 	const infoOfSpecificUser = useSelector(
 		(store) => store.viewAccountInfoReducer
 	);
-	// const [isPromoteDisplayed, setIsPromoteDisplayed] = useState(true);
-	// const [isPromoteDisplayed, setIsPromoteDisplayed] = useState(
-	// 	!infoOfSpecificUser.is_admin
-	//   );
-	// Manage opening and closing of details modal
-	// const [isAdmin, setIsAdmin] = useState(infoOfSpecificUser.is_admin);
-	const [buttonText, setButtonText] = useState(infoOfSpecificUser.is_admin ? "Demote" : "Promote");
 
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => {
 		setOpen(true);
 	};
 	const handleClose = () => setOpen(false);
-	
-
 
 	const handleApprove = () => {
 		console.log("Approve button clicked");
@@ -49,35 +39,25 @@ export default function AdminManageUsers() {
 		handleClose();
 	};
 
-
 	const handleDeny = () => {
 		console.log("Deny button clicked");
 		dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
 		handleClose();
 	};
-	// const handleClick = () => {
-	// 	for (let x = 0; x < verifiedUsers.length; x++) {
-	// 		if (verifiedUsers[x].is_admin === true) {
-	// 			handleDemote();
-	// 		}
-	// 		if (verifiedUsers[x].is_admin === false) {
-	// 			handlePromote();
-	// 		}
-	// 	}
-	// }
+
 	const handlePromote = () => {
 		console.log("Promote button clicked");
 		dispatch({ type: "PROMOTE_USER", payload: infoOfSpecificUser });
-		handleClose(); 
-	}
+		handleClose();
+	};
 
 	const handleDemote = () => {
 		console.log("Demote button clicked");
 		dispatch({ type: "DEMOTE_USER", payload: infoOfSpecificUser });
-		handleClose(); 
-	}
+		handleClose();
+	};
 
-	console.log(infoOfSpecificUser)
+	console.log(infoOfSpecificUser);
 	return (
 		<div>
 			<Stack spacing={3}>
@@ -153,11 +133,19 @@ export default function AdminManageUsers() {
 								</Typography>
 								<br />
 								<Typography variant="h6" component="h4">
-									Created at: {moment(infoOfSpecificUser.created_at).format("MMMM Do YYYY")}
+									Created at:{" "}
+									{moment(infoOfSpecificUser.created_at).format("MMMM Do YYYY")}
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
-										<Button variant="contained" onClick={infoOfSpecificUser.is_admin ? handleDemote : handlePromote}>
+										<Button
+											variant="contained"
+											onClick={
+												infoOfSpecificUser.is_admin
+													? handleDemote
+													: handlePromote
+											}
+										>
 											{infoOfSpecificUser.is_admin ? "Demote" : "Promote"}
 										</Button>
 									</>
@@ -172,7 +160,6 @@ export default function AdminManageUsers() {
 										</Button>
 									</>
 								)}
-
 							</Paper>
 						</Stack>
 					</Modal>
@@ -238,7 +225,8 @@ export default function AdminManageUsers() {
 								</Typography>
 								<br />
 								<Typography variant="h6" component="h4">
-									Name: {infoOfSpecificUser.first_name} {infoOfSpecificUser.last_name}
+									Name: {infoOfSpecificUser.first_name}{" "}
+									{infoOfSpecificUser.last_name}
 								</Typography>
 								<br />
 								<Typography variant="h6" component="h4">
@@ -250,16 +238,25 @@ export default function AdminManageUsers() {
 								</Typography>
 								<br />
 								<Typography variant="h6" component="h4">
-									Created at: {moment(infoOfSpecificUser.created_at).format("MMMM Do YYYY")}
+									Created at:{" "}
+									{moment(infoOfSpecificUser.created_at).format("MMMM Do YYYY")}
 								</Typography>
 								{infoOfSpecificUser.is_verified ? (
 									<>
-										<Button variant="contained" onClick={infoOfSpecificUser.is_admin ? handleDemote : handlePromote}>
+										<Button
+											variant="contained"
+											onClick={
+												infoOfSpecificUser.is_admin
+													? handleDemote
+													: handlePromote
+											}
+										>
 											{infoOfSpecificUser.is_admin ? "Demote" : "Promote"}
 										</Button>
 
-
-										<Button variant="contained" onClick={handleDeny}>Delete</Button>
+										<Button variant="contained" onClick={handleDeny}>
+											Delete
+										</Button>
 									</>
 								) : (
 									<>

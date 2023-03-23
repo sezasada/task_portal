@@ -26,6 +26,7 @@ function* completeTask(action) {
       yield call(axios.put, '/api/tasks/user_complete_task', { task_id, time_completed, status });  
       yield put({ type: 'FETCH_ALL_TASKS' });
       yield put({ type: 'FETCH_ALL_TASKS_FOR_ADMIN' });
+      yield put({ type: 'FETCH_ALL_TASKS_FOR_USER' });
       yield put({ type: 'FETCH_ALL_COMPLETED_TASKS' });
       
 
