@@ -66,13 +66,14 @@ export default function AdminManageTasks() {
   const [editedAssignedTo, setEditedAssignedTo] = useState("");
 
   useEffect(() => {
+    console.log("info of specific task", infoOfSpecificTask);
     if (editMode) {
       setEditedTitle(infoOfSpecificTask.title);
       setEditedTags(infoOfSpecificTask.tags);
-      setEditedLocation(infoOfSpecificTask.location_name);
+      setEditedLocation(allLocations[0]);
       setEditedBudget(infoOfSpecificTask.budget);
       setEditedNotes(infoOfSpecificTask.notes);
-      setEditedDueDate(infoOfSpecificTask.due_date);
+      setEditedDueDate("");
       setEditedTaskID(infoOfSpecificTask.task_id);
       setEditedPhotos(infoOfSpecificTask.photos);
     } else {
@@ -102,6 +103,7 @@ export default function AdminManageTasks() {
       due_date: editedDueDate,
       task_id: editedTaskID,
       photos: editedPhotos,
+      assiged_to_id: editedUserLookup.id,
     };
 
     console.log("new edited Object", newObj);
@@ -207,14 +209,23 @@ export default function AdminManageTasks() {
           (error, result) => {
             console.log(result);
             if (!error && result && result.event === "success") {
+
+              const newPhoto = { file_url: result.info.secure_url};
+
+              if (!editMode){
               // When an upload is successful, save the uploaded URL to local state!
-              setState([
-                ...state,
-                {
-                  file_url: result.info.secure_url,
-                },
-              ]);
-              console.log(state);
+              setState([...state,  newPhoto]);
+              console.log(state)
+            } else if(editMode){
+              // When an upload is successful, save the uploaded URL to local state!
+              setEditedPhotos([...editedPhotos, newPhoto]);
+              console.log(editedPhotos)
+            }
+
+
+
+
+
             }
           }
         )
@@ -346,11 +357,11 @@ export default function AdminManageTasks() {
                   multiple
                   value={editedTags}
                   onChange={(event, newValue) =>
-                    setEditedTags(event.target.newValue)
+                    setEditedTags(newValue)
                   }
                   inputValue={tagInput}
                   onInputChange={(event, newInputValue) =>
-                    setEditedTagInput(event.target.newInputValue)
+                    setEditedTagInput(newInputValue)
                   }
                   id="all-tags-lookup"
                   getOptionLabel={(allTags) => `${allTags.tag_name}`}
@@ -411,11 +422,11 @@ export default function AdminManageTasks() {
                       width: 300,
                       marginBottom: 1,
                     }}
-                    value={infoOfSpecificTask.location_name}
-                    onChange={(event, newValue) => console.log("edit location")}
-                    inputValue={locationInput}
+                    value={editedLocation}
+                    onChange={(event, newValue) => setEditedLocation(newValue)}
+                    inputValue={editedLocationInput}
                     onInputChange={(event, newInputValue) =>
-                      console.log("edit location")
+                      setEditedLocationInput(newInputValue)
                     }
                     id="all-locations-lookup"
                     getOptionLabel={(allLocations) =>
@@ -440,14 +451,18 @@ export default function AdminManageTasks() {
                 )}
               </Typography>
               <br />
+              
               <Typography>
                 Due Date:{" "}
+
                 {editMode ? (
+                  
                   <LocalizationProvider dateAdapter={AdapterMoment}>
                     <DatePicker
+                      value={editedDueDate}
                       sx={{ marginBottom: 1, width: 300 }}
                       onChange={(newValue) =>
-                        setEditedDueDate(newValue.target.value)
+                        setEditedDueDate(newValue)
                       }
                     />
                   </LocalizationProvider>
@@ -473,14 +488,21 @@ export default function AdminManageTasks() {
                       width: 300,
                       marginBottom: 1,
                     }}
-                    value={userLookup}
-                    onChange={(event, newValue) => setUserLookup(newValue)}
-                    inputValue={userLookupInput}
+                    value={editedUserLookup}
+                    onChange={(event, newValue) => 
+                      {
+                        console.log(event.target.value);
+                        console.log(infoOfSpecificTask);
+                        console.log("verified users", verifiedUsers) ;
+                      setEditedUserLookup(newValue)}}
+
+                    inputValue={editedUserLookupInput}
                     onInputChange={(event, newInputValue) =>
-                      setUserLookupInput(newInputValue)
+                      setEditedUserLookupInput(newInputValue)
                     }
                     id="all-verified-users-lookup"
                     getOptionLabel={(verifiedUsers) =>
+                      
                       `${verifiedUsers.first_name} ${verifiedUsers.last_name}`
                     }
                     options={verifiedUsers}
