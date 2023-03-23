@@ -10,6 +10,15 @@ function* fetchAllTasksSaga() {
   }
 }
 
+function* fetchAllAvailableTasksSaga() {
+  try {
+    const response = yield axios.get("/api/tasks/all_available_tasks");
+    yield put({ type: "SET_ALL_AVAILABLE_TASKS", payload: response.data });
+  } catch (error) {
+    console.log("Error with fetching all tasks:", error);
+  }
+}
+
 function* addNewTaskAdminSaga(action) {
   try {
     yield axios.post("/api/tasks/admin", action.payload);
@@ -132,6 +141,8 @@ function* tasksSaga() {
   yield takeLatest("ADD_NEW_TASK", addNewTaskAdminSaga);
   yield takeLatest("SUBMIT_EDITS", submitEditsSaga)
   yield takeLatest("FETCH_COMPLETED_USER_TASKS", fetchAllCompletedTasksForUserSaga);
+  yield takeLatest("FETCH_INCOMING_TASKS", fetchAllAvailableTasksSaga);
+
 }
 
 export default tasksSaga;
