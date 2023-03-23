@@ -97,7 +97,7 @@ router.get("/user_completed", rejectUnauthenticated, async (req, res) => {
   LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
   LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
   LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
-  WHERE "status" = 'Completed'
+  WHERE "status" = 'Completed' AND "assigned_to_id" = $1
   GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
     created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
     assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 

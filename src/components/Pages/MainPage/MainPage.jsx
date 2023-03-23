@@ -12,13 +12,8 @@ function UserPage() {
 
 	// Access tab index reducer
 	const tabIndex = useSelector((store) => store.tabIndexReducer);
-	// Access unverified user reducer
-	const unverifiedUsers = useSelector((store) => store.unverifiedUsersReducer);
-	// Access verified user reducer
-	const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
-	const infoOfSpecificUser = useSelector(
-		(store) => store.viewAccountInfoReducer
-	);
+
+	const user = useSelector((store) => store.user);
 	// Grab all needed data on page load
 	useEffect(() => {
 		dispatch({ type: "FETCH_UNVERIFIED_USERS" });
@@ -29,14 +24,15 @@ function UserPage() {
 		dispatch({ type: "FETCH_VERIFIED_USERS" });
 		dispatch({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
 		dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
-		dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
+		dispatch({ type: "FETCH_COMPLETED_USER_TASKS" });
 	}, []);
-
 
 	return (
 		<div className="container">
 			<Box>
+
 				{/* {infoOfSpecificUser.is_admin ( */}
+
 					<>
 						{tabIndex === 0 && <AdminDashboard />}
 						{tabIndex === 1 && <AdminManageUsers />}
