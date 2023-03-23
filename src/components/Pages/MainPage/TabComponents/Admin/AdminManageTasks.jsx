@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useScript } from "../../../../../hooks/useScript";
+import { useEffect } from "react";
 import {
   Paper,
   Typography,
@@ -50,6 +51,65 @@ export default function AdminManageTasks() {
 
   //Manage edit mode
   const [editMode, setEditMode] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedTags, setEditedTags] = useState([]);
+  const [editedTagInput, setEditedTagInput] = useState("");
+  const [editedLocation, setEditedLocation] = useState(allLocations[0]);
+  const [editedLocationInput, setEditedLocationInput] = useState("");
+  const [editedBudget, setEditedBudget] = useState("");
+  const [editedUserLookup, setEditedUserLookup] = useState(verifiedUsers[0]);
+  const [editedUserLookupInput, setEditedUserLookupInput] = useState("");
+  const [editedNotes, setEditedNotes] = useState("");
+  const [editedDueDate, setEditedDueDate] = useState("");
+  const [editedTaskID, setEditedTaskID] = useState("");
+  const [editedPhotos, setEditedPhotos] = useState("");
+  const [editedAssignedTo, setEditedAssignedTo] = useState("");
+
+  useEffect(() => {
+    if (editMode) {
+      setEditedTitle(infoOfSpecificTask.title);
+      setEditedTags(infoOfSpecificTask.tags);
+      setEditedLocation(infoOfSpecificTask.location_name);
+      setEditedBudget(infoOfSpecificTask.budget);
+      setEditedNotes(infoOfSpecificTask.notes);
+      setEditedDueDate(infoOfSpecificTask.due_date);
+      setEditedTaskID(infoOfSpecificTask.task_id);
+      setEditedPhotos(infoOfSpecificTask.photos);
+    } else {
+      setEditedTitle("");
+      setEditedBudget("");
+      setEditedNotes("");
+      setEditedDueDate("");
+    }
+  }, [editMode]);
+
+  const submit_edits = () => {
+    let has_budget = determineIfHasBudget(editedBudget);
+    let is_time_sensitive;
+
+    editedDueDate == null
+      ? (is_time_sensitive = false)
+      : (is_time_sensitive = true);
+
+    const newObj = {
+      title: editedTitle,
+      tags: editedTags,
+      notes: editedNotes,
+      has_budget: has_budget,
+      budget: editedBudget,
+      location_id: editedLocation,
+      is_time_sensitive,
+      due_date: editedDueDate,
+      task_id: editedTaskID,
+      photos: editedPhotos,
+    };
+
+    console.log("new edited Object", newObj);
+
+    dispatch({ type: "SUBMIT_EDITS", payload: newObj });
+
+	setEditMode(!editMode);
+  };
 
   // Manage opening and closing of details modal
   const [open, setOpen] = useState(false);
@@ -257,18 +317,16 @@ export default function AdminManageTasks() {
                 Title: {""}
                 {editMode ? (
                   <TextField
-					required
-					type="text"
-					label="Title"
-                    value={infoOfSpecificTask.title}
-					sx={{
-						marginBottom: 1,
-						width: 300,
-					  }}
-					  variant="outlined"
-                    onChange={(event) =>
-                      console.log("set event.target.value to updated title")
-                    }
+                    required
+                    type="text"
+                    label="Title"
+                    value={editedTitle}
+                    sx={{
+                      marginBottom: 1,
+                      width: 300,
+                    }}
+                    variant="outlined"
+                    onChange={(event) => setEditedTitle(event.target.value)}
                   />
                 ) : (
                   infoOfSpecificTask.title
@@ -276,38 +334,40 @@ export default function AdminManageTasks() {
               </Typography>
               <br />
               <Typography variant="h6" component="h4">
-                Tags:
+                Tags:{""}
               </Typography>
 
               {editMode ? (
                 <Autocomplete
-                sx={{
-                  width: 300,
-                  marginBottom: 1,
-                }}
-                multiple
-                value={tags}
-                onChange={(event, newValue) => console.log("set tags")}
-                inputValue={tagInput}
-                onInputChange={(event, newInputValue) =>
-                  console.log("set tags")
-                }
-                id="all-tags-lookup"
-                getOptionLabel={(allTags) => `${allTags.tag_name}`}
-                options={allTags}
-                isOptionEqualToValue={(option, value) =>
-                  option.tag_name === value.tag_name
-                }
-                noOptionsText={"No valid tags"}
-                renderOption={(props, allTags) => (
-                  <Box component="li" {...props} key={allTags.id}>
-                    {allTags.tag_name}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField {...params} label="Add Tags" />
-                )}
-              />
+                  sx={{
+                    width: 300,
+                    marginBottom: 1,
+                  }}
+                  multiple
+                  value={editedTags}
+                  onChange={(event, newValue) =>
+                    setEditedTags(event.target.newValue)
+                  }
+                  inputValue={tagInput}
+                  onInputChange={(event, newInputValue) =>
+                    setEditedTagInput(event.target.newInputValue)
+                  }
+                  id="all-tags-lookup"
+                  getOptionLabel={(allTags) => `${allTags.tag_name}`}
+                  options={allTags}
+                  isOptionEqualToValue={(option, value) =>
+                    option.tag_name === value.tag_name
+                  }
+                  noOptionsText={"No valid tags"}
+                  renderOption={(props, allTags) => (
+                    <Box component="li" {...props} key={allTags.id}>
+                      {allTags.tag_name}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Add Tags" />
+                  )}
+                />
               ) : (
                 <ul>
                   {specificTaskTags &&
@@ -318,26 +378,26 @@ export default function AdminManageTasks() {
               )}
               <br />
               <Typography variant="h6" component="h4">
-                Budget:
+                Budget: {""}
                 {editMode ? (
-					<>
-				  <InputLabel htmlFor="budget-input">Budget</InputLabel>
-				  <OutlinedInput
-					type="number"
-					id="budget-input"
-					label="Budget"
-					value={infoOfSpecificTask.budget}
-					sx={{
-					  marginBottom: 1,
-					  width: 300,
-					}}
-					onChange={(event) => console.log("setbudget")}
-					variant="outlined"
-					startAdornment={
-					  <InputAdornment position="start">$</InputAdornment>
-					}
-				  />
-				  </>
+                  <>
+                    <InputLabel htmlFor="budget-input">Budget</InputLabel>
+                    <OutlinedInput
+                      type="number"
+                      id="budget-input"
+                      label="Budget"
+                      value={editedBudget}
+                      sx={{
+                        marginBottom: 1,
+                        width: 300,
+                      }}
+                      onChange={(event) => setEditedBudget(event.target.value)}
+                      variant="outlined"
+                      startAdornment={
+                        <InputAdornment position="start">$</InputAdornment>
+                      }
+                    />
+                  </>
                 ) : (
                   `$${infoOfSpecificTask.budget}`
                 )}
@@ -346,37 +406,35 @@ export default function AdminManageTasks() {
               <Typography variant="h6" component="h4">
                 Location: {""}
                 {editMode ? (
-                  
-				  <Autocomplete
-				  sx={{
-					width: 300,
-					marginBottom: 1,
-				  }}
-				  value={infoOfSpecificTask.location_name}
-				  onChange={(event, newValue) => console.log("edit location")}
-				  inputValue={locationInput}
-				  onInputChange={(event, newInputValue) =>
-					console.log("edit location")
-				  }
-				  id="all-locations-lookup"
-				  getOptionLabel={(allLocations) =>
-					`${allLocations.location_name}`
-				  }
-				  options={allLocations}
-				  isOptionEqualToValue={(option, value) =>
-					option.location_name === value.location_name
-				  }
-				  noOptionsText={"No valid locations"}
-				  renderOption={(props, allLocations) => (
-					<Box component="li" {...props} key={allLocations.id}>
-					  {allLocations.location_name}
-					</Box>
-				  )}
-				  renderInput={(params) => (
-					<TextField {...params} label="Add Location" />
-				  )}
-				/>
-
+                  <Autocomplete
+                    sx={{
+                      width: 300,
+                      marginBottom: 1,
+                    }}
+                    value={infoOfSpecificTask.location_name}
+                    onChange={(event, newValue) => console.log("edit location")}
+                    inputValue={locationInput}
+                    onInputChange={(event, newInputValue) =>
+                      console.log("edit location")
+                    }
+                    id="all-locations-lookup"
+                    getOptionLabel={(allLocations) =>
+                      `${allLocations.location_name}`
+                    }
+                    options={allLocations}
+                    isOptionEqualToValue={(option, value) =>
+                      option.location_name === value.location_name
+                    }
+                    noOptionsText={"No valid locations"}
+                    renderOption={(props, allLocations) => (
+                      <Box component="li" {...props} key={allLocations.id}>
+                        {allLocations.location_name}
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Add Location" />
+                    )}
+                  />
                 ) : (
                   infoOfSpecificTask.location_name
                 )}
@@ -385,15 +443,14 @@ export default function AdminManageTasks() {
               <Typography>
                 Due Date:{" "}
                 {editMode ? (
-
-				  <LocalizationProvider dateAdapter={AdapterMoment}>
-                  <DatePicker
-                    sx={{ marginBottom: 1, width: 300 }}
-                    // value={infoOfSpecificTask.due_date}
-                    onChange={(newValue) => console.log("update due date")}
-                  />
-                </LocalizationProvider>
-
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DatePicker
+                      sx={{ marginBottom: 1, width: 300 }}
+                      onChange={(newValue) =>
+                        setEditedDueDate(newValue.target.value)
+                      }
+                    />
+                  </LocalizationProvider>
                 ) : infoOfSpecificTask.due_date != null ? (
                   moment(infoOfSpecificTask.due_date).format(
                     "MMMM Do YYYY, h:mm a"
@@ -409,43 +466,92 @@ export default function AdminManageTasks() {
               </Typography>
               <br />
               <Typography variant="h6" component="h4">
-                Assigned To: 
-				{editMode ? (
-					<>
-                  <TextField
-                    value={infoOfSpecificTask.assigned_to_first_name}
-                    onChange={(event) => console.log("edit first name")}
+                Assigned To: {""}
+                {editMode ? (
+                  <Autocomplete
+                    sx={{
+                      width: 300,
+                      marginBottom: 1,
+                    }}
+                    value={userLookup}
+                    onChange={(event, newValue) => setUserLookup(newValue)}
+                    inputValue={userLookupInput}
+                    onInputChange={(event, newInputValue) =>
+                      setUserLookupInput(newInputValue)
+                    }
+                    id="all-verified-users-lookup"
+                    getOptionLabel={(verifiedUsers) =>
+                      `${verifiedUsers.first_name} ${verifiedUsers.last_name}`
+                    }
+                    options={verifiedUsers}
+                    isOptionEqualToValue={(option, value) =>
+                      option.first_name === value.first_name
+                    }
+                    noOptionsText={"No valid users"}
+                    renderOption={(props, verifiedUsers) => (
+                      <Box component="li" {...props} key={verifiedUsers.id}>
+                        {verifiedUsers.first_name} {verifiedUsers.last_name}
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Assign to User" />
+                    )}
                   />
-				  <TextField
-                    value={infoOfSpecificTask.assigned_to_last_name}
-                    onChange={(event) => console.log("last name")}
-                  />
-				  </>
-                ) : ( infoOfSpecificTask.assigned_to_first_name == null ? " " :
-
-					`${infoOfSpecificTask.assigned_to_first_name}
+                ) : infoOfSpecificTask.assigned_to_first_name == null ? (
+                  " "
+                ) : (
+                  `${infoOfSpecificTask.assigned_to_first_name}
 					${infoOfSpecificTask.assigned_to_last_name}`
                 )}
-				
               </Typography>
               <br />
               <Typography variant="h6" component="h4">
-                Notes: 
-
-				{editMode ? (
+                Notes: {""}
+                {editMode ? (
                   <TextField
-                    value={infoOfSpecificTask.notes}
-                    onChange={(event) => console.log("edit notes")}
+                    type="text"
+                    label="Notes"
+                    value={editedNotes}
+                    sx={{
+                      marginBottom: 1,
+                      width: 300,
+                    }}
+                    onChange={(event) => setEditedNotes(event.target.value)}
+                    variant="outlined"
                   />
                 ) : (
-                  `$${infoOfSpecificTask.notes}`
+                  `${infoOfSpecificTask.notes}`
                 )}
-				
               </Typography>
-              {photosForTask &&
-                photosForTask.map((item) => {
-                  return <img src={item.photo_url} width={100} />;
-                })}
+              {editMode ? (
+                <>
+                  {/* This just sets up the window.cloudinary widget
+                  {useScript(
+                    "https://widget.cloudinary.com/v2.0/global/all.js"
+                  )} */}
+
+                  <Button
+                    variant="contained"
+                    type="button"
+                    onClick={openWidget}
+                    sx={{ width: 300 }}
+                  >
+                    Pick File
+                  </Button>
+                  {editedPhotos &&
+                    editedPhotos.map((item) => {
+                      return <img src={item.photo_url} width={100} />;
+                    })}
+                </>
+              ) : (
+                <>
+                  {photosForTask &&
+                    photosForTask.map((item) => {
+                      return <img src={item.photo_url} width={100} />;
+                    })}
+                  </>
+               
+              )}
 
               <Button
                 variant="contained"
@@ -464,12 +570,19 @@ export default function AdminManageTasks() {
               <Button variant="contained" onClick={handleCompleteTask}>
                 Mark Complete
               </Button>
-              <Button
-                variant="contained"
-                onClick={() => setEditMode(!editMode)}
-              >
-                Edit
-              </Button>
+
+              {editMode ? (
+                <Button variant="contained" onClick={() => submit_edits()}>
+                  Submit Changes
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  Edit
+                </Button>
+              )}
 
               <Button variant="contained" onClick={handleDeny}>
                 Delete

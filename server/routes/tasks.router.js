@@ -660,6 +660,8 @@ router.put(`/admin_incomplete_task`, (req, res) => {
 
 //admin edits original settings for task
 router.put(`/admin_edit_task`, async (req, res) => {
+
+  console.log("in edit router req.body", req.body);
   let title = req.body.title;
   let tags = req.body.tags;
   let notes = req.body.notes;
