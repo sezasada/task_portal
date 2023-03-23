@@ -81,7 +81,7 @@ export default function AdminManageTasks() {
 			setEditedNotes("");
 			setEditedDueDate("");
 		}
-	}, [editMode]);
+	}, [editMode, allApprovedTasks]);
 
 	const submit_edits = () => {
 		let has_budget = determineIfHasBudget(editedBudget);
@@ -107,6 +107,7 @@ export default function AdminManageTasks() {
 
 		dispatch({ type: "SUBMIT_EDITS", payload: newObj });
 		setEditMode(!editMode);
+		handleClose();
 	};
 
 	// Manage opening and closing of details modal
@@ -406,6 +407,7 @@ export default function AdminManageTasks() {
 								Location: {""}
 								{editMode ? (
 									<Autocomplete
+									required
 										sx={{
 											width: 300,
 											marginBottom: 1,
@@ -431,7 +433,7 @@ export default function AdminManageTasks() {
 											</Box>
 										)}
 										renderInput={(params) => (
-											<TextField {...params} label="Add Location" />
+											<TextField {...params} label="Add Location" required />
 										)}
 									/>
 								) : (
@@ -641,6 +643,7 @@ export default function AdminManageTasks() {
 								)}
 							/>
 							<Autocomplete
+								
 								sx={{
 									width: 300,
 									marginBottom: 1,
@@ -666,7 +669,7 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Add Location" />
+									<TextField {...params} label="Add Location"  required/>
 								)}
 							/>
 							<Autocomplete
