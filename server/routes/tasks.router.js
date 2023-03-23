@@ -568,6 +568,82 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
   }
 });
 
+router.post("/user", rejectUnauthenticated, async (req, res) => {
+  console.log("beginning of post route");
+  try {
+    const {
+      title,
+      notes,
+      has_budget,
+      budget,
+      location_id,
+      status,
+      is_time_sensitive,
+      due_date,
+      assigned_to_id,
+      time_assigned,
+    } = req.body;
+    const photos = req.body.photos;
+    const tags = req.body.tags;
+    const created_by_id = req.user.id;
+    const queryText = `
+      INSERT INTO "tasks" (
+        "title",
+        "notes",
+        "has_budget",
+        "budget",
+        "location_id",
+        "status",
+        "created_by_id",
+        "assigned_to_id",
+        "is_time_sensitive",
+        "due_date",
+        "time_assigned"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING "id"
+    `;
+    console.log("before first post");
+    const result = await pool.query(queryText, [
+      title,
+      notes,
+      has_budget,
+      budget,
+      location_id,
+      status,
+      created_by_id,
+      assigned_to_id,
+      is_time_sensitive,
+      due_date,
+      time_assigned,
+    ]);
+
+    const add_photos_query = `INSERT INTO "photos" (
+      "task_id", 
+      "photo_url"
+      )VALUES ($1, $2);`;
+
+    for (let photo of photos) {
+      await pool.query(add_photos_query, [result.rows[0].id, photo.file_url]);
+    }
+
+    const tags_per_task = `
+    INSERT INTO "tags_per_task" (
+      "task_id",
+      "tag_id"
+    ) VALUES ($1, $2)
+      RETURNING "id"
+    `;
+
+    for (let tag of tags) {
+      await pool.query(tags_per_task, [result.rows[0].id, tag.id]);
+    }
+    res.send(result.rows[0]);
+  } catch (error) {
+    console.log("Error creating task", error);
+    res.sendStatus(500);
+  }
+});
+
 //post route to add comments to tasks
 router.post(`/post_comment`, (req, res) => {
   let task_id = req.body.task_id;

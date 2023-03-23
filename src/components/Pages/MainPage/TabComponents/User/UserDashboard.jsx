@@ -213,28 +213,6 @@ export default function UserDashboard() {
                                 photosForTask.map((item) => {
                                     return <img src={item.photo_url} width={100} />;
                                 })}
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    dispatch({
-                                        type: "MARK_TASK_APPROVED",
-                                        payload: { task_id: infoOfSpecificTask.task_id },
-                                    })
-                                }
-                            >
-                                Approve
-                            </Button>
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    dispatch({
-                                        type: "DENY_TASK",
-                                        payload: infoOfSpecificTask.task_id,
-                                    })
-                                }
-                            >
-                                Deny
-                            </Button>
                         </Paper>
                     </Stack>
                 </Modal>
