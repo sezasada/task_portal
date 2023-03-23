@@ -566,7 +566,6 @@ router.get("/all_available_tasks", rejectUnauthenticated, async (req, res) => {
 });
 //post route to add new task
 router.post("/admin", rejectUnauthenticated, async (req, res) => {
-  console.log("beginning of post route");
   try {
     const {
       title,
@@ -600,7 +599,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-    console.log("before first post");
+    
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -622,7 +621,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       )VALUES ($1, $2);`;
 
     for (let photo of photos) {
-      await pool.query(add_photos_query, [result.rows[0].id, photo.file_url]);
+      await pool.query(add_photos_query, [result.rows[0].id, photo.photo_url]);
     }
 
     const tags_per_task = `
@@ -644,7 +643,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
 });
 
 router.post("/user", rejectUnauthenticated, async (req, res) => {
-  console.log("beginning of post route");
+  
   try {
     const {
       title,
@@ -677,7 +676,7 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING "id"
     `;
-    console.log("before first post");
+    
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -905,7 +904,6 @@ router.put(`/admin_incomplete_task`, (req, res) => {
 //admin edits original settings for task
 router.put(`/admin_edit_task`, async (req, res) => {
 
-  console.log("in edit router req.body", req.body);
   let title = req.body.title;
   let tagObjects = req.body.tags;
   let tags = [];
@@ -919,6 +917,10 @@ router.put(`/admin_edit_task`, async (req, res) => {
   let task_id = req.body.task_id;
   let photos = req.body.photos;
   let assigned_to_id = req.body.assiged_to_id.id;
+
+  if (due_date === ""){
+    due_date = null;
+  }
 
 
   try {
@@ -937,22 +939,22 @@ router.put(`/admin_edit_task`, async (req, res) => {
       task_id,
     ]);
 
-    //then delete all photos in the photos table with that task_id
-    //TODO issue with edit photo function
-    // const deletePhotosQuery = `DELETE FROM "photos" 
-    // WHERE "task_id" = $1;`;
-    // await pool.query(deletePhotosQuery, [task_id]);
+    // then delete all photos in the photos table with that task_id
+    
+    const deletePhotosQuery = `DELETE FROM "photos" 
+    WHERE "task_id" = $1;`;
+    await pool.query(deletePhotosQuery, [task_id]);
 
-    //then add all updated photos to the photos table
-    // const add_photos_query = `INSERT INTO "photos" (
-    //   "task_id", 
-    //   "photo_url"
-    //   )VALUES ($1, $2);`;
+    // then add all updated photos to the photos table
+    const add_photos_query = `INSERT INTO "photos" (
+      "task_id", 
+      "photo_url"
+      )VALUES ($1, $2);`;
 
-    // for (let photo of photos) {
-    //   await pool.query(add_photos_query, [task_id, photo]);
-    // }
-     console.log("assigned to id", assigned_to_id);
+    for (let photo of photos) {
+      await pool.query(add_photos_query, [task_id, photo.photo_url]);
+    }
+     
     if(assigned_to_id ){
       //if there is an assiged to, update the assigned to id and time assigned in db
         const assignedQuery = `UPDATE "tasks"
