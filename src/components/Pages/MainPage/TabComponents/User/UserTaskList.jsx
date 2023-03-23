@@ -77,7 +77,7 @@ export default function UserTaskList() {
 		handleClose();
 	};
 
-	// console.log("this is all available tasks:", allAvailableTasks);
+	console.log("this is all available tasks:", allAvailableTasks);
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -102,7 +102,13 @@ export default function UserTaskList() {
 							>
 								<TableCell>{task.title}</TableCell>
 								<TableCell>{task.location_name}</TableCell>
-								<TableCell>{task.location_name}</TableCell>
+								<TableCell>
+									<ul>
+									{task.tags.map((tag) => (
+										<li key={tag.tag_id}> {tag.tag_name} </li>
+									))}
+									</ul>
+								</TableCell>
 							</TableRow>
 						))}
 					</TableBody>
@@ -160,10 +166,10 @@ export default function UserTaskList() {
 							</Typography>
 							<br />
 							<Typography>
-							Due Date: {infoOfSpecificTask.due_date != null ? 
+								Due Date: {infoOfSpecificTask.due_date != null ?
 									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
-								: " "}
-								</Typography>
+									: " "}
+							</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}

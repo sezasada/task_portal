@@ -14,7 +14,7 @@ import {
 import { Box, Container } from "@mui/system";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
-
+import NotVerifiedUser from "../../Pages/MainPage/TabComponents/NotVerified/NotVerifiedUser";
 function Nav() {
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -70,18 +70,42 @@ function Nav() {
 						textColor="secondary"
 						indicatorColor="secondary"
 					>
-						<Tab
-							label="Dashboard"
-							onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 0 })}
-						/>
-						<Tab
-							label="Manage Users"
-							onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 1 })}
-						/>
-						<Tab
-							label="Manage Tasks"
-							onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 2 })}
-						/>
+
+						{user.is_admin && user.is_verified ? (
+
+							<>
+								<Tab
+									label="Dashboard"
+									onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 0 })}
+								/>
+								<Tab
+									label="Manage Users"
+									onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 1 })}
+								/>
+								<Tab
+									label="Manage Tasks"
+									onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 2 })}
+								/>
+							</>
+						) : user.is_verified ? (
+							<>
+								<Tab
+									label="Dashboard"
+									onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 0 })}
+								/>
+								<Tab
+									label="Create Task"
+									onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 1 })}
+								/>
+								<Tab
+									label="Task List"
+									onClick={() => dispatch({ type: "SET_TAB_INDEX", payload: 2 })}
+								/>
+							</>
+						) : (
+							''
+						)}
+
 					</Tabs>
 				</Box>
 				<Box
