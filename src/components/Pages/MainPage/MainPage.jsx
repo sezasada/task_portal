@@ -7,6 +7,7 @@ import AdminManageTasks from "./TabComponents/Admin/AdminManageTasks";
 import UserDashboard from "./TabComponents/User/UserDashboard";
 import UserCreateTask from "./TabComponents/User/UserCreateTask";
 import UserTaskList from "./TabComponents/User/UserTaskList";
+import NotVerifiedUser from "./TabComponents/NotVerified/NotVerifiedUser";
 function UserPage() {
 	const dispatch = useDispatch();
 
@@ -30,18 +31,20 @@ function UserPage() {
 	return (
 		<div className="container">
 			<Box>
-				{user.is_admin ? (
+				{user.is_admin && user.is_verified ? (
 					<>
 						{tabIndex === 0 && <AdminDashboard />}
 						{tabIndex === 1 && <AdminManageUsers />}
 						{tabIndex === 2 && <AdminManageTasks />}
 					</>
-				) : (
+				) : user.is_verified ? (
 					<>
 						{tabIndex === 0 && <UserDashboard />}
 						{tabIndex === 1 && <UserCreateTask />}
 						{tabIndex === 2 && <UserTaskList />}
 					</>
+				) : (
+					<NotVerifiedUser />
 				)}
 			</Box>
 		</div>
