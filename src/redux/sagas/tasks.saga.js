@@ -80,6 +80,17 @@ function* completeTaskSaga(action) {
     }
 }
 
+function* submitEditsSaga(action){
+  try{
+    yield axios.put('/api/tasks/admin_edit_task', action.payload);
+    //call redux to pull in the updated information
+
+  } catch (error){
+    console.log("error in edit task saga", error);
+  }
+
+}
+
 function* tasksSaga() {
   yield takeLatest("FETCH_ALL_TASKS", fetchAllTasksSaga);
   yield takeLatest("FETCH_INCOMING_TASKS", fetchIncomingTasksSaga);
@@ -88,6 +99,7 @@ function* tasksSaga() {
   yield takeLatest("MARK_TASK_APPROVED", markTaskApprovedSaga);
   yield takeLatest("DENY_TASK", denyTaskSaga);
   yield takeLatest("ADD_NEW_TASK", addNewTaskAdminSaga);
+  yield takeLatest("SUBMIT_EDITS", submitEditsSaga)
 }
 
 export default tasksSaga;

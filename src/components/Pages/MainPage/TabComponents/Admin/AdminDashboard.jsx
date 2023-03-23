@@ -27,7 +27,9 @@ export default function AdminDashboard() {
 	// Access task reducers
 	const incomingTasks = useSelector((store) => store.incomingTasksReducer);
 	const tasksForAdmin = useSelector((store) => store.allTasksForAdminReducer);
+
 	const commentsForTask = useSelector((store) => store.commentsForTaskReducer);
+
 
 	// Access specific task reducer and tags
 	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
