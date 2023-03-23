@@ -66,7 +66,6 @@ export default function AdminManageTasks() {
 	const [editedAssignedTo, setEditedAssignedTo] = useState("");
 
 	useEffect(() => {
-		console.log("info of specific task", infoOfSpecificTask);
 		if (editMode) {
 			setEditedTitle(infoOfSpecificTask.title);
 			setEditedTags([]);
@@ -106,10 +105,7 @@ export default function AdminManageTasks() {
 			assiged_to_id: editedUserLookup,
 		};
 
-		console.log("new edited Object", newObj);
-
 		dispatch({ type: "SUBMIT_EDITS", payload: newObj });
-
 		setEditMode(!editMode);
 	};
 
@@ -176,7 +172,7 @@ export default function AdminManageTasks() {
 		};
 
 		dispatch({ type: "ADD_NEW_TASK", payload: newTaskObj });
-		console.log(newTaskObj);
+
 		setTitle("");
 		setTags([]);
 		setTagInput("");
@@ -207,18 +203,18 @@ export default function AdminManageTasks() {
 						uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
 					},
 					(error, result) => {
-						console.log(result);
+						
 						if (!error && result && result.event === "success") {
 							const newPhoto = { photo_url: result.info.secure_url };
 
 							if (!editMode) {
 								// When an upload is successful, save the uploaded URL to local state!
 								setState([...state, newPhoto]);
-								console.log(state);
+								
 							} else if (editMode) {
 								// When an upload is successful, save the uploaded URL to local state!
 								setEditedPhotos([...editedPhotos, newPhoto]);
-								console.log(editedPhotos);
+								
 							}
 						}
 					}
@@ -227,24 +223,24 @@ export default function AdminManageTasks() {
 	};
 
 	const handleCompleteTask = () => {
-		console.log("infoOfSpecificTask:", infoOfSpecificTask);
+		
 		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
 		handleClose();
 	};
 
 	const handleTakeTask = () => {
-		console.log("take task button is clicked", infoOfSpecificTask);
+		
 		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask });
 		handleClose();
 	};
 
 	const handleDropTask = () => {
-		console.log("drop task clicked", infoOfSpecificTask);
+		
 		dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask });
 		handleClose();
 	};
 	const handleDeny = () => {
-		console.log("Deny button clicked");
+		
 		dispatch({
 			type: "DENY_TASK",
 			payload: infoOfSpecificTask,
@@ -252,7 +248,7 @@ export default function AdminManageTasks() {
 		handleClose();
 	};
 
-	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
+	
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -273,7 +269,7 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpen();
 									dispatch({ type: "VIEW_TASK_INFO", payload: task });
-									console.log(task);
+									
 								}}
 							>
 								<TableCell>{task.title}</TableCell>
@@ -478,9 +474,7 @@ export default function AdminManageTasks() {
 										}}
 										value={editedUserLookup}
 										onChange={(event, newValue) => {
-											console.log(event.target.value);
-											console.log(infoOfSpecificTask);
-											console.log("verified users", verifiedUsers);
+											
 											setEditedUserLookup(newValue);
 										}}
 										inputValue={editedUserLookupInput}
@@ -743,10 +737,10 @@ export default function AdminManageTasks() {
 								Pick File
 							</Button>
 							<br />
-							{console.log("state", state)}
+	
 							{state &&
 								state.map((item) => {
-									console.log;
+									
 									return <img src={item.photo_url} width={100} />;
 								})}
 							<br />

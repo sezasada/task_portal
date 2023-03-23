@@ -109,10 +109,10 @@ function* completeTaskSaga(action) {
 }
 
 function* submitEditsSaga(action){
-  console.log("submit edits saga, action.payload", action.payload);
+  
   try{
     yield axios.put('/api/tasks/admin_edit_task', action.payload);
-    //call redux to pull in the updated information
+    yield put({ type: "FETCH_ALL_TASKS" });
 
   } catch (error){
     console.log("error in edit task saga", error);
