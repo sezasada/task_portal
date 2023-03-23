@@ -69,7 +69,7 @@ export default function AdminManageTasks() {
     console.log("info of specific task", infoOfSpecificTask);
     if (editMode) {
       setEditedTitle(infoOfSpecificTask.title);
-      setEditedTags(infoOfSpecificTask.tags);
+      setEditedTags([]);
       setEditedLocation(allLocations[0]);
       setEditedBudget(infoOfSpecificTask.budget);
       setEditedNotes(infoOfSpecificTask.notes);
@@ -103,7 +103,7 @@ export default function AdminManageTasks() {
       due_date: editedDueDate,
       task_id: editedTaskID,
       photos: editedPhotos,
-      assiged_to_id: editedUserLookup.id,
+      assiged_to_id: editedUserLookup,
     };
 
     console.log("new edited Object", newObj);
