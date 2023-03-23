@@ -4,6 +4,7 @@ const {
 } = require("../modules/authentication-middleware");
 const pool = require("../modules/pool");
 const router = express.Router();
+var moment = require('moment');
 
 //route to GET all tags
 router.get("/tags", (req, res) => {
@@ -832,15 +833,19 @@ router.put(`/admin_edit_task`, async (req, res) => {
 
   console.log("in edit router req.body", req.body);
   let title = req.body.title;
-  let tags = req.body.tags;
+  let tagObjects = req.body.tags;
+  let tags = [];
+  tagObjects.map((tag) => tags.push(tag.id));
   let notes = req.body.notes;
   let has_budget = req.body.has_budget;
   let budget = req.body.budget;
-  let location_id = req.body.location_id;
+  let location_id = req.body.location_id.id;
   let is_time_sensitive = req.body.is_time_sensitive;
   let due_date = req.body.due_date;
   let task_id = req.body.task_id;
   let photos = req.body.photos;
+  let assigned_to_id = req.body.assiged_to_id.id;
+
 
   try {
     //first edit the tasks table
@@ -859,18 +864,30 @@ router.put(`/admin_edit_task`, async (req, res) => {
     ]);
 
     //then delete all photos in the photos table with that task_id
-    const deletePhotosQuery = `DELETE FROM "photos" 
-    WHERE "task_id" = $1;`;
-    await pool.query(deletePhotosQuery, [task_id]);
+    //TODO issue with edit photo function
+    // const deletePhotosQuery = `DELETE FROM "photos" 
+    // WHERE "task_id" = $1;`;
+    // await pool.query(deletePhotosQuery, [task_id]);
 
     //then add all updated photos to the photos table
-    const add_photos_query = `INSERT INTO "photos" (
-      "task_id", 
-      "photo_url"
-      )VALUES ($1, $2);`;
+    // const add_photos_query = `INSERT INTO "photos" (
+    //   "task_id", 
+    //   "photo_url"
+    //   )VALUES ($1, $2);`;
 
-    for (let photo of photos) {
-      await pool.query(add_photos_query, [task_id, photo]);
+    // for (let photo of photos) {
+    //   await pool.query(add_photos_query, [task_id, photo]);
+    // }
+     console.log("assigned to id", assigned_to_id);
+    if(assigned_to_id ){
+      //if there is an assiged to, update the assigned to id and time assigned in db
+        const assignedQuery = `UPDATE "tasks"
+            SET "assigned_to_id" = $1, "time_assigned"=$2
+            WHERE "id" = $3;`;
+          const time_assigned = moment().format();
+
+        await pool.query(assignedQuery, [assigned_to_id, time_assigned, task_id] )
+
     }
 
     //then delete all current tags related to this task_id on the tags_per_task table
