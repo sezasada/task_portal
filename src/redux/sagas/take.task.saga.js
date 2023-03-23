@@ -15,6 +15,7 @@ function* takeTaskSaga(action) {
     yield call(axios.put, '/api/tasks/user_status_change', { task_id, status });  
 
     yield put({ type: 'FETCH_ALL_TASKS' });
+    yield put({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
 
   } catch (error) {
     console.log('Error completing task:', error);
@@ -33,6 +34,9 @@ function* dropTaskSaga(action) {
     yield call(axios.put, '/api/tasks/user_status_change', { task_id, status });  
 
     yield put({ type: 'FETCH_ALL_TASKS' });
+    yield put({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
+
+
 
   } catch (error) {
     console.log('Error dropping task:', error);

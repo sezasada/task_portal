@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack } from "@mui/system";
 import {
 	Paper,
@@ -13,6 +13,8 @@ import {
 	Button,
 	Box,
 	TextField,
+	List,
+	ListItem,
 } from "@mui/material";
 import moment from "moment";
 
@@ -25,7 +27,9 @@ export default function AdminDashboard() {
 	// Access task reducers
 	const incomingTasks = useSelector((store) => store.incomingTasksReducer);
 	const tasksForAdmin = useSelector((store) => store.allTasksForAdminReducer);
-	
+
+	const commentsForTask = useSelector((store) => store.commentsForTaskReducer);
+
 
 	// Access specific task reducer and tags
 	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
@@ -52,15 +56,43 @@ export default function AdminDashboard() {
 	const [openChild, setOpenChild] = useState(false);
 	const handleOpenChild = () => {
 		setOpenChild(true);
+		dispatch({
+			type: "FETCH_COMMENTS_FOR_TASK",
+			payload: { task_id: infoOfSpecificTask.task_id },
+		});
+		console.log("comments", commentsForTask);
 	};
 	const handleCloseChild = () => setOpenChild(false);
 
 	function handleSubmitComment() {
 		const commentObj = {
-			task_id,
+			task_id: infoOfSpecificTask.task_id,
 			content: comment,
 		};
+		console.log(commentObj);
+		dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
+		dispatch({
+			type: "FETCH_COMMENTS_FOR_TASK",
+			payload: { task_id: infoOfSpecificTask.task_id },
+		});
+		setComment("");
 	}
+
+	// const refreshTasks = () => {
+	// 	dispatch({ type: "SET_ALL_TASKS_FOR_ADMIN" });
+	//   };
+
+	const handleDropTask = () => {
+		console.log("drop task clicked", infoOfSpecificTask);
+		dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask });
+		handleClose2();
+	};
+
+	const handleCompleteTask = () => {
+		console.log("infoOfSpecificTask:", infoOfSpecificTask);
+		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
+		handleClose2();
+	};
 
 	return (
 		<Stack spacing={3}>
@@ -153,10 +185,13 @@ export default function AdminDashboard() {
 							</Typography>
 							<br />
 							<Typography>
-							Due Date: {infoOfSpecificTask.due_date != null ? 
-									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
-								: " "}
-								</Typography>
+								Due Date:{" "}
+								{infoOfSpecificTask.due_date != null
+									? moment(infoOfSpecificTask.due_date).format(
+											"MMMM Do YYYY, h:mm a"
+									  )
+									: " "}
+							</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
@@ -280,10 +315,13 @@ export default function AdminDashboard() {
 							</Typography>
 							<br />
 							<Typography>
-							Due Date: {infoOfSpecificTask.due_date != null ? 
-									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
-								: " "}
-								</Typography>
+								Due Date:{" "}
+								{infoOfSpecificTask.due_date != null
+									? moment(infoOfSpecificTask.due_date).format(
+											"MMMM Do YYYY, h:mm a"
+									  )
+									: " "}
+							</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
 								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
@@ -305,8 +343,12 @@ export default function AdminDashboard() {
 							>
 								Add Comment
 							</Button>
-							<Button variant="contained">Finish</Button>
-							<Button variant="contained">Didn't Finish</Button>
+							<Button variant="contained" onClick={handleCompleteTask}>
+								Finish
+							</Button>
+							<Button variant="contained" onClick={handleDropTask}>
+								Didn't Finish
+							</Button>
 						</Paper>
 						<Modal
 							open={openChild}
@@ -328,6 +370,7 @@ export default function AdminDashboard() {
 									}}
 									elevation={3}
 								>
+									{/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
 									<Typography
 										variant="h4"
 										component="h2"
@@ -336,9 +379,17 @@ export default function AdminDashboard() {
 										Add a comment
 									</Typography>
 									<br />
-									<Typography variant="h4" component="h2">
-										Previous comments go here
-									</Typography>
+									<Box>
+										<List>
+											{commentsForTask.length > 0 &&
+												commentsForTask.map((comment) => (
+													<ListItem key={comment.comment_id}>
+														{comment.posted_by_first_name} said{" "}
+														{comment.content} at {comment.time_posted}
+													</ListItem>
+												))}
+										</List>
+									</Box>
 									<br />
 									<TextField
 										type="text"
