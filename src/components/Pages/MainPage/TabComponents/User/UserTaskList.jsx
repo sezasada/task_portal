@@ -104,7 +104,7 @@ export default function UserTaskList() {
 								<TableCell>{task.location_name}</TableCell>
 								<TableCell>
 									<ul>
-									{task.tags.map((tag) => (
+									{task.tags && task.tags.map((tag) => (
 										<li key={tag.tag_id}> {tag.tag_name} </li>
 									))}
 									</ul>
