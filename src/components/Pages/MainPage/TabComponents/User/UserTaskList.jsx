@@ -12,6 +12,8 @@ import {
 	TableBody,
 	Modal,
 	Button,
+	List,
+  ListItem,
 	TextField,
 	Autocomplete,
 	Box,
@@ -46,7 +48,7 @@ export default function UserTaskList() {
 	const allCompletedTasks = useSelector(
 		(store) => store.allCompletedTasksReducer
 	);
-	const commentsForSpecificTask = infoOfSpecificTask.comments;
+	const commentsForSpecificTask = useSelector((store) => store.commentsForTaskReducer);
 	const photosForTask = infoOfSpecificTask.photos;
 
 	// Manage opening and closing of details modal
@@ -77,7 +79,34 @@ export default function UserTaskList() {
 		handleClose();
 	};
 
-	console.log("this is all available tasks:", allAvailableTasks);
+	// Manage opening and closing of child modal for comments modal
+	const [openChild, setOpenChild] = useState(false);
+	const [comment, setComment] = useState("");
+	const handleOpenChild = () => {
+	  setOpenChild(true);
+	  dispatch({
+		type: "FETCH_COMMENTS_FOR_TASK",
+		payload: { task_id: infoOfSpecificTask.task_id },
+	  });
+	  console.log("comments", commentsForSpecificTask);
+	};
+	const handleCloseChild = () => setOpenChild(false);
+  
+	function handleSubmitComment() {
+	  const commentObj = {
+		task_id: infoOfSpecificTask.task_id,
+		content: comment,
+	  };
+	  console.log(commentObj);
+	  dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
+	  dispatch({
+		type: "FETCH_COMMENTS_FOR_TASK",
+		payload: { task_id: infoOfSpecificTask.task_id },
+	  });
+	  setComment("");
+	}
+
+	
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -188,11 +217,78 @@ export default function UserTaskList() {
 								photosForTask.map((item) => {
 									return <img src={item.photo_url} width={100} />;
 								})}
-
+							<Button
+                variant="contained"
+                onClick={() => {
+                  handleOpenChild();
+                }}
+              >
+                Comments
+              </Button>
 							<Button variant="contained" onClick={infoOfSpecificTask.assigned_to_first_name ? handleDropTask : handleTakeTask}>
 								{infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
 							</Button>
 						</Paper>
+						<Modal
+            open={openChild}
+            onClose={() => {
+              handleCloseChild();
+            }}
+          >
+            <Stack
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Paper
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "20px",
+                }}
+                elevation={3}
+              >
+                {/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{ textDecoration: "underline" }}
+                >
+                  Add a comment
+                </Typography>
+                <br />
+                <Box>
+                  <List>
+                    {commentsForSpecificTask &&
+                      commentsForSpecificTask.map((comment) => (
+                        <ListItem key={comment.comment_id}>
+                          {comment.posted_by_first_name} said {comment.content}{" "}
+                          at {comment.time_posted}
+                        </ListItem>
+                      ))}
+                  </List>
+                </Box>
+                <br />
+                <TextField
+                  type="text"
+                  label="Comment"
+                  value={comment}
+                  sx={{
+                    marginBottom: 1,
+                    width: 300,
+                  }}
+                  onChange={(event) => setComment(event.target.value)}
+                  variant="outlined"
+                />
+                <Button variant="contained" onClick={handleSubmitComment}>
+                  Add Comment
+                </Button>
+              </Paper>
+            </Stack>
+          </Modal>
+
+
 					</Stack>
 				</Modal>
 			</Paper>
