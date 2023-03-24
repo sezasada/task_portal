@@ -103,7 +103,7 @@ export default function AdminManageTasks() {
 			due_date: editedDueDate,
 			task_id: editedTaskID,
 			photos: editedPhotos,
-			assiged_to_id: editedUserLookup,
+			assigned_to_id: editedUserLookup,
 		};
 
 		console.log("new edited Object", newObj);
@@ -252,11 +252,11 @@ export default function AdminManageTasks() {
 		handleClose();
 	};
 
-	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
 				<Typography>All Tasks</Typography>
+				{/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
 				<Table>
 					<TableHead>
 						<TableRow>
