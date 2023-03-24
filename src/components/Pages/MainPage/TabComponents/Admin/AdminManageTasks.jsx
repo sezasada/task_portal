@@ -20,6 +20,8 @@ import {
 	OutlinedInput,
 	InputLabel,
 	FormControl,
+	Select,
+	MenuItem,
 } from "@mui/material";
 import moment from "moment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -32,6 +34,7 @@ export default function AdminManageTasks() {
 	// Access redux stores for tasks
 	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
 	const allApprovedTasks = useSelector((store) => store.allTasksReducer);
+	const sortedTasks = useSelector((store) => store.sortingTasksReducer);
 
 	// Access redux store for all tags
 	const allTags = useSelector((store) => store.allTagsReducer);
@@ -242,6 +245,60 @@ export default function AdminManageTasks() {
 		handleClose();
 	};
 
+	// ------------- TABLE SORTING --------------- //
+
+	// Manage state for sorting options
+	const [sortMode, setSortMode] = useState(false);
+	const [sortByLocation, setSortByLocation] = useState("");
+	const [sortByTags, setSortByTags] = useState("");
+	const [sortByStatus, setSortByStatus] = useState("");
+
+	const statuses = [
+		{ id: undefined, status_name: "None" },
+		{ id: 1, status_name: "Available" },
+		{ id: 2, status_name: "In Progress" },
+	];
+
+	const activateSortMode = () => {
+		setSortMode(true);
+	};
+
+	const deactivateSortMode = () => {
+		setSortMode(false);
+	};
+
+	const handleSort = (type, payload) => {
+		console.log("this is the type:", type, "this is the payload:", payload);
+		dispatch({ type: type, payload: payload });
+	};
+
+	function handleSubmitSort(event, type) {
+		if (event.target.value.id === undefined) {
+			deactivateSortMode();
+			if (type === "FETCH_BY_LOCATION") {
+				setSortByLocation(event.target.value);
+			} else if (type === "FETCH_BY_TAGS") {
+				setSortByTags(event.target.value);
+			} else if (type === "FETCH_BY_STATUS") {
+				setSortByStatus(event.target.value);
+			}
+			return;
+		}
+
+		activateSortMode();
+		if (type === "FETCH_BY_LOCATION") {
+			setSortByLocation(event.target.value);
+		} else if (type === "FETCH_BY_TAGS") {
+			setSortByTags(event.target.value);
+		} else if (type === "FETCH_BY_STATUS") {
+			setSortByStatus(event.target.value);
+			handleSort(type, event.target.value.status_name);
+			return;
+		}
+
+		handleSort(type, event.target.value.id);
+	}
+
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
@@ -257,27 +314,114 @@ export default function AdminManageTasks() {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{allApprovedTasks.map((task) => (
-							<TableRow
-								key={task.id}
-								onClick={() => {
-									handleOpen();
-									dispatch({ type: "VIEW_TASK_INFO", payload: task });
-								}}
-							>
-								<TableCell>{task.title}</TableCell>
-								<TableCell>{task.location_name}</TableCell>
-								<TableCell>
-									{" "}
-									{task.due_date != null
-										? moment(task.due_date).format("MMMM Do YYYY, h:mm a")
-										: " "}
-								</TableCell>
-								<TableCell>{task.status}</TableCell>
-							</TableRow>
-						))}
+						{sortMode
+							? sortedTasks.map((task) => (
+									<TableRow
+										key={task.id}
+										onClick={() => {
+											handleOpen();
+											dispatch({ type: "VIEW_TASK_INFO", payload: task });
+										}}
+									>
+										<TableCell>{task.title}</TableCell>
+										<TableCell>{task.location_name}</TableCell>
+										<TableCell>
+											{" "}
+											{task.due_date != null
+												? moment(task.due_date).format("MMMM Do YYYY, h:mm a")
+												: " "}
+										</TableCell>
+										<TableCell>{task.status}</TableCell>
+									</TableRow>
+							  ))
+							: allApprovedTasks.map((task) => (
+									<TableRow
+										key={task.id}
+										onClick={() => {
+											handleOpen();
+											dispatch({ type: "VIEW_TASK_INFO", payload: task });
+										}}
+									>
+										<TableCell>{task.title}</TableCell>
+										<TableCell>{task.location_name}</TableCell>
+										<TableCell>
+											{" "}
+											{task.due_date != null
+												? moment(task.due_date).format("MMMM Do YYYY, h:mm a")
+												: " "}
+										</TableCell>
+										<TableCell>{task.status}</TableCell>
+									</TableRow>
+							  ))}
 					</TableBody>
 				</Table>
+				<br />
+				<Box>
+					<Box>
+						<FormControl sx={{ width: 300 }}>
+							<InputLabel id="sort-by-location-label">
+								Sort By Location
+							</InputLabel>
+							<Select
+								id="sort-by-location"
+								labelId="sort-by-location-label"
+								label="Sort by Location"
+								value={sortByLocation}
+								onChange={(event) =>
+									handleSubmitSort(event, "FETCH_BY_LOCATION")
+								}
+							>
+								<MenuItem value="">
+									<em>None</em>
+								</MenuItem>
+								{allLocations.map((location) => (
+									<MenuItem key={location.location_id} value={location}>
+										{location.location_name}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+						<FormControl sx={{ width: 300 }}>
+							<InputLabel id="sort-by-tags-label">Sort By Tags</InputLabel>
+							<Select
+								id="sort-by-tags"
+								labelId="sort-by-tags-label"
+								label="Sort by Tags"
+								value={sortByTags}
+								onChange={(event) => {
+									handleSubmitSort(event, "FETCH_BY_TAGS");
+								}}
+							>
+								<MenuItem value="">
+									<em>None</em>
+								</MenuItem>
+								{allTags.map((tag) => (
+									<MenuItem key={tag.id} value={tag}>
+										{tag.tag_name}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+						<FormControl sx={{ width: 300 }}>
+							<InputLabel id="sort-by-status-label">Sort By Status</InputLabel>
+							<Select
+								id="sort-by-status"
+								labelId="sort-by-status-label"
+								label="Sort by Status"
+								value={sortByStatus}
+								onChange={(event) => {
+									handleSubmitSort(event, "FETCH_BY_STATUS");
+								}}
+							>
+								{statuses.map((status) => (
+									<MenuItem key={status.id} value={status}>
+										{status.status_name}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+					</Box>
+				</Box>
 				<Modal
 					open={open}
 					onClose={() => {
