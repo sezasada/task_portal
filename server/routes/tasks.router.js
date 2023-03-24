@@ -916,7 +916,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
   let due_date = req.body.due_date;
   let task_id = req.body.task_id;
   let photos = req.body.photos;
-  let assigned_to_id = req.body.assiged_to_id.id;
+  let assigned_to_id = req.body.assiged_to_id;
 
   if (due_date === ""){
     due_date = null;
@@ -962,7 +962,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
             WHERE "id" = $3;`;
           const time_assigned = moment().format();
 
-        await pool.query(assignedQuery, [assigned_to_id, time_assigned, task_id] )
+        await pool.query(assignedQuery, [assigned_to_id.id, time_assigned, task_id] )
 
     }
 
