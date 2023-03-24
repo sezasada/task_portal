@@ -102,7 +102,7 @@ export default function AdminManageTasks() {
 			due_date: editedDueDate,
 			task_id: editedTaskID,
 			photos: editedPhotos,
-			assiged_to_id: editedUserLookup,
+			assigned_to_id: editedUserLookup,
 		};
 
 		dispatch({ type: "SUBMIT_EDITS", payload: newObj });
@@ -204,18 +204,15 @@ export default function AdminManageTasks() {
 						uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
 					},
 					(error, result) => {
-						
 						if (!error && result && result.event === "success") {
 							const newPhoto = { photo_url: result.info.secure_url };
 
 							if (!editMode) {
 								// When an upload is successful, save the uploaded URL to local state!
 								setState([...state, newPhoto]);
-								
 							} else if (editMode) {
 								// When an upload is successful, save the uploaded URL to local state!
 								setEditedPhotos([...editedPhotos, newPhoto]);
-								
 							}
 						}
 					}
@@ -224,24 +221,20 @@ export default function AdminManageTasks() {
 	};
 
 	const handleCompleteTask = () => {
-		
 		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
 		handleClose();
 	};
 
 	const handleTakeTask = () => {
-		
 		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask });
 		handleClose();
 	};
 
 	const handleDropTask = () => {
-		
 		dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask });
 		handleClose();
 	};
 	const handleDeny = () => {
-		
 		dispatch({
 			type: "DENY_TASK",
 			payload: infoOfSpecificTask,
@@ -249,11 +242,11 @@ export default function AdminManageTasks() {
 		handleClose();
 	};
 
-	
 	return (
 		<Stack spacing={3}>
 			<Paper sx={{ p: 3 }}>
 				<Typography>All Tasks</Typography>
+				{/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
 				<Table>
 					<TableHead>
 						<TableRow>
@@ -270,7 +263,6 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpen();
 									dispatch({ type: "VIEW_TASK_INFO", payload: task });
-									
 								}}
 							>
 								<TableCell>{task.title}</TableCell>
@@ -407,7 +399,7 @@ export default function AdminManageTasks() {
 								Location: {""}
 								{editMode ? (
 									<Autocomplete
-									required
+										required
 										sx={{
 											width: 300,
 											marginBottom: 1,
@@ -476,7 +468,6 @@ export default function AdminManageTasks() {
 										}}
 										value={editedUserLookup}
 										onChange={(event, newValue) => {
-											
 											setEditedUserLookup(newValue);
 										}}
 										inputValue={editedUserLookupInput}
@@ -542,13 +533,11 @@ export default function AdminManageTasks() {
 									>
 										Pick File
 									</Button>
-									
+
 									{editedPhotos &&
 										editedPhotos.map((item) => {
 											return <img src={item.photo_url} width={100} />;
-										})
-									
-										}
+										})}
 								</>
 							) : (
 								<>
@@ -643,7 +632,6 @@ export default function AdminManageTasks() {
 								)}
 							/>
 							<Autocomplete
-								
 								sx={{
 									width: 300,
 									marginBottom: 1,
@@ -669,7 +657,7 @@ export default function AdminManageTasks() {
 									</Box>
 								)}
 								renderInput={(params) => (
-									<TextField {...params} label="Add Location"  required/>
+									<TextField {...params} label="Add Location" required />
 								)}
 							/>
 							<Autocomplete
@@ -740,10 +728,9 @@ export default function AdminManageTasks() {
 								Pick File
 							</Button>
 							<br />
-	
+
 							{state &&
 								state.map((item) => {
-									
 									return <img src={item.photo_url} width={100} />;
 								})}
 							<br />
