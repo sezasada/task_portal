@@ -150,7 +150,7 @@ function Nav() {
 							</>
 						)}
 						<MenuItem onClick={() => history.push("/about")}>
-							<Typography>About</Typography>
+							<Typography>Profile</Typography>
 						</MenuItem>
 					</Menu>
 					<Box

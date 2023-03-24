@@ -13,7 +13,7 @@ import Footer from "./Shared/Footer/Footer";
 
 import ProtectedRoute from "./Shared/ProtectedRoute/ProtectedRoute";
 
-import AboutPage from "./Pages/AboutPage/AboutPage";
+import Profile from "./Pages/Profile/Profile";
 import MainPage from "./Pages/MainPage/MainPage";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import LoginPage from "./Pages/LoginPage/LoginPage";
@@ -48,7 +48,7 @@ function App() {
 						exact
 						path="/about"
 					>
-						<AboutPage />
+						<Profile />
 					</Route>
 
 					{/* For protected routes, the view could show one of several things on the same route.
