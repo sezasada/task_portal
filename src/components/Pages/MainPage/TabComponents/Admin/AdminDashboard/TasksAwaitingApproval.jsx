@@ -15,6 +15,8 @@ import {
   InputAdornment,
   OutlinedInput,
   InputLabel,
+  List,
+	ListItem,
   FormControl,
 } from "@mui/material";
 import { useState } from "react";
@@ -27,7 +29,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useScript } from "../../../../../../hooks/useScript";
 
 export default function TasksAwaitingApproval() {
-
   const dispatch = useDispatch();
 
   // Access redux stores and define new variables
@@ -41,6 +42,34 @@ export default function TasksAwaitingApproval() {
   const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
   // Access redux store for all tags
   const allTags = useSelector((store) => store.allTagsReducer);
+
+  const [comment, setComment] = useState("");
+
+  function handleSubmitComment() {
+	const commentObj = {
+		task_id: infoOfSpecificTask.task_id,
+		content: comment,
+	};
+	
+	dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
+	dispatch({
+		type: "FETCH_COMMENTS_FOR_TASK",
+		payload: { task_id: infoOfSpecificTask.task_id },
+	});
+	setComment("");
+}
+
+  const [openChild, setOpenChild] = useState(false);
+  //opens comments
+  const handleOpenChild = () => {
+    setOpenChild(true);
+    dispatch({
+      type: "FETCH_COMMENTS_FOR_TASK",
+      payload: { task_id: infoOfSpecificTask.task_id },
+    });
+  };
+  const handleCloseChild = () => setOpenChild(false);
+  const commentsForTask = useSelector((store) => store.commentsForTaskReducer);
 
   //Manage edit mode
   const [editMode, setEditMode] = useState(false);
@@ -452,17 +481,23 @@ export default function TasksAwaitingApproval() {
                   })}
               </>
             )}
-
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleOpenChild();
+              }}
+            >
+              Comments
+            </Button>
             <Button
               variant="contained"
               onClick={() => {
                 dispatch({
                   type: "MARK_TASK_APPROVED",
                   payload: { task_id: infoOfSpecificTask.task_id },
-                })
-				handleClose();
-			}
-              }
+                });
+                handleClose();
+              }}
             >
               Approve
             </Button>
@@ -472,10 +507,9 @@ export default function TasksAwaitingApproval() {
                 dispatch({
                   type: "DENY_TASK",
                   payload: infoOfSpecificTask,
-                })
-				handleClose();
-			}
-              }
+                });
+                handleClose();
+              }}
             >
               Deny
             </Button>
@@ -492,6 +526,64 @@ export default function TasksAwaitingApproval() {
               </Button>
             )}
           </Paper>
+          <Modal
+            open={openChild}
+            onClose={() => {
+              handleCloseChild();
+            }}
+          >
+            <Stack
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Paper
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "20px",
+                }}
+                elevation={3}
+              >
+                {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{ textDecoration: "underline" }}
+                >
+                  Add a comment
+                </Typography>
+                <br />
+                <Box>
+                  <List>
+                    {commentsForTask.length > 0 &&
+                      commentsForTask.map((comment) => (
+                        <ListItem key={comment.comment_id}>
+                          {comment.posted_by_first_name} said {comment.content}{" "}
+                          at {comment.time_posted}
+                        </ListItem>
+                      ))}
+                  </List>
+                </Box>
+                <br />
+                <TextField
+                  type="text"
+                  label="Comment"
+                  value={comment}
+                  sx={{
+                    marginBottom: 1,
+                    width: 300,
+                  }}
+                  onChange={(event) => setComment(event.target.value)}
+                  variant="outlined"
+                />
+                <Button variant="contained" onClick={handleSubmitComment}>
+                  Add Comment
+                </Button>
+              </Paper>
+            </Stack>
+          </Modal>
         </Stack>
       </Modal>
     </Paper>

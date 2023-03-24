@@ -43,7 +43,7 @@ export default function TasksAssignedToYou() {
 			type: "FETCH_COMMENTS_FOR_TASK",
 			payload: { task_id: infoOfSpecificTask.task_id },
 		});
-		console.log("comments", commentsForTask);
+		
 	};
 	const handleCloseChild = () => setOpenChild(false);
 
@@ -64,7 +64,7 @@ export default function TasksAssignedToYou() {
 			task_id: infoOfSpecificTask.task_id,
 			content: comment,
 		};
-		console.log(commentObj);
+		
 		dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
 		dispatch({
 			type: "FETCH_COMMENTS_FOR_TASK",
@@ -184,7 +184,7 @@ export default function TasksAssignedToYou() {
 								handleOpenChild();
 							}}
 						>
-							Add Comment
+							Comments
 						</Button>
 						<Button variant="contained" onClick={handleCompleteTask}>
 							Finish
