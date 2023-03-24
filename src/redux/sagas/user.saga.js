@@ -124,6 +124,7 @@ function* updateUser(action) {
     const response = yield axios.put('/api/user/update_info', action.payload, config);
     // Update the client-side user object with the new information
     yield put({ type: 'SET_USER', payload: response.data });
+    yield put({ type: 'FETCH_USER' });
   } catch (error) {
     console.log('User update request failed', error);
   }

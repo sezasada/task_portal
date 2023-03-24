@@ -294,5 +294,4 @@ router.put("/update_info", rejectUnauthenticated, (req, res) => {
     });
 });
 
-
 module.exports = router;
