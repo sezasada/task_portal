@@ -5,8 +5,7 @@ function* fetchAllCommentsForTaskSaga(action) {
     try {
         const response = yield axios.get(`/api/tasks/comments/${action.payload.task_id}`);
         yield put({ type: "SET_ALL_COMMENTS_FOR_TASK", payload: response.data });
-        console.log('this is response', response);
-        console.log('this is action', action.payload);
+        
 
     } catch (error) {
         console.log('Error with fetching comments:', error);
