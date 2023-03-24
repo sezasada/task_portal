@@ -116,7 +116,6 @@ export default function UserDashboard() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
-                            <TableCell>Created By</TableCell>
                             <TableCell>Created At</TableCell>
                         </TableRow>
                     </TableHead>
@@ -130,9 +129,6 @@ export default function UserDashboard() {
                                 }}
                             >
                                 <TableCell>{task.title}</TableCell>
-                                <TableCell>
-                                    {task.created_by_first_name} {task.created_by_last_name}
-                                </TableCell>
                                 <TableCell>
                                     {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
                                 </TableCell>
@@ -213,28 +209,6 @@ export default function UserDashboard() {
                                 photosForTask.map((item) => {
                                     return <img src={item.photo_url} width={100} />;
                                 })}
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    dispatch({
-                                        type: "MARK_TASK_APPROVED",
-                                        payload: { task_id: infoOfSpecificTask.task_id },
-                                    })
-                                }
-                            >
-                                Approve
-                            </Button>
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    dispatch({
-                                        type: "DENY_TASK",
-                                        payload: infoOfSpecificTask.task_id,
-                                    })
-                                }
-                            >
-                                Deny
-                            </Button>
                         </Paper>
                     </Stack>
                 </Modal>
@@ -246,7 +220,6 @@ export default function UserDashboard() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
-                            <TableCell>Created By</TableCell>
                             <TableCell>Created At</TableCell>
                         </TableRow>
                     </TableHead>
@@ -260,9 +233,6 @@ export default function UserDashboard() {
                                 }}
                             >
                                 <TableCell>{task.title}</TableCell>
-                                <TableCell>
-                                    {task.created_by_first_name} {task.created_by_last_name}
-                                </TableCell>
                                 <TableCell>
                                     {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
                                 </TableCell>

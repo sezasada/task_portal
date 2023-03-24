@@ -4,6 +4,7 @@ const {
 } = require("../modules/authentication-middleware");
 const pool = require("../modules/pool");
 const router = express.Router();
+var moment = require('moment');
 
 //route to GET all tags
 router.get("/tags", (req, res) => {
@@ -489,9 +490,82 @@ router.get("/all_tasks", rejectUnauthenticated, async (req, res) => {
   }
 });
 
+// route to GET all tasks where status is Available. 
+router.get("/all_available_tasks", rejectUnauthenticated, async (req, res) => {
+  try {
+    const queryText = `SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status",
+    created_by."id" AS "created_by_id",
+    created_by."first_name" AS "created_by_first_name",
+    created_by."last_name" AS "created_by_last_name",
+    created_by."username" AS "created_by_username",
+    created_by."phone_number" AS "created_by_phone_number",
+    assigned_to."id" AS "assigned_to_id",
+    assigned_to."first_name" AS "assigned_to_first_name",
+    assigned_to."last_name" AS "assigned_to_last_name",
+    assigned_to."username" AS "assigned_to_username",
+    assigned_to."phone_number" AS "assigned_to_phone_number",
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name",
+   (SELECT json_agg(
+         json_build_object(
+          'tag_id', "tags"."id",
+          'tag_name', "tags"."tag_name"
+        )
+      )
+      FROM "tags_per_task"
+      LEFT JOIN "tags" ON "tag_id" = "tags"."id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "tags",
+   (SELECT json_agg(
+         json_build_object(
+          'photo_id', "photos"."id",
+          'photo_url', "photos"."photo_url"
+        )
+      )
+      FROM "photos"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "photos"
+  ,
+  (SELECT json_agg(
+         json_build_object(
+          'comment_id', "comments"."id",
+          'time_posted', "comments"."time_posted",
+          'content', "comments"."content",
+          'posted_by_first_name', posted_by."first_name",
+          'posted_by_last_name', posted_by."last_name",
+          'posted_by_username', posted_by."username",
+          'posted_by_phone_number', posted_by."phone_number"
+        )
+      )
+      FROM "comments"
+      LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+      WHERE "task_id" = "tasks"."id"
+  ) AS "comments"
+  
+  FROM "tasks"
+  
+  LEFT JOIN "locations" ON "location_id" = "locations"."id"
+  LEFT JOIN "user" created_by ON created_by."id" = "tasks"."created_by_id"
+  LEFT JOIN "user" assigned_to ON assigned_to."id" = "tasks"."assigned_to_id"
+  LEFT JOIN "comments" ON "tasks"."id" = "comments"."task_id"
+  LEFT JOIN "user" posted_by ON posted_by."id" = "comments"."posted_by_id"
+  LEFT JOIN "photos" ON "photos"."task_id" = "tasks"."id"
+  WHERE "is_approved" = true AND "status" = 'Available'
+  GROUP BY "tasks"."id", "title", "notes", "has_budget", "budget", "location_id", "status",
+    created_by."id", created_by."first_name", created_by."last_name", created_by."username", created_by."phone_number", 
+    assigned_to."id", assigned_to."first_name", assigned_to."last_name", assigned_to."username", assigned_to."phone_number", 
+    "time_created", "time_assigned", "time_completed", "is_time_sensitive", "due_date", "location_name"
+  ;
+  
+  `;
+    const result = await pool.query(queryText);
+    res.send(result.rows);
+  } catch (error) {
+    console.log("error getting task", error);
+    res.sendStatus(500);
+  }
+});
 //post route to add new task
 router.post("/admin", rejectUnauthenticated, async (req, res) => {
-  console.log("beginning of post route");
   try {
     const {
       title,
@@ -525,7 +599,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id"
     `;
-    console.log("before first post");
+    
     const result = await pool.query(queryText, [
       title,
       notes,
@@ -538,6 +612,82 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       is_time_sensitive,
       due_date,
       true,
+      time_assigned,
+    ]);
+
+    const add_photos_query = `INSERT INTO "photos" (
+      "task_id", 
+      "photo_url"
+      )VALUES ($1, $2);`;
+
+    for (let photo of photos) {
+      await pool.query(add_photos_query, [result.rows[0].id, photo.photo_url]);
+    }
+
+    const tags_per_task = `
+    INSERT INTO "tags_per_task" (
+      "task_id",
+      "tag_id"
+    ) VALUES ($1, $2)
+      RETURNING "id"
+    `;
+
+    for (let tag of tags) {
+      await pool.query(tags_per_task, [result.rows[0].id, tag.id]);
+    }
+    res.send(result.rows[0]);
+  } catch (error) {
+    console.log("Error creating task", error);
+    res.sendStatus(500);
+  }
+});
+
+router.post("/user", rejectUnauthenticated, async (req, res) => {
+  
+  try {
+    const {
+      title,
+      notes,
+      has_budget,
+      budget,
+      location_id,
+      status,
+      is_time_sensitive,
+      due_date,
+      assigned_to_id,
+      time_assigned,
+    } = req.body;
+    const photos = req.body.photos;
+    const tags = req.body.tags;
+    const created_by_id = req.user.id;
+    const queryText = `
+      INSERT INTO "tasks" (
+        "title",
+        "notes",
+        "has_budget",
+        "budget",
+        "location_id",
+        "status",
+        "created_by_id",
+        "assigned_to_id",
+        "is_time_sensitive",
+        "due_date",
+        "time_assigned"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING "id"
+    `;
+    
+    const result = await pool.query(queryText, [
+      title,
+      notes,
+      has_budget,
+      budget,
+      location_id,
+      status,
+      created_by_id,
+      assigned_to_id,
+      is_time_sensitive,
+      due_date,
       time_assigned,
     ]);
 
@@ -754,7 +904,6 @@ router.put(`/admin_incomplete_task`, (req, res) => {
 //admin edits original settings for task
 router.put(`/admin_edit_task`, async (req, res) => {
 
-  console.log("in edit router req.body", req.body);
   let title = req.body.title;
   let tagObjects = req.body.tags;
   let tags = [];
@@ -767,6 +916,12 @@ router.put(`/admin_edit_task`, async (req, res) => {
   let due_date = req.body.due_date;
   let task_id = req.body.task_id;
   let photos = req.body.photos;
+  let assigned_to_id = req.body.assiged_to_id.id;
+
+  if (due_date === ""){
+    due_date = null;
+  }
+
 
   try {
     //first edit the tasks table
@@ -784,19 +939,31 @@ router.put(`/admin_edit_task`, async (req, res) => {
       task_id,
     ]);
 
-    //then delete all photos in the photos table with that task_id
+    // then delete all photos in the photos table with that task_id
+    
     const deletePhotosQuery = `DELETE FROM "photos" 
     WHERE "task_id" = $1;`;
     await pool.query(deletePhotosQuery, [task_id]);
 
-    //then add all updated photos to the photos table
+    // then add all updated photos to the photos table
     const add_photos_query = `INSERT INTO "photos" (
       "task_id", 
       "photo_url"
       )VALUES ($1, $2);`;
 
     for (let photo of photos) {
-      await pool.query(add_photos_query, [task_id, photo]);
+      await pool.query(add_photos_query, [task_id, photo.photo_url]);
+    }
+     
+    if(assigned_to_id ){
+      //if there is an assiged to, update the assigned to id and time assigned in db
+        const assignedQuery = `UPDATE "tasks"
+            SET "assigned_to_id" = $1, "time_assigned"=$2
+            WHERE "id" = $3;`;
+          const time_assigned = moment().format();
+
+        await pool.query(assignedQuery, [assigned_to_id, time_assigned, task_id] )
+
     }
 
     //then delete all current tags related to this task_id on the tags_per_task table
