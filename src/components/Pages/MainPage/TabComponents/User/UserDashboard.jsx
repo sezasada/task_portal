@@ -621,7 +621,7 @@ export default function UserDashboard() {
                   handleOpenChild();
                 }}
               >
-                Comments
+                CommentS
               </Button>
             </Paper>
             <Modal
