@@ -74,42 +74,48 @@ function Nav() {
               <>
                 <Tab
                   label="Dashboard"
-                  onClick={() =>
-                    dispatch({ type: "SET_TAB_INDEX", payload: 0 })
-                  }
+                  onClick={() => {
+                    dispatch({ type: "SET_TAB_INDEX", payload: 0 });
+                    history.push("/main");
+                  }}
                 />
                 <Tab
                   label="Manage Users"
-                  onClick={() =>
-                    dispatch({ type: "SET_TAB_INDEX", payload: 1 })
-                  }
+                  onClick={() => {
+                    dispatch({ type: "SET_TAB_INDEX", payload: 1 });
+                    history.push("/main");
+                  }}
                 />
                 <Tab
                   label="Manage Tasks"
-                  onClick={() =>
-                    dispatch({ type: "SET_TAB_INDEX", payload: 2 })
-                  }
+                  onClick={() => {
+                    dispatch({ type: "SET_TAB_INDEX", payload: 2 });
+                    history.push("/main");
+                  }}
                 />
               </>
             ) : user.is_verified ? (
               <>
                 <Tab
                   label="Dashboard"
-                  onClick={() =>
-                    dispatch({ type: "SET_TAB_INDEX", payload: 0 })
-                  }
+                  onClick={() => {
+                    dispatch({ type: "SET_TAB_INDEX", payload: 0 });
+                    history.push("/main");
+                  }}
                 />
                 <Tab
                   label="Create Task"
-                  onClick={() =>
-                    dispatch({ type: "SET_TAB_INDEX", payload: 1 })
-                  }
+                  onClick={() => {
+                    dispatch({ type: "SET_TAB_INDEX", payload: 1 });
+                    history.push("/main");
+                  }}
                 />
                 <Tab
                   label="Task List"
-                  onClick={() =>
-                    dispatch({ type: "SET_TAB_INDEX", payload: 2 })
-                  }
+                  onClick={() => {
+                    dispatch({ type: "SET_TAB_INDEX", payload: 2 });
+                    history.push("/main");
+                  }}
                 />
               </>
             ) : (
