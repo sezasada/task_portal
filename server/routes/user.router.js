@@ -273,4 +273,26 @@ router.put("/check_if_valid", async (req, res) => {
   }
 });
 
+//update user information
+router.put("/update_info", rejectUnauthenticated, (req, res) => {
+  const id = req.user.id;
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const username = req.body.username;
+  const phone_number = req.body.phone_number;
+
+  const queryText = `UPDATE "user"
+  SET "first_name" = $1, "last_name" = $2, "username" = $3, "phone_number" = $4
+  WHERE "id" = $5;`;
+
+  pool
+    .query(queryText, [first_name, last_name, username, phone_number, id])
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.log("update user information failed", err);
+      res.sendStatus(500);
+    });
+});
+
+
 module.exports = router;
