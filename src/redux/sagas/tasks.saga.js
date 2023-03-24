@@ -113,6 +113,7 @@ function* submitEditsSaga(action){
   try{
     yield axios.put('/api/tasks/admin_edit_task', action.payload);
     yield put({ type: "FETCH_ALL_TASKS" });
+    yield put({ type: "FETCH_INCOMING_TASKS" });
 
   } catch (error){
     console.log("error in edit task saga", error);

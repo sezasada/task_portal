@@ -348,7 +348,7 @@ export default function AdminManageTasks() {
 									multiple
 									value={editedTags}
 									onChange={(event, newValue) => setEditedTags(newValue)}
-									inputValue={tagInput}
+									inputValue={editedTagInput}
 									onInputChange={(event, newInputValue) =>
 										setEditedTagInput(newInputValue)
 									}
