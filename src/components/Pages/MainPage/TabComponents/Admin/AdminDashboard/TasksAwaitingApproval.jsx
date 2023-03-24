@@ -471,7 +471,7 @@ export default function TasksAwaitingApproval() {
               onClick={() => {
                 dispatch({
                   type: "DENY_TASK",
-                  payload: infoOfSpecificTask.task_id,
+                  payload: infoOfSpecificTask,
                 })
 				handleClose();
 			}
