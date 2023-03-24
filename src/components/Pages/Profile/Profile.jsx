@@ -8,6 +8,9 @@ function Profile() {
   const [username, setUsername] = useState(user.username);
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(user.phone_number);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,8 +29,19 @@ function Profile() {
         first_name: firstName,
         last_name: lastName,
         username: username,
-        password: password,
         phone_number: phoneNumber,
+      },
+    });
+  };
+
+  const resetPassword = (event) => {
+    event.preventDefault();
+
+    dispatch({
+      type: "RESET_PASSWORD_DIRECT",
+      payload: {
+        password: newPassword,
+        username: user.username,
       },
     });
   };
@@ -73,17 +87,6 @@ function Profile() {
           </label>
         </div>
         <div>
-          <label htmlFor="password">
-            New Password:
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </label>
-        </div>
-        <div>
           <label htmlFor="phone-number">
             Phone Number:
             <input
@@ -104,7 +107,7 @@ function Profile() {
           />
         </div>
       </form>
-      <form className="formPanel" onSubmit={updateUser}>
+      <form className="formPanel" onSubmit={resetPassword}>
         <h2>Change Password</h2>
         <>
           <div>
@@ -112,20 +115,20 @@ function Profile() {
               New Password:
               <input
                 type="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                name="new-password"
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
               />
             </label>
           </div>
           <div>
-            <label htmlFor="password">
+            <label htmlFor="confirm-password">
               Confirm Password:
               <input
                 type="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                name="confirm-password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </label>
           </div>

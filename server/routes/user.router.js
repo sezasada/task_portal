@@ -151,6 +151,25 @@ router.get("/verified", (req, res) => {
       res.sendStatus(500);
     });
 });
+router.put("/change_password", async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const password = encryptLib.encryptPassword(req.body.password);
+
+    const queryText = `UPDATE "user"
+                       SET "password" = $1 
+                       WHERE "id" = $2;`;
+    // Update password in the database
+    let response = await pool.query(queryText, [password, user_id]);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.log("error with reset password", error);
+    res.sendStatus(500);
+  }
+});
+
+
 
 //initiate reset password. generate random token and send reset email link
 router.put("/reset_password", async (req, res) => {
@@ -217,7 +236,6 @@ router.put("/set_new_password", async (req, res) => {
     
     const password = encryptLib.encryptPassword(req.body.password);
     const token = req.body.token;
-
 
     const queryText = `UPDATE "user"
   SET "password" = $1 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest, call } from 'redux-saga/effects';
 import swal from 'sweetalert';
 
 // worker Saga: will be fired on "FETCH_USER" actions
@@ -116,12 +116,8 @@ function* set_new_password(action) {
 
 function* updateUser(action) {
   try {
-    const config = {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    };
     // Send the updated user information to the server
-    const response = yield axios.put('/api/user/update_info', action.payload, config);
+    const response = yield axios.put('/api/user/update_info', action.payload);
     // Update the client-side user object with the new information
     yield put({ type: 'SET_USER', payload: response.data });
     yield put({ type: 'FETCH_USER' });
@@ -129,7 +125,18 @@ function* updateUser(action) {
     console.log('User update request failed', error);
   }
 }
+function* resetPasswordDirect(action) {
+  try {
+    yield call(axios.put, '/api/user/change_password', {
+      password: action.payload.password,
+      username: action.payload.username, 
+    });
 
+  } catch (error) {
+    console.log('reset password request failed', error);
+
+  }
+}
 
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
@@ -139,6 +146,7 @@ function* userSaga() {
   yield takeLatest('RESET_PASSWORD', reset_password);
   yield takeLatest('NEW_PASSWORD', set_new_password);
   yield takeLatest('CHECK_IF_VALID', check_if_valid);
+  yield takeLatest('RESET_PASSWORD_DIRECT', resetPasswordDirect);
 
   
 }
