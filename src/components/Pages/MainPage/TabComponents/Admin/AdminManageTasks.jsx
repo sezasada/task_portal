@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import {
 	Paper,
 	Typography,
+	List,
+	ListItem,
 	Table,
 	TableHead,
 	TableRow,
@@ -49,7 +51,9 @@ export default function AdminManageTasks() {
 	const allCompletedTasks = useSelector(
 		(store) => store.allCompletedTasksReducer
 	);
-	const commentsForSpecificTask = infoOfSpecificTask.comments;
+	const commentsForSpecificTask = useSelector(
+		(store) => store.commentsForTaskReducer
+	);
 	const photosForTask = infoOfSpecificTask.photos;
 
 	//Manage edit mode
@@ -222,6 +226,33 @@ export default function AdminManageTasks() {
 				)
 				.open();
 	};
+
+	//comments
+	const [comment, setComment] = useState("");
+	// Manage opening and closing of child modal for comments modal
+	const [openChild, setOpenChild] = useState(false);
+	const handleOpenChild = () => {
+		setOpenChild(true);
+		dispatch({
+			type: "FETCH_COMMENTS_FOR_TASK",
+			payload: { task_id: infoOfSpecificTask.task_id },
+		});
+	};
+	const handleCloseChild = () => setOpenChild(false);
+
+	function handleSubmitComment() {
+		const commentObj = {
+			task_id: infoOfSpecificTask.task_id,
+			content: comment,
+		};
+
+		dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
+		dispatch({
+			type: "FETCH_COMMENTS_FOR_TASK",
+			payload: { task_id: infoOfSpecificTask.task_id },
+		});
+		setComment("");
+	}
 
 	const handleCompleteTask = () => {
 		dispatch({ type: "COMPLETE_TASK", payload: infoOfSpecificTask });
@@ -484,7 +515,7 @@ export default function AdminManageTasks() {
 									multiple
 									value={editedTags}
 									onChange={(event, newValue) => setEditedTags(newValue)}
-									inputValue={tagInput}
+									inputValue={editedTagInput}
 									onInputChange={(event, newInputValue) =>
 										setEditedTagInput(newInputValue)
 									}
@@ -694,6 +725,15 @@ export default function AdminManageTasks() {
 
 							<Button
 								variant="contained"
+								onClick={() => {
+									handleOpenChild();
+								}}
+							>
+								Comments
+							</Button>
+
+							<Button
+								variant="contained"
 								onClick={
 									infoOfSpecificTask.assigned_to_first_name
 										? handleDropTask
@@ -727,6 +767,64 @@ export default function AdminManageTasks() {
 								Delete
 							</Button>
 						</Paper>
+						<Modal
+							open={openChild}
+							onClose={() => {
+								handleCloseChild();
+							}}
+						>
+							<Stack
+								sx={{
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
+								<Paper
+									sx={{
+										display: "flex",
+										flexDirection: "column",
+										padding: "20px",
+									}}
+									elevation={3}
+								>
+									{/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
+									<Typography
+										variant="h4"
+										component="h2"
+										sx={{ textDecoration: "underline" }}
+									>
+										Add a comment
+									</Typography>
+									<br />
+									<Box>
+										<List>
+											{commentsForSpecificTask &&
+												commentsForSpecificTask.map((comment) => (
+													<ListItem key={comment.comment_id}>
+														{comment.posted_by_first_name} said{" "}
+														{comment.content} at {comment.time_posted}
+													</ListItem>
+												))}
+										</List>
+									</Box>
+									<br />
+									<TextField
+										type="text"
+										label="Comment"
+										value={comment}
+										sx={{
+											marginBottom: 1,
+											width: 300,
+										}}
+										onChange={(event) => setComment(event.target.value)}
+										variant="outlined"
+									/>
+									<Button variant="contained" onClick={handleSubmitComment}>
+										Add Comment
+									</Button>
+								</Paper>
+							</Stack>
+						</Modal>
 					</Stack>
 				</Modal>
 			</Paper>

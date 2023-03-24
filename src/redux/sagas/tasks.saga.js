@@ -100,7 +100,7 @@ function* markTaskApprovedSaga(action) {
 // Deny means delete in this case
 function* denyTaskSaga(action) {
   try {
-    yield axios.delete(`/api/tasks/${action.payload.task_id}`);
+    yield axios.delete(`/api/tasks/${action.payload}`);
     yield put({ type: "FETCH_INCOMING_TASKS" });
     const response = yield axios.get("/api/tasks/all_tasks");
     yield put({ type: "SET_ALL_TASKS", payload: response.data });
@@ -126,7 +126,10 @@ function* submitEditsSaga(action){
   console.log("submit edits saga, action.payload", action.payload);
   try{
     yield axios.put('/api/tasks/admin_edit_task', action.payload);
-    //call redux to pull in the updated information
+
+    yield put({ type: "FETCH_ALL_TASKS" });
+    yield put({ type: "FETCH_INCOMING_TASKS" });
+
 
   } catch (error){
     console.log("error in edit task saga", error);
