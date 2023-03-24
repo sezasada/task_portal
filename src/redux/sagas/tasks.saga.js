@@ -10,6 +10,15 @@ function* fetchAllTasksSaga() {
   }
 }
 
+function* fetchAllAvailableTasksSaga() {
+  try {
+    const response = yield axios.get("/api/tasks/all_available_tasks");
+    yield put({ type: "SET_ALL_AVAILABLE_TASKS", payload: response.data });
+  } catch (error) {
+    console.log("Error with fetching all tasks:", error);
+  }
+}
+
 function* addNewTaskAdminSaga(action) {
   try {
     yield axios.post("/api/tasks/admin", action.payload);
@@ -22,7 +31,8 @@ function* addNewTaskAdminSaga(action) {
 function* addNewTaskUserSaga(action) {
   try {
     yield axios.post("/api/tasks/user", action.payload);
-    yield put({ type: "FETCH_ALL_TASKS" });
+    yield put({ type: "FETCH_INCOMING_TASKS" });
+
   } catch (error) {
     console.log("Error posting task:", error);
   }
@@ -33,6 +43,7 @@ function* fetchIncomingTasksSaga() {
   try {
     const response = yield axios.get("/api/tasks/not_approved");
     yield put({ type: "SET_INCOMING_TASKS", payload: response.data });
+    yield put({ type: "FETCH_ALL_AVAILABLE_TASKS" });
   } catch (error) {
     console.log("Error with fetching incoming tasks:", error);
   }
@@ -80,6 +91,7 @@ function* markTaskApprovedSaga(action) {
     yield put({ type: "FETCH_INCOMING_TASKS" });
     const response = yield axios.get("/api/tasks/all_tasks");
     yield put({ type: "SET_ALL_TASKS", payload: response.data });
+    yield put({ type: "SET_ALL_AVAILABLE_TASKS", payload: response.data });
   } catch (error) {
     console.log("Error marking task as approved:", error);
   }
@@ -92,6 +104,8 @@ function* denyTaskSaga(action) {
     yield put({ type: "FETCH_INCOMING_TASKS" });
     const response = yield axios.get("/api/tasks/all_tasks");
     yield put({ type: "SET_ALL_TASKS", payload: response.data });
+    yield put({ type: "SET_ALL_AVAILABLE_TASKS", payload: response.data });
+
   } catch (error) {
     console.log("Error marking task as approved:", error);
   }
@@ -109,11 +123,13 @@ function* completeTaskSaga(action) {
 }
 
 function* submitEditsSaga(action){
-  
+  console.log("submit edits saga, action.payload", action.payload);
   try{
     yield axios.put('/api/tasks/admin_edit_task', action.payload);
+
     yield put({ type: "FETCH_ALL_TASKS" });
     yield put({ type: "FETCH_INCOMING_TASKS" });
+
 
   } catch (error){
     console.log("error in edit task saga", error);
@@ -133,6 +149,7 @@ function* tasksSaga() {
   yield takeLatest("ADD_NEW_TASK", addNewTaskAdminSaga);
   yield takeLatest("SUBMIT_EDITS", submitEditsSaga)
   yield takeLatest("FETCH_COMPLETED_USER_TASKS", fetchAllCompletedTasksForUserSaga);
+  yield takeLatest("FETCH_ALL_AVAILABLE_TASKS", fetchAllAvailableTasksSaga);
 }
 
 export default tasksSaga;

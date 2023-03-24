@@ -114,9 +114,26 @@ function* set_new_password(action) {
 }
 
 
+function* updateUser(action) {
+  try {
+    const config = {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+    // Send the updated user information to the server
+    const response = yield axios.put('/api/user/update_info', action.payload, config);
+    // Update the client-side user object with the new information
+    yield put({ type: 'SET_USER', payload: response.data });
+    yield put({ type: 'FETCH_USER' });
+  } catch (error) {
+    console.log('User update request failed', error);
+  }
+}
+
 
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('UPDATE_USER', updateUser);
   yield takeLatest('FETCH_UNVERIFIED_USERS', fetchUnverifiedUsersSaga);
   yield takeLatest('FETCH_VERIFIED_USERS', fetchVerifiedUsersSaga);
   yield takeLatest('RESET_PASSWORD', reset_password);
