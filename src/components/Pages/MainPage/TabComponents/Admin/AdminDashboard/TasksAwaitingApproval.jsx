@@ -579,7 +579,7 @@ export default function TasksAwaitingApproval() {
                   variant="outlined"
                 />
                 <Button variant="contained" onClick={handleSubmitComment}>
-                  Add Comment
+                  Comments
                 </Button>
               </Paper>
             </Stack>
