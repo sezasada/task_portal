@@ -42,19 +42,24 @@ function Nav() {
 
   return (
     <AppBar
+      
       position="sticky"
       sx={{
         width: "100vw",
+        "background-color": "#BB292E",
+        
       }}
     >
       <Container
+      
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          
         }}
       >
-        <Box>
+        <Box >
           <Link
             to="/home"
             onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}

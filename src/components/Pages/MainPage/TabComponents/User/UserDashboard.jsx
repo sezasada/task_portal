@@ -17,6 +17,7 @@ import {
   ListItem,
 } from "@mui/material";
 import moment from "moment";
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function UserDashboard() {
   const dispatch = useDispatch();
@@ -161,6 +162,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
+              <ClearIcon />
               <Typography
                 variant="h4"
                 component="h2"
@@ -331,6 +333,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
+              <ClearIcon />
               <Typography
                 variant="h4"
                 component="h2"
@@ -418,6 +421,7 @@ export default function UserDashboard() {
                   }}
                   elevation={3}
                 >
+                  
                   {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
                   {/* <Typography
                     variant="h4"
