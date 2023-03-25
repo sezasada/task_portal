@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useScript } from "../../../../../hooks/useScript";
 import { useEffect } from "react";
+import MarkChatUnreadRoundedIcon from '@mui/icons-material/MarkChatUnreadRounded';
 import {
 	Paper,
 	Typography,
@@ -51,9 +52,12 @@ export default function AdminManageTasks() {
 	const allCompletedTasks = useSelector(
 		(store) => store.allCompletedTasksReducer
 	);
+
 	const commentsForSpecificTask = useSelector(
 		(store) => store.commentsForTaskReducer
 	);
+	
+
 	const photosForTask = infoOfSpecificTask.photos;
 
 	//Manage edit mode
@@ -728,8 +732,10 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpenChild();
 								}}
-							>
-								Comments
+
+							> {commentsForSpecificTask?.length === 0 ? `Comments` : <> Comments&nbsp;<MarkChatUnreadRoundedIcon /> </>}
+							
+					
 							</Button>
 
 							<Button
@@ -1008,8 +1014,8 @@ export default function AdminManageTasks() {
 					<TableHead>
 						<TableRow>
 							<TableCell>Title</TableCell>
-							<TableCell>Completed At</TableCell>
 							<TableCell>Completed By</TableCell>
+							<TableCell>Date Completed</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -1019,6 +1025,7 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpen2();
 									dispatch({ type: "VIEW_TASK_INFO", payload: task });
+
 								}}
 							>
 								<TableCell>{task.title}</TableCell>

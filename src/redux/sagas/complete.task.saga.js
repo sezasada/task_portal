@@ -22,7 +22,7 @@ function* completeTask(action) {
       const status = "Completed";
       const time_completed = moment().format("YYYY-MM-DD HH:mm:ss");
           
-      console.log("saga id, time and status", task_id, time_completed, status );
+      // console.log("saga id, time and status", task_id, time_completed, status );
       yield call(axios.put, '/api/tasks/user_complete_task', { task_id, time_completed, status });  
       yield put({ type: 'FETCH_ALL_TASKS' });
       yield put({ type: 'FETCH_ALL_TASKS_FOR_ADMIN' });

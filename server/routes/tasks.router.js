@@ -671,9 +671,9 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
         "created_by_id",
         "assigned_to_id",
         "is_time_sensitive",
-        "due_date",
-        "time_assigned"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        "due_date"
+        
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING "id"
     `;
     
@@ -688,7 +688,7 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
       assigned_to_id,
       is_time_sensitive,
       due_date,
-      time_assigned,
+      
     ]);
 
     const add_photos_query = `INSERT INTO "photos" (
