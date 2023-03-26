@@ -2,25 +2,26 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useScript } from "../../../../../hooks/useScript";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
-	Paper,
-	Typography,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Modal,
-	Button,
-	List,
+  Paper,
+  Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Modal,
+  Button,
+  List,
   ListItem,
-	TextField,
-	Autocomplete,
-	Box,
-	InputAdornment,
-	OutlinedInput,
-	InputLabel,
-	FormControl,
+  TextField,
+  Autocomplete,
+  Box,
+  InputAdornment,
+  OutlinedInput,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import moment from "moment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -28,196 +29,202 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function UserTaskList() {
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-	// Access redux stores for tasks
-	const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
-	const allApprovedTasks = useSelector((store) => store.allTasksReducer);
-	const allAvailableTasks = useSelector((store) => store.allAvailableTasksReducer);
+  // Access redux stores for tasks
+  const infoOfSpecificTask = useSelector((store) => store.viewTaskInfoReducer);
+  const allApprovedTasks = useSelector((store) => store.allTasksReducer);
+  const allAvailableTasks = useSelector(
+    (store) => store.allAvailableTasksReducer
+  );
 
-	// Access redux store for all tags
-	const allTags = useSelector((store) => store.allTagsReducer);
-	const specificTaskTags = infoOfSpecificTask.tags;
+  // Access redux store for all tags
+  const allTags = useSelector((store) => store.allTagsReducer);
+  const specificTaskTags = infoOfSpecificTask.tags;
 
-	// Access redux store for all locations
-	const allLocations = useSelector((store) => store.allLocationsReducer);
+  // Access redux store for all locations
+  const allLocations = useSelector((store) => store.allLocationsReducer);
 
-	// Access redux store for all users
-	const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
+  // Access redux store for all users
+  const verifiedUsers = useSelector((store) => store.verifiedUsersReducer);
 
-	const allCompletedTasks = useSelector(
-		(store) => store.allCompletedTasksReducer
-	);
-	const commentsForSpecificTask = useSelector((store) => store.commentsForTaskReducer);
-	const photosForTask = infoOfSpecificTask.photos;
+  const allCompletedTasks = useSelector(
+    (store) => store.allCompletedTasksReducer
+  );
+  const commentsForSpecificTask = useSelector(
+    (store) => store.commentsForTaskReducer
+  );
+  const photosForTask = infoOfSpecificTask.photos;
 
-	// Manage opening and closing of details modal
-	const [open, setOpen] = useState(false);
-	const handleOpen = () => {
-		setOpen(true);
-	};
-	const handleClose = () => setOpen(false);
+  // Manage opening and closing of details modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
-	// Manage opening and closing of second details modal
-	const [open2, setOpen2] = useState(false);
-	const handleOpen2 = () => {
-		setOpen2(true);
-	};
-	const handleClose2 = () => setOpen2(false);
+  // Manage opening and closing of second details modal
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => setOpen2(false);
 
+  const handleTakeTask = () => {
+    console.log("take task button is clicked", infoOfSpecificTask);
+    dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask });
+    handleClose();
+  };
 
+  const handleDropTask = () => {
+    console.log("drop task clicked", infoOfSpecificTask);
+    dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask });
+    handleClose();
+  };
 
-	const handleTakeTask = () => {
-		console.log("take task button is clicked", infoOfSpecificTask);
-		dispatch({ type: "TAKE_TASK", payload: infoOfSpecificTask });
-		handleClose();
-	};
+  // Manage opening and closing of child modal for comments modal
+  const [openChild, setOpenChild] = useState(false);
+  const [comment, setComment] = useState("");
+  const handleOpenChild = () => {
+    setOpenChild(true);
+    dispatch({
+      type: "FETCH_COMMENTS_FOR_TASK",
+      payload: { task_id: infoOfSpecificTask.task_id },
+    });
+    console.log("comments", commentsForSpecificTask);
+  };
+  const handleCloseChild = () => setOpenChild(false);
 
-	const handleDropTask = () => {
-		console.log("drop task clicked", infoOfSpecificTask);
-		dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask })
-		handleClose();
-	};
+  function handleSubmitComment() {
+    const commentObj = {
+      task_id: infoOfSpecificTask.task_id,
+      content: comment,
+    };
+    console.log(commentObj);
+    dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
+    dispatch({
+      type: "FETCH_COMMENTS_FOR_TASK",
+      payload: { task_id: infoOfSpecificTask.task_id },
+    });
+    setComment("");
+  }
 
-	// Manage opening and closing of child modal for comments modal
-	const [openChild, setOpenChild] = useState(false);
-	const [comment, setComment] = useState("");
-	const handleOpenChild = () => {
-	  setOpenChild(true);
-	  dispatch({
-		type: "FETCH_COMMENTS_FOR_TASK",
-		payload: { task_id: infoOfSpecificTask.task_id },
-	  });
-	  console.log("comments", commentsForSpecificTask);
-	};
-	const handleCloseChild = () => setOpenChild(false);
-  
-	function handleSubmitComment() {
-	  const commentObj = {
-		task_id: infoOfSpecificTask.task_id,
-		content: comment,
-	  };
-	  console.log(commentObj);
-	  dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
-	  dispatch({
-		type: "FETCH_COMMENTS_FOR_TASK",
-		payload: { task_id: infoOfSpecificTask.task_id },
-	  });
-	  setComment("");
-	}
+  return (
+    <Stack spacing={3}>
+      <Paper sx={{ p: 3 }}>
+        <Typography>Available Tasks</Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Tags</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {allAvailableTasks.map((task) => (
+              <TableRow
+                key={task.id}
+                onClick={() => {
+                  handleOpen();
+                  dispatch({ type: "VIEW_TASK_INFO", payload: task });
+                  console.log(task);
+                }}
+              >
+                <TableCell>{task.title}</TableCell>
+                <TableCell>{task.location_name}</TableCell>
+                <TableCell>
+                  <ul>
+                    {task.tags &&
+                      task.tags.map((tag) => (
+                        <li key={tag.tag_id}> {tag.tag_name} </li>
+                      ))}
+                  </ul>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Modal
+          open={open}
+          onClose={() => {
+            handleClose();
+            dispatch({ type: "UNVIEW_TASK_INFO" });
+          }}
+        >
+          <Stack
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Paper
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "20px",
+              }}
+            >
+              <ClearIcon onClick={() => setOpen(false)} />
+              {/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
+              <Typography
+                variant="h4"
+                component="h2"
+                sx={{ textDecoration: "underline" }}
+              >
+                Task Info
+              </Typography>
+              <br />
+              <Typography variant="h6" component="h4">
+                Title: {infoOfSpecificTask.title}
+              </Typography>
+              <br />
+              <Typography variant="h6" component="h4">
+                Tags:
+              </Typography>
 
-	
-	return (
-		<Stack spacing={3}>
-			<Paper sx={{ p: 3 }}>
-				<Typography>Available Tasks</Typography>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Title</TableCell>
-							<TableCell>Location</TableCell>
-							<TableCell>Tags</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{allAvailableTasks.map((task) => (
-							<TableRow
-								key={task.id}
-								onClick={() => {
-									handleOpen();
-									dispatch({ type: "VIEW_TASK_INFO", payload: task });
-									console.log(task);
-								}}
-							>
-								<TableCell>{task.title}</TableCell>
-								<TableCell>{task.location_name}</TableCell>
-								<TableCell>
-									<ul>
-									{task.tags && task.tags.map((tag) => (
-										<li key={tag.tag_id}> {tag.tag_name} </li>
-									))}
-									</ul>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-				<Modal
-					open={open}
-					onClose={() => {
-						handleClose();
-						dispatch({ type: "UNVIEW_TASK_INFO" });
-					}}
-				>
-					<Stack
-						sx={{
-							display: "flex",
-							alignItems: "center",
-						}}
-					>
-						<Paper
-							sx={{
-								display: "flex",
-								flexDirection: "column",
-								padding: "20px",
-							}}
-						>
-							{/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
-							<Typography
-								variant="h4"
-								component="h2"
-								sx={{ textDecoration: "underline" }}
-							>
-								Task Info
-							</Typography>
-							<br />
-							<Typography variant="h6" component="h4">
-								Title: {infoOfSpecificTask.title}
-							</Typography>
-							<br />
-							<Typography variant="h6" component="h4">
-								Tags:
-							</Typography>
-
-							<ul>
-								{specificTaskTags &&
-									specificTaskTags.map((tag) => (
-										<li key={tag.tag_id}>{tag.tag_name}</li>
-									))}
-							</ul>
-							<br />
-							<Typography variant="h6" component="h4">
-								Budget: ${infoOfSpecificTask.budget}
-							</Typography>
-							<br />
-							<Typography variant="h6" component="h4">
-								Location: {infoOfSpecificTask.location_name}
-							</Typography>
-							<br />
-							<Typography>
-								Due Date: {infoOfSpecificTask.due_date != null ?
-									moment(infoOfSpecificTask.due_date).format("MMMM Do YYYY, h:mm a")
-									: " "}
-							</Typography>
-							<br />
-							<Typography variant="h6" component="h4">
-								Created By: {infoOfSpecificTask.created_by_first_name}{" "}
-								{infoOfSpecificTask.created_by_last_name}
-							</Typography>
-							<br />
-							<Typography variant="h6" component="h4">
-								Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
-								{infoOfSpecificTask.assigned_to_last_name}
-							</Typography>
-							<br />
-							<Typography variant="h6" component="h4">
-								Notes: {infoOfSpecificTask.notes}
-							</Typography>
-							{photosForTask &&
-								photosForTask.map((item) => {
-									return <img src={item.photo_url} width={100} />;
-								})}
-							<Button
+              <ul>
+                {specificTaskTags &&
+                  specificTaskTags.map((tag) => (
+                    <li key={tag.tag_id}>{tag.tag_name}</li>
+                  ))}
+              </ul>
+              <br />
+              <Typography variant="h6" component="h4">
+                Budget: ${infoOfSpecificTask.budget}
+              </Typography>
+              <br />
+              <Typography variant="h6" component="h4">
+                Location: {infoOfSpecificTask.location_name}
+              </Typography>
+              <br />
+              <Typography>
+                Due Date:{" "}
+                {infoOfSpecificTask.due_date != null
+                  ? moment(infoOfSpecificTask.due_date).format(
+                      "MMMM Do YYYY, h:mm a"
+                    )
+                  : " "}
+              </Typography>
+              <br />
+              <Typography variant="h6" component="h4">
+                Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+                {infoOfSpecificTask.created_by_last_name}
+              </Typography>
+              <br />
+              <Typography variant="h6" component="h4">
+                Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
+                {infoOfSpecificTask.assigned_to_last_name}
+              </Typography>
+              <br />
+              <Typography variant="h6" component="h4">
+                Notes: {infoOfSpecificTask.notes}
+              </Typography>
+              {photosForTask &&
+                photosForTask.map((item) => {
+                  return <img src={item.photo_url} width={100} />;
+                })}
+              <Button
                 variant="contained"
                 onClick={() => {
                   handleOpenChild();
@@ -225,73 +232,79 @@ export default function UserTaskList() {
               >
                 Comments
               </Button>
-							<Button variant="contained" onClick={infoOfSpecificTask.assigned_to_first_name ? handleDropTask : handleTakeTask}>
-								{infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
-							</Button>
-						</Paper>
-						<Modal
-            open={openChild}
-            onClose={() => {
-              handleCloseChild();
-            }}
-          >
-            <Stack
-              sx={{
-                display: "flex",
-                alignItems: "center",
+              <Button
+                variant="contained"
+                onClick={
+                  infoOfSpecificTask.assigned_to_first_name
+                    ? handleDropTask
+                    : handleTakeTask
+                }
+              >
+                {infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
+              </Button>
+            </Paper>
+            <Modal
+              open={openChild}
+              onClose={() => {
+                handleCloseChild();
               }}
             >
-              <Paper
+              <Stack
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  padding: "20px",
+                  alignItems: "center",
                 }}
-                elevation={3}
               >
-                {/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
-                <Typography
-                  variant="h4"
-                  component="h2"
-                  sx={{ textDecoration: "underline" }}
-                >
-                  Add a comment
-                </Typography>
-                <br />
-                <Box>
-                  <List>
-                    {commentsForSpecificTask &&
-                      commentsForSpecificTask.map((comment) => (
-                        <ListItem key={comment.comment_id}>
-                          {comment.posted_by_first_name} said {comment.content}{" "}
-                          at {comment.time_posted}
-                        </ListItem>
-                      ))}
-                  </List>
-                </Box>
-                <br />
-                <TextField
-                  type="text"
-                  label="Comment"
-                  value={comment}
+                <Paper
                   sx={{
-                    marginBottom: 1,
-                    width: 300,
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "20px",
                   }}
-                  onChange={(event) => setComment(event.target.value)}
-                  variant="outlined"
-                />
-                <Button variant="contained" onClick={handleSubmitComment}>
-                  Add Comment
-                </Button>
-              </Paper>
-            </Stack>
-          </Modal>
-
-
-					</Stack>
-				</Modal>
-			</Paper>
-		</Stack>
-	);
+                  elevation={3}
+                >
+                  <ClearIcon onClick={() => setOpenChild(false)} />
+                  {/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    sx={{ textDecoration: "underline" }}
+                  >
+                    Add a comment
+                  </Typography>
+                  <br />
+                  <Box>
+                    <List>
+                      {commentsForSpecificTask &&
+                        commentsForSpecificTask.map((comment) => (
+                          <ListItem key={comment.comment_id}>
+                            {comment.posted_by_first_name} said{" "}
+                            {comment.content} at {comment.time_posted}
+                          </ListItem>
+                        ))}
+                    </List>
+                  </Box>
+                  <br />
+                  <TextField
+                    type="text"
+                    label="Comment"
+                    value={comment}
+                    sx={{
+                      marginBottom: 1,
+                      width: 300,
+                    }}
+                    onChange={(event) => setComment(event.target.value)}
+                    variant="outlined"
+                  />
+                  <Button variant="contained" onClick={handleSubmitComment}>
+                    Add Comment
+                  </Button>
+                </Paper>
+              </Stack>
+            </Modal>
+          </Stack>
+        </Modal>
+      </Paper>
+    </Stack>
+  );
 }

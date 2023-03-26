@@ -19,6 +19,7 @@ import {
 	ListItem,
   FormControl,
 } from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -236,6 +237,7 @@ export default function TasksAwaitingApproval() {
             }}
             elevation={3}
           >
+            <ClearIcon onClick={() => setOpen(false)}/>
             <Typography
               variant="h4"
               component="h2"
@@ -546,6 +548,7 @@ export default function TasksAwaitingApproval() {
                 }}
                 elevation={3}
               >
+                <ClearIcon onClick={() => setOpenChild(false)}/>
                 {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
                 <Typography
                   variant="h4"
