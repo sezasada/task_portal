@@ -12,6 +12,8 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
+
+import ClearIcon from '@mui/icons-material/Clear';
 import { Box, Stack } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
@@ -126,6 +128,7 @@ export default function TasksAssignedToYou() {
 						}}
 						elevation={3}
 					>
+						<ClearIcon onClick={() => setOpen2(false)}/>
 						<Typography
 							variant="h4"
 							component="h2"
@@ -213,6 +216,7 @@ export default function TasksAssignedToYou() {
 								}}
 								elevation={3}
 							>
+								<ClearIcon onClick={() => setOpenChild(false)}/>
 								{/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
 								<Typography
 									variant="h4"

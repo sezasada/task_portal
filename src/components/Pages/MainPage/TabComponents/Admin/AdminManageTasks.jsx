@@ -4,6 +4,7 @@ import { Stack } from "@mui/system";
 import { useScript } from "../../../../../hooks/useScript";
 import { useEffect } from "react";
 import MarkChatUnreadRoundedIcon from '@mui/icons-material/MarkChatUnreadRounded';
+import ClearIcon from '@mui/icons-material/Clear';
 import {
 	Paper,
 	Typography,
@@ -477,6 +478,7 @@ export default function AdminManageTasks() {
 								padding: "20px",
 							}}
 						>
+							<ClearIcon onClick={() => setOpen(false)}/>
 							{/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
 							<Typography
 								variant="h4"
@@ -748,10 +750,7 @@ export default function AdminManageTasks() {
 							>
 								{infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
 							</Button>
-							{/* <Button variant="contained" onClick={handleTakeTask}
-							>
-								Take
-							</Button> */}
+							
 							<Button variant="contained" onClick={handleCompleteTask}>
 								Mark Complete
 							</Button>
@@ -793,6 +792,7 @@ export default function AdminManageTasks() {
 									}}
 									elevation={3}
 								>
+									<ClearIcon onClick={() => setOpenChild(false)}/>
 									{/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
 									<Typography
 										variant="h4"
@@ -1060,6 +1060,7 @@ export default function AdminManageTasks() {
 							}}
 							elevation={3}
 						>
+							<ClearIcon onClick={() => setOpen2(false)}/>
 							<Typography
 								variant="h4"
 								component="h2"
