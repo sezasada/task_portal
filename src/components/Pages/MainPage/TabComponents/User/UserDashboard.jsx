@@ -89,10 +89,6 @@ export default function UserDashboard() {
     setComment("");
   }
 
-  // const refreshTasks = () => {
-  // 	dispatch({ type: "SET_ALL_TASKS_FOR_ADMIN" });
-  //   };
-
   const handleDropTask = () => {
     console.log("drop task clicked", infoOfSpecificTask);
     dispatch({ type: "DROP_TASK", payload: infoOfSpecificTask });
@@ -162,7 +158,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
-              <ClearIcon />
+              <ClearIcon onClick={() => setOpen(false)}/>
               <Typography
                 variant="h4"
                 component="h2"
@@ -244,7 +240,9 @@ export default function UserDashboard() {
                 }}
                 elevation={3}
               >
+                 
                 {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
+                <ClearIcon onClick={() => setOpenChild(false)}/>
                 <Typography
                   variant="h4"
                   component="h2"
@@ -333,7 +331,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
-              <ClearIcon />
+              <ClearIcon onClick={() => setOpen2(false)}/>
               <Typography
                 variant="h4"
                 component="h2"
@@ -413,6 +411,7 @@ export default function UserDashboard() {
                   alignItems: "center",
                 }}
               >
+                 
                 <Paper
                   sx={{
                     display: "flex",
@@ -421,17 +420,9 @@ export default function UserDashboard() {
                   }}
                   elevation={3}
                 >
-                  
-                  {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
-                  {/* <Typography
-                    variant="h4"
-                    component="h2"
-                    sx={{ textDecoration: "underline" }}
-                  >
-                    Add a comment
-                  </Typography> */}
                   <br />
                   <Box>
+                  
                     <List>
                       {commentsForTask.length > 0 &&
                         commentsForTask.map((comment) => (
@@ -479,6 +470,7 @@ export default function UserDashboard() {
                       elevation={3}
                     >
                       {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
+                      <ClearIcon onClick={() => setOpenChild(false)}/>
                       <Typography
                         variant="h4"
                         component="h2"
@@ -569,6 +561,8 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
+               <ClearIcon onClick={() => setOpen3(false)}/>
+
               <Typography
                 variant="h4"
                 component="h2"
@@ -625,7 +619,7 @@ export default function UserDashboard() {
                   handleOpenChild();
                 }}
               >
-                CommentS
+                Comments
               </Button>
             </Paper>
             <Modal
@@ -648,14 +642,8 @@ export default function UserDashboard() {
                   }}
                   elevation={3}
                 >
-                  {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
-                  {/* <Typography
-                                        variant="h4"
-                                        component="h2"
-                                        sx={{ textDecoration: "underline" }}
-                                    >
-                                        Add a comment
-                                    </Typography> */}
+                   <ClearIcon onClick={() => setOpenChild(false)}/>
+                  
                   <br />
                   <Box>
                     <List>
@@ -669,20 +657,6 @@ export default function UserDashboard() {
                     </List>
                   </Box>
                   <br />
-                  {/* <TextField
-                                        type="text"
-                                        label="Comment"
-                                        value={comment}
-                                        sx={{
-                                            marginBottom: 1,
-                                            width: 300,
-                                        }}
-                                        onChange={(event) => setComment(event.target.value)}
-                                        variant="outlined"
-                                    />
-                                    <Button variant="contained" onClick={handleSubmitComment}>
-                                        Add Comment
-                                    </Button> */}
                 </Paper>
               </Stack>
             </Modal>
