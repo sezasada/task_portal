@@ -105,16 +105,47 @@ export default function UserDashboard() {
   console.log("admin tasks", allCompletedTasks);
 
   return (
-    <Stack spacing={3}>
-      <Box>
-        <Typography component="h2" variant="h4">
+    <Stack
+      spacing={3}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      {/* <Box>
+        <Typography component="h5" variant="h5">
           Welcome, {user.first_name}!
         </Typography>
-      </Box>
-      <Paper sx={{ p: 3 }} elevation={3}>
+      </Box> */}
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         {/* <pre>{JSON.stringify(incomingTasks)}</pre> */}
-        <Typography>Tasks awaiting approval</Typography>
-        <Table>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          Tasks awaiting approval
+        </Typography>
+        <hr />
+        <Table
+          sx={{
+            "& thead th:first-child": {
+              width: "70%",
+            },
+            "& thead th:last-child": {
+              width: "30%",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Title</TableCell>
@@ -143,6 +174,15 @@ export default function UserDashboard() {
           onClose={() => {
             handleClose();
             dispatch({ type: "UNVIEW_TASK_INFO" });
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "90%",
+            height: "80%",
+            margin: "auto",
+            outline: "none",
           }}
         >
           <Stack
@@ -312,10 +352,39 @@ export default function UserDashboard() {
           </Stack>
         </Modal>
       </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         {/* <pre>{JSON.stringify(tasksForAdmin)}</pre> */}
-        <Typography>Tasks assigned to you</Typography>
-        <Table>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          Tasks assigned to you
+        </Typography>
+        <hr />
+
+        <Table
+          sx={{
+            "& thead th:first-child": {
+              width: "70%",
+            },
+            "& thead th:last-child": {
+              width: "30%",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Title</TableCell>
@@ -518,10 +587,38 @@ export default function UserDashboard() {
           </Stack>
         </Modal>
       </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         {/* <pre>{JSON.stringify(tasksForAdmin)}</pre> */}
-        <Typography>Previous Tasks</Typography>
-        <Table>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          Previous Tasks
+        </Typography>
+        <hr />
+        <Table
+          sx={{
+            "& thead th:first-child": {
+              width: "70%",
+            },
+            "& thead th:last-child": {
+              width: "30%",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Title</TableCell>
