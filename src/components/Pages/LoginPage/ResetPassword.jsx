@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
+import { Stack } from "@mui/system";
+
+import { Typography, Button, TextField, Box } from "@mui/material";
 
 function ResetPassword() {
   const history = useHistory();
@@ -38,14 +41,66 @@ function ResetPassword() {
 
   return (
     <>
-     <form onSubmit={handleSubmit}>
-          <label>
-            New Password
-            <input type="text" value={newPassword} onChange={handleChange} />
-          </label>
-          <button type="submit">Reset Password</button>
+        <Box
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center", "margin-top":"20px", }}
+    >
+      <Stack
+        sx={{
+          backgroundColor: "rgb(241, 241, 241)",
+          padding: "10px",
+          borderRadius: "12px",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 25,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          Create New Password
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Stack>
+            <TextField
+              required
+              type="text"
+              label={"New Password"}
+              value={newPassword}
+              sx={{
+                marginBottom: 1,
+                display: "flex",
+              }}
+              onChange={handleChange}
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      background: "white",
+                      color:"black",
+                      ":hover": {
+                        bgcolor: "#F58259",
+                        color: "black"},
+                    }}
+                  >
+                    Reset
+                  </Button>
+                ),
+              }}
+            />
+          </Stack>
         </form>
+      </Stack>
+    </Box>
     </>
+
+
+
   );
 }
 
