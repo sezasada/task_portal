@@ -59,11 +59,14 @@ function Nav() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          paddingLeft: "16px",
-          paddingRight: "16px",
         }}
       >
-        <Box sx={{ marginLeft: 0, paddingLeft: 0 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Link
             to="/home"
             onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
@@ -72,21 +75,26 @@ function Nav() {
               to="/home"
               onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
             >
-              <img
-                src="https://static.wixstatic.com/media/bf2bff_05ec89b84f6f40998006c9d59f212956~mv2.png/v1/fill/w_232,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20red.png"
-                alt="logo red.png"
-                className="logo-img"
-                style={{
-                  width: "auto",
-                  minHeight: "10px",
-                  maxHeight: "30px",
-                  objectFit: "cover",
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              />
+              >
+                <img
+                  src="https://static.wixstatic.com/media/bf2bff_05ec89b84f6f40998006c9d59f212956~mv2.png/v1/fill/w_232,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20red.png"
+                  alt="logo red.png"
+                  className="logo-img"
+                  style={{
+                    width: "auto",
+                    objectFit: "cover",
+                    height: "3vh",
+                  }}
+                />
+              </Box>
             </Link>
           </Link>
         </Box>
-
         <Box sx={{ flex: "1 1 auto", textAlign: "center" }}>
           <Tabs
             value={tabIndex}
