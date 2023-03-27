@@ -8,12 +8,13 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
+  console.log(id);
   pool
     .query('SELECT * FROM "user" WHERE id = $1', [id])
     .then((result) => {
       // Handle Errors
       const user = result && result.rows && result.rows[0];
-
+      console.log(user);
       if (user) {
         // user found
         delete user.password; // remove password so it doesn't get sent

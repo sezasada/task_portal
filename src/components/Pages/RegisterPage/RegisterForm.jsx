@@ -1,5 +1,9 @@
+import { TextFieldsRounded } from "@mui/icons-material";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { Stack } from "@mui/system";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { MuiTelInput } from "mui-tel-input";
 
 function RegisterForm() {
 	const [firstName, setFirstName] = useState("");
@@ -27,75 +31,74 @@ function RegisterForm() {
 
 	return (
 		<form className="formPanel" onSubmit={registerUser}>
-			<h2>Register User</h2>
+			<Typography component="h2" variant="h4">
+				Register User
+			</Typography>
 			{errors.registrationMessage && (
-				<h3 className="alert" role="alert">
+				<Typography component="h3" variant="h6" className="alert" role="alert">
 					{errors.registrationMessage}
-				</h3>
+				</Typography>
 			)}
-			<div>
-				<label htmlFor="first-name">
-					First Name:
-					<input
+			<br />
+			<Stack spacing={1}>
+				<Box>
+					<TextField
 						type="text"
 						name="first-name"
+						label="Enter First Name"
 						value={firstName}
 						required
 						onChange={(event) => setFirstName(event.target.value)}
 					/>
-				</label>
-			</div>
-			<div>
-				<label htmlFor="last-name">
-					Last Name:
-					<input
+				</Box>
+				<Box>
+					<TextField
 						type="text"
 						name="last-name"
 						value={lastName}
+						label="Enter Last Name"
 						required
 						onChange={(event) => setLastName(event.target.value)}
 					/>
-				</label>
-			</div>
-			<div>
-				<label htmlFor="email">
-					Email Address:
-					<input
-						type="text"
+				</Box>
+				<Box>
+					<TextField
+						type="email"
 						name="email"
 						value={username}
+						label="Enter Email Address"
 						required
 						onChange={(event) => setUsername(event.target.value)}
 					/>
-				</label>
-			</div>
-			<div>
-				<label htmlFor="password">
-					Password:
-					<input
+				</Box>
+				<Box>
+					<TextField
 						type="password"
 						name="password"
 						value={password}
+						label="Enter Password"
 						required
 						onChange={(event) => setPassword(event.target.value)}
 					/>
-				</label>
-			</div>
-			<div>
-				<label htmlFor="phone-number">
-					Phone Number:
-					<input
-						type="text"
-						name="phone-number"
+				</Box>
+				<Box>
+					<MuiTelInput
 						value={phoneNumber}
+						label="Enter Phone Number"
 						required
-						onChange={(event) => setPhoneNumber(event.target.value)}
+						defaultCountry="US"
+						flagSize="small"
+						onChange={(newPhone) => {
+							setPhoneNumber(newPhone);
+						}}
 					/>
-				</label>
-			</div>
-			<div>
-				<input className="btn" type="submit" name="submit" value="Register" />
-			</div>
+				</Box>
+				<Box>
+					<Button type="submit" variant="contained">
+						Register
+					</Button>
+				</Box>
+			</Stack>
 		</form>
 	);
 }
