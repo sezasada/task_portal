@@ -50,7 +50,6 @@ function Nav() {
       sx={{
         width: "100vw",
         backgroundColor: "rgb(241, 241, 241)",
-        flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
       }}
     >
@@ -62,10 +61,7 @@ function Nav() {
         }}
       >
         <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
+ 
         >
           <Link
             to="/home"
@@ -76,10 +72,7 @@ function Nav() {
               onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
             >
               <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
+  
               >
                 <img
                   src="https://static.wixstatic.com/media/bf2bff_05ec89b84f6f40998006c9d59f212956~mv2.png/v1/fill/w_232,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20red.png"
