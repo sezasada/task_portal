@@ -138,13 +138,10 @@ function Nav() {
 							TabIndicatorProps={{ style: { background: "rgb(187, 41, 46)" } }}
 							value={tabIndex}
 							sx={{
-								display: "flex",
-								justifyContent: "center",
-								color: "Black",
-								minWidth: "400px",
 								"& .MuiTab-root": {
 									minWidth: "unset",
 									flex: 1,
+									color: "Black",
 								},
 							}}
 						>
@@ -152,7 +149,7 @@ function Nav() {
 								icon={
 									<GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
 								}
-								label={<span style={{ color: "black" }}>Dashboard</span>}
+								// label={<span style={{ color: "black" }}>Dashboard</span>}
 								onClick={() => {
 									dispatch({ type: "SET_TAB_INDEX", payload: 0 });
 									history.push("/main");
@@ -162,7 +159,7 @@ function Nav() {
 								icon={
 									<BorderColorSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
 								}
-								label={<span style={{ color: "black" }}>Create New Task</span>}
+								// label={<span style={{ color: "black" }}>Create New Task</span>}
 								onClick={() => {
 									dispatch({ type: "SET_TAB_INDEX", payload: 1 });
 									history.push("/main");
@@ -172,7 +169,7 @@ function Nav() {
 								icon={
 									<TextSnippetSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
 								}
-								label={<span style={{ color: "black" }}>Task List</span>}
+								// label={<span style={{ color: "black" }}>Task List</span>}
 								onClick={() => {
 									dispatch({ type: "SET_TAB_INDEX", payload: 2 });
 									history.push("/main");
