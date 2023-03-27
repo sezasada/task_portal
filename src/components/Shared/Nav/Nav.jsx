@@ -14,6 +14,10 @@ import {
 import { Box, Container } from "@mui/system";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
+import GridViewSharpIcon from "@mui/icons-material/GridViewSharp";
+import BorderColorSharpIcon from "@mui/icons-material/BorderColorSharp";
+import TextSnippetSharpIcon from "@mui/icons-material/TextSnippetSharp";
+import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import NotVerifiedUser from "../../Pages/MainPage/TabComponents/NotVerified/NotVerifiedUser";
 function Nav() {
   const history = useHistory();
@@ -45,8 +49,7 @@ function Nav() {
       position="sticky"
       sx={{
         width: "100vw",
-        // "background-color": "#BB292E",
-        
+        "background-color": "rgb(241, 241, 241)"
       }}
     >
       <Container
@@ -56,42 +59,44 @@ function Nav() {
           alignItems: "center",
         }}
       >
-        <Box >
+        <Box>
           <Link
             to="/home"
             onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
           >
-            <Typography sx={{ color: "white"}} component="h2" variant="h5">
-              Task Portal
-            </Typography>
+            <Link
+              to="/home"
+              onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
+            >
+              <img
+                src="https://static.wixstatic.com/media/bf2bff_05ec89b84f6f40998006c9d59f212956~mv2.png/v1/fill/w_232,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20red.png"
+                alt="logo red.png"
+                className="logo-img"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </Link>
           </Link>
         </Box>
         <Box>
-          <Tabs
-          
-            value={tabIndex}
-            textColor="secondary"
-            indicatorColor="white"
-          >
+          <Tabs value={tabIndex}  >
             {user.is_admin && user.is_verified ? (
               <>
                 <Tab
-                  sx={{ color: "white" }}
-                  label="Dashboard"
+                  icon={<GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }}/>}
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 0 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  label="Manage Users"
+                  icon={<PersonSharpIcon style={{ color: "rgb(187, 41, 46)" }}/>}
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 1 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  label="Manage Tasks"
+                  icon={<TextSnippetSharpIcon  style={{ color: "rgb(187, 41, 46)" }}/>}
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 2 });
                     history.push("/main");
@@ -101,21 +106,22 @@ function Nav() {
             ) : user.is_verified ? (
               <>
                 <Tab
-                  label="Dashboard"
+               
+                  icon={<GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }}/>}
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 0 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  label="Create Task"
+                  icon={<BorderColorSharpIcon style={{ color: "rgb(187, 41, 46)" }} />}
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 1 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  label="Task List"
+                  icon={<TextSnippetSharpIcon  style={{ color: "rgb(187, 41, 46)" }} />}
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 2 });
                     history.push("/main");
@@ -180,13 +186,9 @@ function Nav() {
             }}
           >
             <IconButton size="large" onClick={handleOpenNavMenu}>
-              <AccountCircleIcon />
+              <AccountCircleIcon style={{ color: "rgb(187, 41, 46)" }}/>
             </IconButton>
-            {user.id && (
-              <Typography>
-                {user.first_name} {user.last_name}
-              </Typography>
-            )}
+
           </Box>
         </Box>
       </Container>

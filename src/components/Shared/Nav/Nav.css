@@ -19,4 +19,13 @@
   margin: 0;
 } */
 
+.logo-img {
+  filter: brightness(70%) hue-rotate(-10deg) saturate(150%);
+}
+/* .grid-icon {
+  color: rgba(187, 41, 46, 1)!important;
+} */
+
+
+
 
