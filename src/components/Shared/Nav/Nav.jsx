@@ -49,7 +49,9 @@ function Nav() {
       position="sticky"
       sx={{
         width: "100vw",
-        "background-color": "rgb(241, 241, 241)"
+        backgroundColor: "rgb(241, 241, 241)",
+        flexDirection: { xs: "column", md: "row" },
+        alignItems: "center",
       }}
     >
       <Container
@@ -57,9 +59,11 @@ function Nav() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          paddingLeft: "16px",
+          paddingRight: "16px",
         }}
       >
-        <Box>
+        <Box sx={{ marginLeft: 0, paddingLeft: 0 }}>
           <Link
             to="/home"
             onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
@@ -72,31 +76,56 @@ function Nav() {
                 src="https://static.wixstatic.com/media/bf2bff_05ec89b84f6f40998006c9d59f212956~mv2.png/v1/fill/w_232,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20red.png"
                 alt="logo red.png"
                 className="logo-img"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{
+                  width: "auto",
+                  minHeight: "10px",
+                  maxHeight: "30px",
+                  objectFit: "cover",
+                }}
               />
             </Link>
           </Link>
         </Box>
-        <Box>
-          <Tabs value={tabIndex}  >
+
+        <Box sx={{ flex: "1 1 auto", textAlign: "center" }}>
+          <Tabs
+            value={tabIndex}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              minWidth: "400px",
+              "& .MuiTab-root": {
+                minWidth: "unset",
+                flex: 1,
+              },
+            }}
+          >
             {user.is_admin && user.is_verified ? (
               <>
                 <Tab
-                  icon={<GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }}/>}
+                  icon={
+                    <GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                  }
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 0 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  icon={<PersonSharpIcon style={{ color: "rgb(187, 41, 46)" }}/>}
+                  icon={
+                    <PersonSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                  }
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 1 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  icon={<TextSnippetSharpIcon  style={{ color: "rgb(187, 41, 46)" }}/>}
+                  icon={
+                    <TextSnippetSharpIcon
+                      style={{ color: "rgb(187, 41, 46)" }}
+                    />
+                  }
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 2 });
                     history.push("/main");
@@ -106,22 +135,31 @@ function Nav() {
             ) : user.is_verified ? (
               <>
                 <Tab
-               
-                  icon={<GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }}/>}
+                  icon={
+                    <GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                  }
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 0 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  icon={<BorderColorSharpIcon style={{ color: "rgb(187, 41, 46)" }} />}
+                  icon={
+                    <BorderColorSharpIcon
+                      style={{ color: "rgb(187, 41, 46)" }}
+                    />
+                  }
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 1 });
                     history.push("/main");
                   }}
                 />
                 <Tab
-                  icon={<TextSnippetSharpIcon  style={{ color: "rgb(187, 41, 46)" }} />}
+                  icon={
+                    <TextSnippetSharpIcon
+                      style={{ color: "rgb(187, 41, 46)" }}
+                    />
+                  }
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 2 });
                     history.push("/main");
@@ -186,9 +224,8 @@ function Nav() {
             }}
           >
             <IconButton size="large" onClick={handleOpenNavMenu}>
-              <AccountCircleIcon style={{ color: "rgb(187, 41, 46)" }}/>
+              <AccountCircleIcon style={{ color: "rgb(187, 41, 46)" }} />
             </IconButton>
-
           </Box>
         </Box>
       </Container>
