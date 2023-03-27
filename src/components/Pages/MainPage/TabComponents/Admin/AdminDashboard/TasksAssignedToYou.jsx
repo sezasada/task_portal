@@ -102,7 +102,7 @@ export default function TasksAssignedToYou() {
 								{task.created_by_first_name} {task.created_by_last_name}
 							</TableCell>
 							<TableCell>
-								{moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
+								{moment(task.time_created).format("MMMM DD YYYY, h:mm a")}
 							</TableCell>
 						</TableRow>
 					))}
@@ -165,7 +165,7 @@ export default function TasksAssignedToYou() {
 							Due Date:{" "}
 							{infoOfSpecificTask.due_date != null
 								? moment(infoOfSpecificTask.due_date).format(
-										"MMMM Do YYYY, h:mm a"
+										"MMMM DD YYYY, h:mm a"
 								  )
 								: " "}
 						</Typography>
@@ -257,7 +257,7 @@ export default function TasksAssignedToYou() {
 													background: "white",
 												  }}>
 												   
-													<Box sx={{ fontWeight: 'bold' }}>{comment.posted_by_first_name}</Box><Box sx={{ fontWeight: 'light' }}>{moment(comment.time_posted).format('MMMM d, YYYY h:mma')}</Box>
+													<Box sx={{ fontWeight: 'bold' }}>{comment.posted_by_first_name}</Box><Box sx={{ fontWeight: 'light' }}>{moment(comment.time_posted).format('MMMM DD, YYYY h:mma')}</Box>
 													<br />
 													{comment.content}{" "}
 													

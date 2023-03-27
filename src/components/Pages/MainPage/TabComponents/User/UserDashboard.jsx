@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Stack } from "@mui/system";
 import {
   Paper,
+  Card,
   Typography,
   Table,
   TableHead,
@@ -17,7 +18,7 @@ import {
   ListItem,
 } from "@mui/material";
 import moment from "moment";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 
 export default function UserDashboard() {
   const dispatch = useDispatch();
@@ -131,7 +132,7 @@ export default function UserDashboard() {
               >
                 <TableCell>{task.title}</TableCell>
                 <TableCell>
-                  {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
+                  {moment(task.time_created).format("MMMM DD YYYY, h:mm a")}
                 </TableCell>
               </TableRow>
             ))}
@@ -158,7 +159,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
-              <ClearIcon onClick={() => setOpen(false)}/>
+              <ClearIcon onClick={() => setOpen(false)} />
               <Typography
                 variant="h4"
                 component="h2"
@@ -194,7 +195,7 @@ export default function UserDashboard() {
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
-                      "MMMM Do YYYY, h:mm a"
+                      "MMMM DD YYYY, h:mm a"
                     )
                   : " "}
               </Typography>
@@ -221,66 +222,94 @@ export default function UserDashboard() {
               </Button>
             </Paper>
             <Modal
-            open={openChild}
-            onClose={() => {
-              handleCloseChild();
-            }}
-          >
-            <Stack
+              open={openChild}
+              onClose={() => {
+                handleCloseChild();
+              }}
               sx={{
-                display: "flex",
-                alignItems: "center",
+                overflow: "scroll",
               }}
             >
-              <Paper
+              <Stack
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  padding: "20px",
+                  alignItems: "center",
                 }}
-                elevation={3}
               >
-                 
-                {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
-                <ClearIcon onClick={() => setOpenChild(false)}/>
-                <Typography
-                  variant="h4"
-                  component="h2"
-                  sx={{ textDecoration: "underline" }}
-                >
-                  Add a comment
-                </Typography>
-                <br />
-                <Box>
-                  <List>
-                    {commentsForTask.length > 0 &&
-                      commentsForTask.map((comment) => (
-                        <ListItem key={comment.comment_id}>
-                          {comment.posted_by_first_name} said {comment.content}{" "}
-                          at {comment.time_posted}
-                        </ListItem>
-                      ))}
-                  </List>
-                </Box>
-                <br />
-                <TextField
-                  type="text"
-                  label="Comment"
-                  value={comment}
+                <Paper
                   sx={{
-                    marginBottom: 1,
-                    width: 300,
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "20px",
+                    "background-color": "rgb(241, 241, 241)",
+                    width: "400px",
                   }}
-                  onChange={(event) => setComment(event.target.value)}
-                  variant="outlined"
-                />
-                <Button variant="contained" onClick={handleSubmitComment}>
-                  Comments
-                </Button>
-              </Paper>
-            </Stack>
-          </Modal>
-            </Stack>
+                  elevation={3}
+                >
+                  {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
+                  <ClearIcon onClick={() => setOpenChild(false)} />
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    sx={{ textDecoration: "underline" }}
+                  ></Typography>
+                  <br />
+                  <TextField
+                    type="text"
+                    label="Add a comment..."
+                    value={comment}
+                    multiline
+                    rows={2}
+                    sx={{
+                      "margin-left": "2px",
+                      "margin-right": "2px",
+                      "padding-left": "2px",
+                      "padding-right": "2px",
+                    }}
+                    onChange={(event) => setComment(event.target.value)}
+                    variant="outlined"
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          variant="contained"
+                          onClick={handleSubmitComment}
+                        >
+                          Send
+                        </Button>
+                      ),
+                    }}
+                  />
+
+                  <Box>
+                    <List>
+                      {commentsForTask.length > 0 &&
+                        commentsForTask.map((comment) => (
+                          <Card
+                            key={comment.comment_id}
+                            sx={{
+                              margin: "5px",
+                              padding: "20px",
+                              background: "white",
+                            }}
+                          >
+                            <Box sx={{ fontWeight: "bold" }}>
+                              {comment.posted_by_first_name}
+                            </Box>
+                            <Box sx={{ fontWeight: "light" }}>
+                              {moment(comment.time_posted).format(
+                                "MMMM DD, YYYY h:mma"
+                              )}
+                            </Box>
+                            <br />
+                            {comment.content}{" "}
+                          </Card>
+                        ))}
+                    </List>
+                  </Box>
+                </Paper>
+              </Stack>
+            </Modal>
+          </Stack>
         </Modal>
       </Paper>
       <Paper sx={{ p: 3 }} elevation={3}>
@@ -304,7 +333,7 @@ export default function UserDashboard() {
               >
                 <TableCell>{task.title}</TableCell>
                 <TableCell>
-                  {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
+                  {moment(task.time_created).format("MMMM DD YYYY, h:mm a")}
                 </TableCell>
               </TableRow>
             ))}
@@ -331,7 +360,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
-              <ClearIcon onClick={() => setOpen2(false)}/>
+              <ClearIcon onClick={() => setOpen2(false)} />
               <Typography
                 variant="h4"
                 component="h2"
@@ -367,7 +396,7 @@ export default function UserDashboard() {
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
-                      "MMMM Do YYYY, h:mm a"
+                      "MMMM DD YYYY, h:mm a"
                     )
                   : " "}
               </Typography>
@@ -404,6 +433,9 @@ export default function UserDashboard() {
               onClose={() => {
                 handleCloseChild();
               }}
+              sx={{
+                overflow: "scroll",
+              }}
             >
               <Stack
                 sx={{
@@ -411,103 +443,76 @@ export default function UserDashboard() {
                   alignItems: "center",
                 }}
               >
-                 
                 <Paper
                   sx={{
                     display: "flex",
                     flexDirection: "column",
                     padding: "20px",
+                    "background-color": "rgb(241, 241, 241)",
+                    width: "400px",
                   }}
                   elevation={3}
                 >
+                  <ClearIcon onClick={() => setOpenChild(false)} />
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    sx={{ textDecoration: "underline" }}
+                  ></Typography>
                   <br />
+                  <TextField
+                    type="text"
+                    label="Add a comment..."
+                    value={comment}
+                    multiline
+                    rows={2}
+                    sx={{
+                      "margin-left": "2px",
+                      "margin-right": "2px",
+                      "padding-left": "2px",
+                      "padding-right": "2px",
+                    }}
+                    onChange={(event) => setComment(event.target.value)}
+                    variant="outlined"
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          variant="contained"
+                          onClick={handleSubmitComment}
+                        >
+                          Send
+                        </Button>
+                      ),
+                    }}
+                  />
                   <Box>
-                  
                     <List>
                       {commentsForTask.length > 0 &&
                         commentsForTask.map((comment) => (
-                          <ListItem key={comment.comment_id}>
-                            {comment.posted_by_first_name} said{" "}
-                            {comment.content} at {comment.time_posted}
-                          </ListItem>
+                          <Card
+                            key={comment.comment_id}
+                            sx={{
+                              margin: "5px",
+                              padding: "20px",
+                              background: "white",
+                            }}
+                          >
+                            <Box sx={{ fontWeight: "bold" }}>
+                              {comment.posted_by_first_name}
+                            </Box>
+                            <Box sx={{ fontWeight: "light" }}>
+                              {moment(comment.time_posted).format(
+                                "MMMM DD, YYYY h:mma"
+                              )}
+                            </Box>
+                            <br />
+                            {comment.content}{" "}
+                          </Card>
                         ))}
                     </List>
                   </Box>
                   <br />
-                  <TextField
-                    type="text"
-                    label="Comment"
-                    value={comment}
-                    sx={{
-                      marginBottom: 1,
-                      width: 300,
-                    }}
-                    onChange={(event) => setComment(event.target.value)}
-                    variant="outlined"
-                  />
-                  <Button variant="contained" onClick={handleSubmitComment}>
-                    Add Comment
-                  </Button>
                 </Paper>
-                <Modal
-                  open={openChild}
-                  onClose={() => {
-                    handleCloseChild();
-                  }}
-                >
-                  <Stack
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Paper
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        padding: "20px",
-                      }}
-                      elevation={3}
-                    >
-                      {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
-                      <ClearIcon onClick={() => setOpenChild(false)}/>
-                      <Typography
-                        variant="h4"
-                        component="h2"
-                        sx={{ textDecoration: "underline" }}
-                      >
-                        Add a comment
-                      </Typography>
-                      <br />
-                      <Box>
-                        <List>
-                          {commentsForTask.length > 0 &&
-                            commentsForTask.map((comment) => (
-                              <ListItem key={comment.comment_id}>
-                                {comment.posted_by_first_name} said{" "}
-                                {comment.content} at {comment.time_posted}
-                              </ListItem>
-                            ))}
-                        </List>
-                      </Box>
-                      <br />
-                      <TextField
-                        type="text"
-                        label="Comment"
-                        value={comment}
-                        sx={{
-                          marginBottom: 1,
-                          width: 300,
-                        }}
-                        onChange={(event) => setComment(event.target.value)}
-                        variant="outlined"
-                      />
-                      <Button variant="contained" onClick={handleSubmitComment}>
-                        Comments
-                      </Button>
-                    </Paper>
-                  </Stack>
-                </Modal>
               </Stack>
             </Modal>
           </Stack>
@@ -534,7 +539,7 @@ export default function UserDashboard() {
               >
                 <TableCell>{task.title}</TableCell>
                 <TableCell>
-                  {moment(task.time_completed).format("MMMM Do YYYY, h:mm a")}
+                  {moment(task.time_completed).format("MMMM DD YYYY, h:mm a")}
                 </TableCell>
               </TableRow>
             ))}
@@ -561,7 +566,7 @@ export default function UserDashboard() {
               }}
               elevation={3}
             >
-               <ClearIcon onClick={() => setOpen3(false)}/>
+              <ClearIcon onClick={() => setOpen3(false)} />
 
               <Typography
                 variant="h4"
@@ -593,7 +598,7 @@ export default function UserDashboard() {
               <Typography varient="h6" component="h4">
                 Date Completed:{" "}
                 {moment(infoOfSpecificTask.time_completed).format(
-                  "MMMM Do YYYY, h:mm a"
+                  "MMMM DD YYYY, h:mm a"
                 )}
               </Typography>
               <Typography variant="h6" component="h4">
@@ -627,6 +632,9 @@ export default function UserDashboard() {
               onClose={() => {
                 handleCloseChild();
               }}
+              sx={{
+                overflow: "scroll",
+              }}
             >
               <Stack
                 sx={{
@@ -639,20 +647,37 @@ export default function UserDashboard() {
                     display: "flex",
                     flexDirection: "column",
                     padding: "20px",
+                    "background-color": "rgb(241, 241, 241)",
+                    width: "400px",
                   }}
                   elevation={3}
                 >
-                   <ClearIcon onClick={() => setOpenChild(false)}/>
-                  
+                  <ClearIcon onClick={() => setOpenChild(false)} />
+
                   <br />
                   <Box>
                     <List>
                       {commentsForTask.length > 0 &&
                         commentsForTask.map((comment) => (
-                          <ListItem key={comment.comment_id}>
-                            {comment.posted_by_first_name} said{" "}
-                            {comment.content} at {comment.time_posted}
-                          </ListItem>
+                          <Card
+                            key={comment.comment_id}
+                            sx={{
+                              margin: "5px",
+                              padding: "20px",
+                              background: "white",
+                            }}
+                          >
+                            <Box sx={{ fontWeight: "bold" }}>
+                              {comment.posted_by_first_name}
+                            </Box>
+                            <Box sx={{ fontWeight: "light" }}>
+                              {moment(comment.time_posted).format(
+                                "MMMM DD, YYYY h:mma"
+                              )}
+                            </Box>
+                            <br />
+                            {comment.content}{" "}
+                          </Card>
                         ))}
                     </List>
                   </Box>

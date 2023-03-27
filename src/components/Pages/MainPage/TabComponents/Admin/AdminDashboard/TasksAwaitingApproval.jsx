@@ -211,7 +211,7 @@ export default function TasksAwaitingApproval() {
                 {task.created_by_first_name} {task.created_by_last_name}
               </TableCell>
               <TableCell>
-                {moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
+                {moment(task.time_created).format("MMMM DD YYYY, h:mm a")}
               </TableCell>
             </TableRow>
           ))}
@@ -385,7 +385,7 @@ export default function TasksAwaitingApproval() {
                 </LocalizationProvider>
               ) : infoOfSpecificTask.due_date != null ? (
                 moment(infoOfSpecificTask.due_date).format(
-                  "MMMM Do YYYY, h:mm a"
+                  "MMMM DD YYYY, h:mm a"
                 )
               ) : (
                 " "
@@ -555,13 +555,12 @@ export default function TasksAwaitingApproval() {
                 elevation={3}
               >
                 <ClearIcon onClick={() => setOpenChild(false)}/>
-                {/* <pre>{JSON.stringify(commentsForTask)}</pre> */}
+                
                 <Typography
                   variant="h4"
                   component="h2"
                   sx={{ textDecoration: "underline" }}
-                >
-                  
+                >  
                 </Typography>
                 <br />
                 
@@ -584,8 +583,7 @@ export default function TasksAwaitingApproval() {
                 </Button>}}
                 />
                 <Box>
-                  <List>
-                    
+                  <List>                   
                     {commentsForTask.length > 0 &&
                       commentsForTask.map((comment) => (
                         <Card key={comment.comment_id} sx={{
@@ -594,17 +592,13 @@ export default function TasksAwaitingApproval() {
                           background: "white",
                         }}>
                          
-                          <Box sx={{ fontWeight: 'bold' }}>{comment.posted_by_first_name}</Box><Box sx={{ fontWeight: 'light' }}>{moment(comment.time_posted).format('MMMM d, YYYY h:mma')}</Box>
+                          <Box sx={{ fontWeight: 'bold' }}>{comment.posted_by_first_name}</Box><Box sx={{ fontWeight: 'light' }}>{moment(comment.time_posted).format('MMMM DD, YYYY h:mma')}</Box>
                           <br />
                           {comment.content}{" "}
-                          
-                          
                         </Card>
                       ))}
                   </List>
                 </Box>
-                
-                
               </Paper>
             </Stack>
           </Modal>
