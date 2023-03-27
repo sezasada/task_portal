@@ -42,21 +42,18 @@ function Nav() {
 
   return (
     <AppBar
-      
       position="sticky"
       sx={{
         width: "100vw",
-        "background-color": "#BB292E",
+        // "background-color": "#BB292E",
         
       }}
     >
       <Container
-      
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          
         }}
       >
         <Box >
@@ -64,20 +61,22 @@ function Nav() {
             to="/home"
             onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
           >
-            <Typography component="h2" variant="h5">
+            <Typography sx={{ color: "white"}} component="h2" variant="h5">
               Task Portal
             </Typography>
           </Link>
         </Box>
         <Box>
           <Tabs
+          
             value={tabIndex}
             textColor="secondary"
-            indicatorColor="secondary"
+            indicatorColor="white"
           >
             {user.is_admin && user.is_verified ? (
               <>
                 <Tab
+                  sx={{ color: "white" }}
                   label="Dashboard"
                   onClick={() => {
                     dispatch({ type: "SET_TAB_INDEX", payload: 0 });
