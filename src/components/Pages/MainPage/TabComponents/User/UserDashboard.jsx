@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import ClearIcon from "@mui/icons-material/Clear";
+import { BorderBottom } from "@mui/icons-material";
 
 export default function UserDashboard() {
   const dispatch = useDispatch();
@@ -176,13 +177,11 @@ export default function UserDashboard() {
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            margin: "0 auto",
+
             width: "90%",
-            height: "80%",
-            margin: "auto",
-            outline: "none",
+            maxWidth: "750px",
+            overflow: "scroll",
           }}
         >
           <Stack
@@ -195,7 +194,9 @@ export default function UserDashboard() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
               elevation={3}
             >
@@ -203,35 +204,60 @@ export default function UserDashboard() {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "rgb(187, 41, 46)",
+                  borderBottom: "1px solid grey",
+                }}
               >
                 Task Info
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Title: {infoOfSpecificTask.title}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Tags:
               </Typography>
-
               <ul>
                 {specificTaskTags &&
                   specificTaskTags.map((tag) => (
                     <li key={tag.tag_id}>{tag.tag_name}</li>
                   ))}
               </ul>
-              <br />
-              <Typography variant="h6" component="h4">
+
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Budget: ${infoOfSpecificTask.budget}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Location: {infoOfSpecificTask.location_name}
               </Typography>
               <br />
-              <Typography>
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
@@ -240,7 +266,11 @@ export default function UserDashboard() {
                   : " "}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Created By: {infoOfSpecificTask.created_by_first_name}{" "}
                 {infoOfSpecificTask.created_by_last_name}
               </Typography>
@@ -254,6 +284,7 @@ export default function UserDashboard() {
                 })}
               <Button
                 variant="contained"
+                sx={{ backgroundColor: "rgb(187, 41, 46)" }}
                 onClick={() => {
                   handleOpenChild();
                 }}
@@ -267,6 +298,9 @@ export default function UserDashboard() {
                 handleCloseChild();
               }}
               sx={{
+                margin: "0 auto",
+                width: "90%",
+                maxWidth: "750px",
                 overflow: "scroll",
               }}
             >
@@ -280,9 +314,9 @@ export default function UserDashboard() {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    padding: "20px",
-                    "background-color": "rgb(241, 241, 241)",
-                    width: "400px",
+                    width: "90%",
+                    padding: "40px",
+                    backgroundColor: "rgb(241, 241, 241)",
                   }}
                   elevation={3}
                 >
@@ -414,6 +448,13 @@ export default function UserDashboard() {
             handleClose2();
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
+          sx={{
+            margin: "0 auto",
+
+            width: "90%",
+            maxWidth: "750px",
+            overflow: "scroll",
+          }}
         >
           <Stack
             sx={{
@@ -425,7 +466,9 @@ export default function UserDashboard() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
               elevation={3}
             >
@@ -433,16 +476,30 @@ export default function UserDashboard() {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderBottom: "1px solid grey",
+                  color: "rgb(187, 41, 46)",
+                }}
               >
                 Task Info
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Title: {infoOfSpecificTask.title}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Tags:
               </Typography>
 
@@ -452,16 +509,28 @@ export default function UserDashboard() {
                     <li key={tag.tag_id}>{tag.tag_name}</li>
                   ))}
               </ul>
-              <br />
-              <Typography variant="h6" component="h4">
+
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Budget: ${infoOfSpecificTask.budget}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Location: {infoOfSpecificTask.location_name}
               </Typography>
               <br />
-              <Typography>
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
@@ -470,7 +539,11 @@ export default function UserDashboard() {
                   : " "}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Created By: {infoOfSpecificTask.created_by_first_name}{" "}
                 {infoOfSpecificTask.created_by_last_name}
               </Typography>
@@ -482,20 +555,43 @@ export default function UserDashboard() {
                 photosForTask.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleOpenChild();
-                }}
-              >
-                Comments
-              </Button>
-              <Button variant="contained" onClick={handleCompleteTask}>
-                Finish
-              </Button>
-              <Button variant="contained" onClick={handleDropTask}>
-                Didn't Finish
-              </Button>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "rgb(187, 41, 46)",
+
+                    width: "30%",
+                  }}
+                  onClick={() => {
+                    handleOpenChild();
+                  }}
+                >
+                  Comments
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "rgb(187, 41, 46)",
+
+                    width: "30%",
+                  }}
+                  onClick={handleCompleteTask}
+                >
+                  Complete
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "rgb(187, 41, 46)",
+
+                    width: "30%",
+                  }}
+                  onClick={handleDropTask}
+                >
+                  Didn't Complete
+                </Button>
+              </Box>
             </Paper>
             <Modal
               open={openChild}
@@ -648,6 +744,13 @@ export default function UserDashboard() {
             handleClose3();
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
+          sx={{
+            margin: "0 auto",
+
+            width: "90%",
+            maxWidth: "750px",
+            overflow: "scroll",
+          }}
         >
           <Stack
             sx={{
@@ -659,7 +762,9 @@ export default function UserDashboard() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
               elevation={3}
             >
@@ -668,16 +773,30 @@ export default function UserDashboard() {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderBottom: "1px solid grey",
+                  color: "rgb(187, 41, 46)",
+                }}
               >
                 Task Info
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Title: {infoOfSpecificTask.title}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Tags:
               </Typography>
 
@@ -687,23 +806,41 @@ export default function UserDashboard() {
                     <li key={tag.tag_id}>{tag.tag_name}</li>
                   ))}
               </ul>
-              <br />
-              <Typography variant="h6" component="h4">
+
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Budget: ${infoOfSpecificTask.budget}
               </Typography>
               <br />
-              <Typography varient="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Date Completed:{" "}
-                {moment(infoOfSpecificTask.time_completed).format(
-                  "MMMM DD YYYY, h:mm a"
-                )}
+                {infoOfSpecificTask.time_completed != null
+                  ? moment(infoOfSpecificTask.time_completed).format(
+                      "MMMM DD YYYY, h:mm a"
+                    )
+                  : " "}
               </Typography>
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Location: {infoOfSpecificTask.location_name}
               </Typography>
 
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Created By: {infoOfSpecificTask.created_by_first_name}{" "}
                 {infoOfSpecificTask.created_by_last_name}
               </Typography>
@@ -717,6 +854,7 @@ export default function UserDashboard() {
                 })}
               <Button
                 variant="contained"
+                sx={{ backgroundColor: "rgb(187, 41, 46)" }}
                 onClick={() => {
                   handleOpenChild();
                 }}
