@@ -10,6 +10,7 @@ import {
 	TableHead,
 	TableRow,
 	TextField,
+	Card,
 	Typography,
 } from "@mui/material";
 
@@ -101,7 +102,7 @@ export default function TasksAssignedToYou() {
 								{task.created_by_first_name} {task.created_by_last_name}
 							</TableCell>
 							<TableCell>
-								{moment(task.time_created).format("MMMM Do YYYY, h:mm a")}
+								{moment(task.time_created).format("MMMM DD YYYY, h:mm a")}
 							</TableCell>
 						</TableRow>
 					))}
@@ -164,7 +165,7 @@ export default function TasksAssignedToYou() {
 							Due Date:{" "}
 							{infoOfSpecificTask.due_date != null
 								? moment(infoOfSpecificTask.due_date).format(
-										"MMMM Do YYYY, h:mm a"
+										"MMMM DD YYYY, h:mm a"
 								  )
 								: " "}
 						</Typography>
@@ -201,6 +202,7 @@ export default function TasksAssignedToYou() {
 						onClose={() => {
 							handleCloseChild();
 						}}
+						sx={{overflow:"scroll"}}
 					>
 						<Stack
 							sx={{
@@ -211,8 +213,10 @@ export default function TasksAssignedToYou() {
 							<Paper
 								sx={{
 									display: "flex",
-									flexDirection: "column",
-									padding: "20px",
+                  flexDirection: "column",
+                  padding: "20px",
+                  "background-color": "rgb(241, 241, 241)",
+                  width: "400px",
 								}}
 								elevation={3}
 							>
@@ -223,35 +227,46 @@ export default function TasksAssignedToYou() {
 									component="h2"
 									sx={{ textDecoration: "underline" }}
 								>
-									Add a comment
 								</Typography>
 								<br />
+								<TextField
+									type="text"
+									label="Add a comment..."
+									value={comment}
+									multiline rows={2}
+									sx={{
+										"margin-left": "2px",
+                    "margin-right": "2px",
+                    "padding-left": "2px",
+                    "padding-right": "2px",
+									}}
+									onChange={(event) => setComment(event.target.value)}
+									variant="outlined"
+									InputProps={{endAdornment: <Button variant="contained" onClick={handleSubmitComment}>
+                  Send
+                </Button>}}
+								/>
+								
 								<Box>
 									<List>
 										{commentsForTask.length > 0 &&
 											commentsForTask.map((comment) => (
-												<ListItem key={comment.comment_id}>
-													{comment.posted_by_first_name} said {comment.content}{" "}
-													at {comment.time_posted}
-												</ListItem>
+												<Card key={comment.comment_id} sx={{
+													margin: "5px",
+													padding: "20px",
+													background: "white",
+												  }}>
+												   
+													<Box sx={{ fontWeight: 'bold' }}>{comment.posted_by_first_name}</Box><Box sx={{ fontWeight: 'light' }}>{moment(comment.time_posted).format('MMMM DD, YYYY h:mma')}</Box>
+													<br />
+													{comment.content}{" "}
+													
+													
+												  </Card>
 											))}
 									</List>
 								</Box>
-								<br />
-								<TextField
-									type="text"
-									label="Comment"
-									value={comment}
-									sx={{
-										marginBottom: 1,
-										width: 300,
-									}}
-									onChange={(event) => setComment(event.target.value)}
-									variant="outlined"
-								/>
-								<Button variant="contained" onClick={handleSubmitComment}>
-									Add Comment
-								</Button>
+								
 							</Paper>
 						</Stack>
 					</Modal>
