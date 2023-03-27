@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useScript } from "../../../../../hooks/useScript";
 import { useEffect } from "react";
-import MarkChatUnreadRoundedIcon from '@mui/icons-material/MarkChatUnreadRounded';
-import ClearIcon from '@mui/icons-material/Clear';
+import MarkChatUnreadRoundedIcon from "@mui/icons-material/MarkChatUnreadRounded";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
 	Paper,
 	Typography,
@@ -57,7 +57,6 @@ export default function AdminManageTasks() {
 	const commentsForSpecificTask = useSelector(
 		(store) => store.commentsForTaskReducer
 	);
-	
 
 	const photosForTask = infoOfSpecificTask.photos;
 
@@ -290,7 +289,7 @@ export default function AdminManageTasks() {
 	const [sortByStatus, setSortByStatus] = useState("");
 
 	const statuses = [
-		{ id: undefined, status_name: "None" },
+		// { id: undefined, status_name: "None" },
 		{ id: 1, status_name: "Available" },
 		{ id: 2, status_name: "In Progress" },
 	];
@@ -316,7 +315,7 @@ export default function AdminManageTasks() {
 			} else if (type === "FETCH_BY_TAGS") {
 				setSortByTags(event.target.value);
 			} else if (type === "FETCH_BY_STATUS") {
-				setSortByStatus(event.target.value);
+				setSortByStatus(event.target.value.status_name);
 			}
 			return;
 		}
@@ -327,7 +326,7 @@ export default function AdminManageTasks() {
 		} else if (type === "FETCH_BY_TAGS") {
 			setSortByTags(event.target.value);
 		} else if (type === "FETCH_BY_STATUS") {
-			setSortByStatus(event.target.value);
+			setSortByStatus(event.target.value.status_name);
 			handleSort(type, event.target.value.status_name);
 			return;
 		}
@@ -403,9 +402,11 @@ export default function AdminManageTasks() {
 								labelId="sort-by-location-label"
 								label="Sort by Location"
 								value={sortByLocation}
-								onChange={(event) =>
-									handleSubmitSort(event, "FETCH_BY_LOCATION")
-								}
+								onChange={(event) => {
+									handleSubmitSort(event, "FETCH_BY_LOCATION");
+									setSortByStatus("");
+									setSortByTags("");
+								}}
 							>
 								<MenuItem value="">
 									<em>None</em>
@@ -426,6 +427,8 @@ export default function AdminManageTasks() {
 								value={sortByTags}
 								onChange={(event) => {
 									handleSubmitSort(event, "FETCH_BY_TAGS");
+									setSortByLocation("");
+									setSortByStatus("");
 								}}
 							>
 								<MenuItem value="">
@@ -447,8 +450,14 @@ export default function AdminManageTasks() {
 								value={sortByStatus}
 								onChange={(event) => {
 									handleSubmitSort(event, "FETCH_BY_STATUS");
+									console.log(event.target.value);
+									setSortByLocation("");
+									setSortByTags("");
 								}}
 							>
+								<MenuItem value="">
+									<em>None</em>
+								</MenuItem>
 								{statuses.map((status) => (
 									<MenuItem key={status.id} value={status}>
 										{status.status_name}
@@ -478,7 +487,7 @@ export default function AdminManageTasks() {
 								padding: "20px",
 							}}
 						>
-							<ClearIcon onClick={() => setOpen(false)}/>
+							<ClearIcon onClick={() => setOpen(false)} />
 							{/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
 							<Typography
 								variant="h4"
@@ -734,10 +743,17 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpenChild();
 								}}
-
-							> {commentsForSpecificTask?.length === 0 ? `Comments` : <> Comments&nbsp;<MarkChatUnreadRoundedIcon /> </>}
-							
-					
+							>
+								{" "}
+								{commentsForSpecificTask?.length === 0 ? (
+									`Comments`
+								) : (
+									<>
+										{" "}
+										Comments&nbsp;
+										<MarkChatUnreadRoundedIcon />{" "}
+									</>
+								)}
 							</Button>
 
 							<Button
@@ -750,7 +766,7 @@ export default function AdminManageTasks() {
 							>
 								{infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
 							</Button>
-							
+
 							<Button variant="contained" onClick={handleCompleteTask}>
 								Mark Complete
 							</Button>
@@ -792,7 +808,7 @@ export default function AdminManageTasks() {
 									}}
 									elevation={3}
 								>
-									<ClearIcon onClick={() => setOpenChild(false)}/>
+									<ClearIcon onClick={() => setOpenChild(false)} />
 									{/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
 									<Typography
 										variant="h4"
@@ -1025,7 +1041,6 @@ export default function AdminManageTasks() {
 								onClick={() => {
 									handleOpen2();
 									dispatch({ type: "VIEW_TASK_INFO", payload: task });
-
 								}}
 							>
 								<TableCell>{task.title}</TableCell>
@@ -1060,7 +1075,7 @@ export default function AdminManageTasks() {
 							}}
 							elevation={3}
 						>
-							<ClearIcon onClick={() => setOpen2(false)}/>
+							<ClearIcon onClick={() => setOpen2(false)} />
 							<Typography
 								variant="h4"
 								component="h2"
