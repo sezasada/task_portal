@@ -20,12 +20,19 @@
 } */
 
 .logo-img {
-  filter: brightness(70%) hue-rotate(-10deg) saturate(150%);
+	filter: brightness(70%) hue-rotate(-10deg) saturate(150%);
 }
 /* .grid-icon {
   color: rgba(187, 41, 46, 1)!important;
 } */
 
+.MuiTabs-flexContainer {
+	min-width: 200px !important;
+	max-width: 1500px !important;
+	justify-content: center !important;
+	margin: 0 !important;
+}
 
-
-
+.css-o1liia {
+	max-width: 1500px !important;
+}
