@@ -60,9 +60,7 @@ function Nav() {
           alignItems: "center",
         }}
       >
-        <Box
- 
-        >
+        <Box>
           <Link
             to="/home"
             onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
@@ -71,9 +69,7 @@ function Nav() {
               to="/home"
               onClick={() => dispatch({ type: "UNSET_TAB_INDEX" })}
             >
-              <Box
-  
-              >
+              <Box>
                 <img
                   src="https://static.wixstatic.com/media/bf2bff_05ec89b84f6f40998006c9d59f212956~mv2.png/v1/fill/w_232,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20red.png"
                   alt="logo red.png"
@@ -81,7 +77,7 @@ function Nav() {
                   style={{
                     width: "auto",
                     objectFit: "cover",
-                    height: "3vh",
+                    height: "150px",
                   }}
                 />
               </Box>
@@ -89,88 +85,103 @@ function Nav() {
           </Link>
         </Box>
         <Box sx={{ flex: "1 1 auto", textAlign: "center" }}>
-          <Tabs
-            value={tabIndex}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              minWidth: "400px",
-              "& .MuiTab-root": {
-                minWidth: "unset",
-                flex: 1,
-              },
-            }}
-          >
-            {user.is_admin && user.is_verified ? (
-              <>
-                <Tab
-                  icon={
-                    <GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
-                  }
-                  onClick={() => {
-                    dispatch({ type: "SET_TAB_INDEX", payload: 0 });
-                    history.push("/main");
-                  }}
-                />
-                <Tab
-                  icon={
-                    <PersonSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
-                  }
-                  onClick={() => {
-                    dispatch({ type: "SET_TAB_INDEX", payload: 1 });
-                    history.push("/main");
-                  }}
-                />
-                <Tab
-                  icon={
-                    <TextSnippetSharpIcon
-                      style={{ color: "rgb(187, 41, 46)" }}
-                    />
-                  }
-                  onClick={() => {
-                    dispatch({ type: "SET_TAB_INDEX", payload: 2 });
-                    history.push("/main");
-                  }}
-                />
-              </>
-            ) : user.is_verified ? (
-              <>
-                <Tab
-                  icon={
-                    <GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
-                  }
-                  onClick={() => {
-                    dispatch({ type: "SET_TAB_INDEX", payload: 0 });
-                    history.push("/main");
-                  }}
-                />
-                <Tab
-                  icon={
-                    <BorderColorSharpIcon
-                      style={{ color: "rgb(187, 41, 46)" }}
-                    />
-                  }
-                  onClick={() => {
-                    dispatch({ type: "SET_TAB_INDEX", payload: 1 });
-                    history.push("/main");
-                  }}
-                />
-                <Tab
-                  icon={
-                    <TextSnippetSharpIcon
-                      style={{ color: "rgb(187, 41, 46)" }}
-                    />
-                  }
-                  onClick={() => {
-                    dispatch({ type: "SET_TAB_INDEX", payload: 2 });
-                    history.push("/main");
-                  }}
-                />
-              </>
-            ) : (
-              ""
-            )}
-          </Tabs>
+          {user.is_admin && user.is_verified ? (
+            <Tabs
+              position="absolute"
+              TabIndicatorProps={{ style: { background: "rgb(187, 41, 46)" } }}
+              value={tabIndex}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                minWidth: "400px",
+                "& .MuiTab-root": {
+                  minWidth: "unset",
+                  flex: 1,
+                  color: "Black",
+                },
+              }}
+            >
+              <Tab
+                icon={
+                  <GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                }
+                label={<span style={{ color: 'black' }}>Dashboard</span>}
+                onClick={() => {
+                  dispatch({ type: "SET_TAB_INDEX", payload: 0 });
+                  history.push("/main");
+                }}
+              />
+
+              <Tab
+                icon={<PersonSharpIcon style={{ color: "rgb(187, 41, 46)" }} />}
+                label={<span style={{ color: 'black' }}>Manage Users</span>}
+                onClick={() => {
+                  dispatch({ type: "SET_TAB_INDEX", payload: 1 });
+                  history.push("/main");
+                }}
+              />
+
+              <Tab
+                icon={
+                  <TextSnippetSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                }
+                label={<span style={{ color: 'black' }}>Manage Tasks</span>}
+                onClick={() => {
+                  dispatch({ type: "SET_TAB_INDEX", payload: 2 });
+                  history.push("/main");
+                }}
+              />
+            </Tabs>
+          ) : user.is_verified ? (
+            <Tabs
+              position="absolute"
+              TabIndicatorProps={{ style: { background: "rgb(187, 41, 46)" } }}
+              value={tabIndex}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                color: "Black",
+                minWidth: "400px",
+                "& .MuiTab-root": {
+                  minWidth: "unset",
+                  flex: 1,
+                },
+              }}
+            >
+              <Tab
+                icon={
+                  <GridViewSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                }
+                label={<span style={{ color: 'black' }}>Dashboard</span>}
+                onClick={() => {
+                  dispatch({ type: "SET_TAB_INDEX", payload: 0 });
+                  history.push("/main");
+                }}
+              />
+              <Tab
+                icon={
+                  <BorderColorSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                }
+                label={<span style={{ color: 'black' }}>Create New Task</span>}
+                onClick={() => {
+                  dispatch({ type: "SET_TAB_INDEX", payload: 1 });
+                  history.push("/main");
+                }}
+              />
+              <Tab
+                icon={
+                  <TextSnippetSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+                }
+                label={<span style={{ color: 'black' }}>Task List</span>}
+                onClick={() => {
+                  dispatch({ type: "SET_TAB_INDEX", payload: 2 });
+                  history.push("/main");
+                }}
+              />
+            </Tabs>
+          ) : (
+            ""
+          )}
         </Box>
         <Box
           sx={{
