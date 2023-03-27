@@ -51,7 +51,7 @@ function* reset_password(action) {
   try {
     let history = action.payload.history
     let email = action.payload.email;
-    const response = yield axios.put('/api/user/reset_password', email);
+    const response = yield axios.put('/api/user/reset_password', {email: email});
 
     if (response.data === "email doesnt exist"){
       //the email does not exist so no email was sent, BUT we still push user to the page that says email was sent

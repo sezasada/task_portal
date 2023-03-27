@@ -176,7 +176,9 @@ router.put("/reset_password", async (req, res) => {
   try {
     // first do a query to see if the email exists, only send email if it does
     const firstQueryText = `SELECT * FROM "user" WHERE "username" = $1;`;
+    
     const username = req.body.email;
+    
     const firstResponse = await pool.query(firstQueryText, [username]);
     
 
@@ -205,7 +207,7 @@ router.put("/reset_password", async (req, res) => {
       const msg = {
         to: username,
         from: "kathrynszombatfalvy@gmail.com",
-        subject: "FIDRRV reset password",
+        subject: "Farm in the Dell reset password",
         html: `
     <p>Hello,</p>
     <p>It seems like you forgot your password for Farm in the Dell. If this is true, click the link below to reset your password.</p>
