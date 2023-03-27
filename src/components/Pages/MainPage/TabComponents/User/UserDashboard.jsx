@@ -644,6 +644,7 @@ export default function UserDashboard() {
                         <Button
                           variant="contained"
                           onClick={handleSubmitComment}
+                          sx={{backgroundColor: "rgb(187, 41, 46)"}}
                         >
                           Send
                         </Button>
