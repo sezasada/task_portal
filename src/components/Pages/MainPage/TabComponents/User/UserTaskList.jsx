@@ -18,6 +18,7 @@ import {
 	TextField,
 	Autocomplete,
 	Box,
+	Card,
 	InputAdornment,
 	OutlinedInput,
 	InputLabel,
@@ -365,6 +366,9 @@ export default function UserTaskList() {
 							onClose={() => {
 								handleCloseChild();
 							}}
+							sx={{
+								overflow: "scroll",
+							  }}
 						>
 							<Stack
 								sx={{
@@ -377,6 +381,8 @@ export default function UserTaskList() {
 										display: "flex",
 										flexDirection: "column",
 										padding: "20px",
+										"background-color": "rgb(241, 241, 241)",
+                    width: "400px",
 									}}
 									elevation={3}
 								>
@@ -386,36 +392,63 @@ export default function UserTaskList() {
 										variant="h4"
 										component="h2"
 										sx={{ textDecoration: "underline" }}
-									>
-										Add a comment
-									</Typography>
-									<br />
-									<Box>
-										<List>
-											{commentsForSpecificTask &&
-												commentsForSpecificTask.map((comment) => (
-													<ListItem key={comment.comment_id}>
-														{comment.posted_by_first_name} said{" "}
-														{comment.content} at {comment.time_posted}
-													</ListItem>
-												))}
-										</List>
-									</Box>
+									></Typography>
 									<br />
 									<TextField
 										type="text"
 										label="Comment"
 										value={comment}
+										multiline
+                    rows={2}
 										sx={{
-											marginBottom: 1,
-											width: 300,
+											"margin-left": "2px",
+                      "margin-right": "2px",
+                      "padding-left": "2px",
+                      "padding-right": "2px",
 										}}
 										onChange={(event) => setComment(event.target.value)}
 										variant="outlined"
+										InputProps={{
+											endAdornment: (
+											  <Button
+												variant="contained"
+												onClick={handleSubmitComment}
+											  >
+												Send
+											  </Button>
+											),
+										  }}
 									/>
-									<Button variant="contained" onClick={handleSubmitComment}>
-										Add Comment
-									</Button>
+									
+
+									<Box>
+										<List>
+											{commentsForSpecificTask &&
+												commentsForSpecificTask.map((comment) => (
+													<Card
+                            key={comment.comment_id}
+                            sx={{
+                              margin: "5px",
+                              padding: "20px",
+                              background: "white",
+                            }}
+                          >
+                            <Box sx={{ fontWeight: "bold" }}>
+                              {comment.posted_by_first_name}
+                            </Box>
+                            <Box sx={{ fontWeight: "light" }}>
+                              {moment(comment.time_posted).format(
+                                "MMMM DD, YYYY h:mma"
+                              )}
+                            </Box>
+                            <br />
+                            {comment.content}{" "}
+                          </Card>
+												))}
+										</List>
+									</Box>
+									<br />
+									
 								</Paper>
 							</Stack>
 						</Modal>
