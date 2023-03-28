@@ -99,6 +99,7 @@ export default function TasksAssignedToYou() {
       >
         Tasks assigned to you
       </Typography>
+      <hr />
       <Table
         sx={{
           width: "100%",
