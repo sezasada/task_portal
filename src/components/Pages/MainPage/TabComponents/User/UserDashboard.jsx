@@ -153,7 +153,8 @@ export default function UserDashboard() {
 		<Stack
 			spacing={3}
 			sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-		>
+		> 
+    
 			{/* <Box>
         <Typography component="h5" variant="h5">
           Welcome, {user.first_name}!

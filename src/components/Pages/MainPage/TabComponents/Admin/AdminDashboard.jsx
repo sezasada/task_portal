@@ -5,19 +5,20 @@ import TasksAwaitingApproval from "./AdminDashboard/TasksAwaitingApproval";
 import TasksAssignedToYou from "./AdminDashboard/TasksAssignedToYou";
 
 export default function AdminDashboard() {
-	// Access user reducer
-	const user = useSelector((store) => store.user);
-	return (
-		<Stack spacing={3}>
-			<Box>
-				<Typography component="h2" variant="h4">
-					Welcome, {user.first_name}!
-				</Typography>
-				<TasksAwaitingApproval />
-			</Box>
-			<Box>
-				<TasksAssignedToYou />
-			</Box>
-		</Stack>
-	);
+  // Access user reducer
+  const user = useSelector((store) => store.user);
+  return (
+    <Stack
+      spacing={3}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      <Box>
+
+        <TasksAwaitingApproval />
+      </Box>
+      <Box>
+        <TasksAssignedToYou />
+      </Box>
+    </Stack>
+  );
 }

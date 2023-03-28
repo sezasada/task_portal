@@ -16,13 +16,13 @@ import {
   OutlinedInput,
   InputLabel,
   List,
-	ListItem,
+  ListItem,
   Card,
   FormControl,
   ImageList,
   ImageListItem,
 } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -50,18 +50,18 @@ export default function TasksAwaitingApproval() {
   const [comment, setComment] = useState("");
 
   function handleSubmitComment() {
-	const commentObj = {
-		task_id: infoOfSpecificTask.task_id,
-		content: comment,
-	};
-	
-	dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
-	dispatch({
-		type: "FETCH_COMMENTS_FOR_TASK",
-		payload: { task_id: infoOfSpecificTask.task_id },
-	});
-	setComment("");
-}
+    const commentObj = {
+      task_id: infoOfSpecificTask.task_id,
+      content: comment,
+    };
+
+    dispatch({ type: "ADD_COMMENT_TO_TASK", payload: commentObj });
+    dispatch({
+      type: "FETCH_COMMENTS_FOR_TASK",
+      payload: { task_id: infoOfSpecificTask.task_id },
+    });
+    setComment("");
+  }
 
   const [openChild, setOpenChild] = useState(false);
   //opens comments
@@ -180,7 +180,6 @@ export default function TasksAwaitingApproval() {
         .open();
   };
 
-
   // Manage opening and closing of first details modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -189,15 +188,69 @@ export default function TasksAwaitingApproval() {
   const handleClose = () => setOpen(false);
 
   return (
-    <Paper sx={{ p: 3 }} elevation={3}>
+    <Paper
+      sx={{
+        p: 3,
+        maxWidth: "750px",
+        width: "90%",
+        backgroundColor: "rgb(241, 241, 241)",
+      }}
+      elevation={3}
+    >
       {/* <pre>{JSON.stringify(incomingTasks)}</pre> */}
-      <Typography>Tasks awaiting approval</Typography>
-      <Table>
+      <Typography
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "3vh",
+          color: "rgb(187, 41, 46)",
+        }}
+      >
+        Tasks awaiting approval
+      </Typography>
+      <hr />
+      <Table
+        sx={{
+          width: "100%",
+          tableLayout: "fixed",
+        }}
+      >
         <TableHead>
           <TableRow>
-            <TableCell>Title</TableCell>
-            <TableCell>Created By</TableCell>
-            <TableCell>Created At</TableCell>
+            <TableCell
+              sx={{
+                width: "33%",
+                fontSize: "2vh",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                fontWeight: "bold",
+              }}
+            >
+              Title
+            </TableCell>
+            <TableCell
+              sx={{
+                width: "33%",
+                fontSize: "2vh",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                fontWeight: "bold",
+              }}
+            >
+              Created By
+            </TableCell>
+            <TableCell
+              sx={{
+                width: "33%",
+                fontSize: "2vh",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                fontWeight: "bold",
+              }}
+            >
+              Created At
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -209,11 +262,31 @@ export default function TasksAwaitingApproval() {
                 dispatch({ type: "VIEW_TASK_INFO", payload: task });
               }}
             >
-              <TableCell>{task.title}</TableCell>
-              <TableCell>
+              <TableCell
+                sx={{
+                  width: "33%",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                {task.title}
+              </TableCell>
+              <TableCell
+                sx={{
+                  width: "33%",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
                 {task.created_by_first_name} {task.created_by_last_name}
               </TableCell>
-              <TableCell>
+              <TableCell
+                sx={{
+                  width: "33%",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
                 {moment(task.time_created).format("MMMM DD YYYY, h:mm a")}
               </TableCell>
             </TableRow>
@@ -227,12 +300,16 @@ export default function TasksAwaitingApproval() {
           dispatch({ type: "UNVIEW_TASK_INFO" });
         }}
         sx={{
-          overflow:'scroll',
+          margin: "0 auto",
+          width: "90%",
+          maxWidth: "750px",
+          overflow: "scroll",
         }}
       >
         <Stack
           sx={{
             display: "flex",
+            justifyContent: "center",
             alignItems: "center",
           }}
         >
@@ -240,305 +317,512 @@ export default function TasksAwaitingApproval() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              padding: "20px",
+              width: "90%",
+              padding: "40px",
+              backgroundColor: "rgb(241, 241, 241)",
             }}
             elevation={3}
           >
-            <ClearIcon onClick={() => setOpen(false)}/>
+            <ClearIcon onClick={() => setOpen(false)} />
             <Typography
               variant="h4"
               component="h2"
-              sx={{ textDecoration: "underline" }}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "rgb(187, 41, 46)",
+                borderBottom: "1px solid grey",
+              }}
             >
               Task Info
             </Typography>
             <br />
             <Typography variant="h6" component="h4">
-              Title: {""}
               {editMode ? (
-                <TextField
-                  required
-                  type="text"
-                  label="Title"
-                  value={editedTitle}
+                <Box
                   sx={{
-                    marginBottom: 1,
-                    width: 300,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  variant="outlined"
-                  onChange={(event) => setEditedTitle(event.target.value)}
-                />
-              ) : (
-                infoOfSpecificTask.title
-              )}
-            </Typography>
-            <br />
-            <Typography variant="h6" component="h4">
-              Tags:{""}
-            </Typography>
-
-            {editMode ? (
-              <Autocomplete
-                sx={{
-                  width: 300,
-                  marginBottom: 1,
-                }}
-                multiple
-                value={editedTags}
-                onChange={(event, newValue) => setEditedTags(newValue)}
-                inputValue={editedTagInput}
-                onInputChange={(event, newInputValue) =>
-                  setEditedTagInput(newInputValue)
-                }
-                id="all-tags-lookup"
-                getOptionLabel={(allTags) => `${allTags.tag_name}`}
-                options={allTags}
-                isOptionEqualToValue={(option, value) =>
-                  option.tag_name === value.tag_name
-                }
-                noOptionsText={"No valid tags"}
-                renderOption={(props, allTags) => (
-                  <Box component="li" {...props} key={allTags.id}>
-                    {allTags.tag_name}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField {...params} label="Add Tags" />
-                )}
-              />
-            ) : (
-              <ul>
-                {specificTaskTags &&
-                  specificTaskTags.map((tag) => (
-                    <li key={tag.tag_id}>{tag.tag_name}</li>
-                  ))}
-              </ul>
-            )}
-            <br />
-            <Typography variant="h6" component="h4">
-              Budget: {""}
-              {editMode ? (
-                <>
-                  <InputLabel htmlFor="budget-input">Budget</InputLabel>
-                  <OutlinedInput
-                    type="number"
-                    id="budget-input"
-                    label="Budget"
-                    value={editedBudget}
+                >
+                  <TextField
+                    required
+                    type="text"
+                    label="Title"
+                    value={editedTitle}
                     sx={{
                       marginBottom: 1,
                       width: 300,
                     }}
-                    onChange={(event) => setEditedBudget(event.target.value)}
                     variant="outlined"
-                    startAdornment={
-                      <InputAdornment position="start">$</InputAdornment>
-                    }
+                    onChange={(event) => setEditedTitle(event.target.value)}
+                  />
+                </Box>
+              ) : (
+                <>
+                  <Box sx={{ borderBottom: "1px solid grey" }}>
+                    Title: {""}
+                    {infoOfSpecificTask.title}
+                  </Box>
+                  <br
+                    style={{ display: "block", height: "1em", content: '""' }}
                   />
                 </>
-              ) : (
-                `$${infoOfSpecificTask.budget}`
               )}
             </Typography>
-            <br />
-            <Typography variant="h6" component="h4">
-              Location: {""}
-              {editMode ? (
+
+            {editMode ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <Autocomplete
-                  required
                   sx={{
                     width: 300,
                     marginBottom: 1,
                   }}
-                  value={editedLocation}
-                  onChange={(event, newValue) => setEditedLocation(newValue)}
-                  inputValue={editedLocationInput}
+                  multiple
+                  value={editedTags}
+                  onChange={(event, newValue) => setEditedTags(newValue)}
+                  inputValue={editedTagInput}
                   onInputChange={(event, newInputValue) =>
-                    setEditedLocationInput(newInputValue)
+                    setEditedTagInput(newInputValue)
                   }
-                  id="all-locations-lookup"
-                  getOptionLabel={(allLocations) =>
-                    `${allLocations.location_name}`
-                  }
-                  options={allLocations}
+                  id="all-tags-lookup"
+                  getOptionLabel={(allTags) => `${allTags.tag_name}`}
+                  options={allTags}
                   isOptionEqualToValue={(option, value) =>
-                    option.location_name === value.location_name
+                    option.tag_name === value.tag_name
                   }
-                  noOptionsText={"No valid locations"}
-                  renderOption={(props, allLocations) => (
-                    <Box component="li" {...props} key={allLocations.id}>
-                      {allLocations.location_name}
+                  noOptionsText={"No valid tags"}
+                  renderOption={(props, allTags) => (
+                    <Box component="li" {...props} key={allTags.id}>
+                      {allTags.tag_name}
                     </Box>
                   )}
                   renderInput={(params) => (
-                    <TextField {...params} label="Add Location" required />
+                    <TextField {...params} label="Add Tags" />
                   )}
                 />
+              </Box>
+            ) : (
+              <>
+                <Typography
+                  variant="h6"
+                  component="h4"
+                  sx={{ borderBottom: "1px solid grey" }}
+                >
+                  Tags:{""}
+                </Typography>
+
+                <ul>
+                  {specificTaskTags &&
+                    specificTaskTags.map((tag) => (
+                      <li key={tag.tag_id}>{tag.tag_name}</li>
+                    ))}
+                </ul>
+              </>
+            )}
+            <Typography variant="h6" component="h4">
+              {editMode ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <>
+                    <FormControl sx={{ marginBottom: 1 }}>
+                      <InputLabel htmlFor="budget-input">Budget</InputLabel>
+                      <OutlinedInput
+                        type="number"
+                        id="budget-input"
+                        label="Budget"
+                        value={editedBudget}
+                        sx={{
+                          marginBottom: 1,
+                          width: 300,
+                        }}
+                        onChange={(event) =>
+                          setEditedBudget(event.target.value)
+                        }
+                        variant="outlined"
+                        startAdornment={
+                          <InputAdornment position="start">$</InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </>
+                </Box>
               ) : (
-                infoOfSpecificTask.location_name
+                <>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ borderBottom: "1px solid grey" }}
+                  >
+                    Budget: {""} {`$${infoOfSpecificTask.budget}`}
+                  </Typography>
+                  <br
+                    style={{ display: "block", height: "1em", content: '""' }}
+                  />
+                </>
               )}
             </Typography>
-            <br />
-            <Typography>
-              Due Date:{" "}
+
+            <Typography variant="h6" component="h4">
               {editMode ? (
-                <LocalizationProvider dateAdapter={AdapterMoment}>
-                  <DatePicker
-                    value={editedDueDate}
-                    sx={{ marginBottom: 1, width: 300 }}
-                    onChange={(newValue) => setEditedDueDate(newValue)}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Autocomplete
+                    required
+                    sx={{
+                      width: 300,
+                      marginBottom: 1,
+                    }}
+                    value={editedLocation}
+                    onChange={(event, newValue) => setEditedLocation(newValue)}
+                    inputValue={editedLocationInput}
+                    onInputChange={(event, newInputValue) =>
+                      setEditedLocationInput(newInputValue)
+                    }
+                    id="all-locations-lookup"
+                    getOptionLabel={(allLocations) =>
+                      `${allLocations.location_name}`
+                    }
+                    options={allLocations}
+                    isOptionEqualToValue={(option, value) =>
+                      option.location_name === value.location_name
+                    }
+                    noOptionsText={"No valid locations"}
+                    renderOption={(props, allLocations) => (
+                      <Box component="li" {...props} key={allLocations.id}>
+                        {allLocations.location_name}
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Add Location" required />
+                    )}
                   />
-                </LocalizationProvider>
+                </Box>
+              ) : (
+                <>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ borderBottom: "1px solid grey" }}
+                  >
+                    Location: {""} {infoOfSpecificTask.location_name}
+                  </Typography>
+                  <br
+                    style={{ display: "block", height: "1em", content: '""' }}
+                  />
+                </>
+              )}
+            </Typography>
+            {editMode ? (
+              <Box>
+                <>
+                  {/* This just sets up the window.cloudinary widget */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p style={{ marginRight: "5%" }}>Upload New File:</p>
+                    <Button
+                      variant="contained"
+                      type="button"
+                      onClick={openWidget}
+                      sx={{
+                        width: "20%",
+                        backgroundColor: "rgb(187, 41, 46)",
+                        "&:hover": {
+                          backgroundColor: "rgb(187, 41, 46)",
+                          transform: "scale(1.03)",
+                        },
+                      }}
+                    >
+                      Pick File
+                    </Button>
+                  </div>
+
+                  {editedPhotos &&
+                    editedPhotos.map((item) => {
+                      return <img src={item.photo_url} width={100} />;
+                    })}
+                </>
+              </Box>
+            ) : (
+              // if there is no image, there's a big space under location. Might neet to fix that.
+              <ImageList class="image_line">
+                {photosForTask != null &&
+                  photosForTask.map((item) => {
+                    return (
+                      <img
+                        src={item.photo_url}
+                        style={{
+                          width: "300px",
+                          border: "1px solid black",
+                          margin: "5px",
+                          "border-radius": "3%",
+                        }}
+                      />
+                    );
+                  })}
+              </ImageList>
+            )}
+            <Typography>
+              {editMode ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DatePicker
+                      value={editedDueDate}
+                      sx={{ marginBottom: 1, width: 300 }}
+                      onChange={(newValue) => setEditedDueDate(newValue)}
+                    />
+                  </LocalizationProvider>
+                </Box>
               ) : infoOfSpecificTask.due_date != null ? (
                 moment(infoOfSpecificTask.due_date).format(
                   "MMMM DD YYYY, h:mm a"
                 )
               ) : (
-                " "
+                <>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ borderBottom: "1px solid grey" }}
+                  >
+                    Due Date:{" "}
+                  </Typography>{" "}
+                  <br
+                    style={{ display: "block", height: "1em", content: '""' }}
+                  />
+                </>
               )}
             </Typography>
-            <br />
+
             <Typography variant="h6" component="h4">
-              Created By: {infoOfSpecificTask.created_by_first_name}{" "}
-              {infoOfSpecificTask.created_by_last_name}
-            </Typography>
-            <br />
-            <Typography variant="h6" component="h4">
-              Assigned To: {""}
               {editMode ? (
-                <Autocomplete
+                <Box
                   sx={{
-                    width: 300,
-                    marginBottom: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  value={editedUserLookup}
-                  onChange={(event, newValue) => {
-                    setEditedUserLookup(newValue);
-                  }}
-                  inputValue={editedUserLookupInput}
-                  onInputChange={(event, newInputValue) =>
-                    setEditedUserLookupInput(newInputValue)
-                  }
-                  id="all-verified-users-lookup"
-                  getOptionLabel={(verifiedUsers) =>
-                    `${verifiedUsers.first_name} ${verifiedUsers.last_name}`
-                  }
-                  options={verifiedUsers}
-                  isOptionEqualToValue={(option, value) =>
-                    option.first_name === value.first_name
-                  }
-                  noOptionsText={"No valid users"}
-                  renderOption={(props, verifiedUsers) => (
-                    <Box component="li" {...props} key={verifiedUsers.id}>
-                      {verifiedUsers.first_name} {verifiedUsers.last_name}
-                    </Box>
-                  )}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Assign to User" />
-                  )}
-                />
+                >
+                  <Autocomplete
+                    sx={{
+                      width: 300,
+                      marginBottom: 1,
+                    }}
+                    value={editedUserLookup}
+                    onChange={(event, newValue) => {
+                      setEditedUserLookup(newValue);
+                    }}
+                    inputValue={editedUserLookupInput}
+                    onInputChange={(event, newInputValue) =>
+                      setEditedUserLookupInput(newInputValue)
+                    }
+                    id="all-verified-users-lookup"
+                    getOptionLabel={(verifiedUsers) =>
+                      `${verifiedUsers.first_name} ${verifiedUsers.last_name}`
+                    }
+                    options={verifiedUsers}
+                    isOptionEqualToValue={(option, value) =>
+                      option.first_name === value.first_name
+                    }
+                    noOptionsText={"No valid users"}
+                    renderOption={(props, verifiedUsers) => (
+                      <Box component="li" {...props} key={verifiedUsers.id}>
+                        {verifiedUsers.first_name} {verifiedUsers.last_name}
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Assign to User" />
+                    )}
+                  />
+                </Box>
               ) : infoOfSpecificTask.assigned_to_first_name == null ? (
                 " "
               ) : (
-                `${infoOfSpecificTask.assigned_to_first_name}
-					${infoOfSpecificTask.assigned_to_last_name}`
+                <>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ borderBottom: "1px solid grey" }}
+                  >
+                    Assigned To: {""}{" "}
+                    {`${infoOfSpecificTask.assigned_to_first_name}
+					          ${infoOfSpecificTask.assigned_to_last_name}`}
+                  </Typography>
+                  <br
+                    style={{ display: "block", height: "1em", content: '""' }}
+                  />
+                </>
               )}
             </Typography>
-            <br />
+
             <Typography variant="h6" component="h4">
-              Notes: {""}
               {editMode ? (
-                <TextField
-                  type="text"
-                  label="Notes"
-                  value={editedNotes}
+                <Box
                   sx={{
-                    marginBottom: 1,
-                    width: 300,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  onChange={(event) => setEditedNotes(event.target.value)}
-                  variant="outlined"
-                />
+                >
+                  <TextField
+                    type="text"
+                    label="Notes"
+                    value={editedNotes}
+                    sx={{
+                      marginBottom: 1,
+                      width: 300,
+                    }}
+                    onChange={(event) => setEditedNotes(event.target.value)}
+                    variant="outlined"
+                  />
+                </Box>
               ) : (
-                `${infoOfSpecificTask.notes}`
+                <>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ borderBottom: "1px solid grey" }}
+                  >
+                    Notes: {""} {`${infoOfSpecificTask.notes}`}
+                  </Typography>
+                  <br
+                    style={{ display: "block", height: "1em", content: '""' }}
+                  />
+                </>
               )}
             </Typography>
 
-            {editMode ? (
-              <>
-                {/* This just sets up the window.cloudinary widget */}
-
-                <Button
-                  variant="contained"
-                  type="button"
-                  onClick={openWidget}
-                  sx={{ width: 300 }}
-                >
-                  Pick File
-                </Button>
-
-                {editedPhotos &&
-                  editedPhotos.map((item) => {
-                    return <img src={item.photo_url} width={100} />;
-                  })}
-              </>
-            ) : (
-              
-              <ImageList class="image_line"  >
-                {photosForTask != null &&
-                  photosForTask.map((item) => {
-                    return <img src={item.photo_url}  style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }}  />;
-                    
-                  })}
-                  </ImageList>
-                  
-             
-             
-            )}
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleOpenChild();
-              }}
-            >
-              Comments
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                dispatch({
-                  type: "MARK_TASK_APPROVED",
-                  payload: { task_id: infoOfSpecificTask.task_id },
-                });
-                handleClose();
-              }}
-            >
-              Approve
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                dispatch({
-                  type: "DENY_TASK",
-                  payload: infoOfSpecificTask,
-                });
-                handleClose();
-              }}
-            >
-              Deny
-            </Button>
-            {editMode ? (
-              <Button variant="contained" onClick={() => submit_edits()}>
-                Submit Changes
-              </Button>
-            ) : (
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button
                 variant="contained"
-                onClick={() => setEditMode(!editMode)}
+                sx={{
+                  marginRight: "10%",
+                  width: "40%",
+                  maxWidth: "220px",
+                  marginTop: "5px",
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                    transform: "scale(1.03)",
+                  },
+                }}
+                onClick={() => {
+                  handleOpenChild();
+                }}
               >
-                Edit
+                Comments
               </Button>
-            )}
+              <Button
+                variant="contained"
+                sx={{
+                  width: "40%",
+                  maxWidth: "220px",
+                  marginTop: "5px",
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                    transform: "scale(1.03)",
+                  },
+                }}
+                onClick={() => {
+                  dispatch({
+                    type: "MARK_TASK_APPROVED",
+                    payload: { task_id: infoOfSpecificTask.task_id },
+                  });
+                  handleClose();
+                }}
+              >
+                Approve
+              </Button>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                variant="contained"
+                sx={{
+                  marginRight: "10%",
+                  width: "40%",
+                  maxWidth: "220px",
+                  marginTop: "5px",
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                    transform: "scale(1.03)",
+                  },
+                }}
+                onClick={() => {
+                  dispatch({
+                    type: "DENY_TASK",
+                    payload: infoOfSpecificTask,
+                  });
+                  handleClose();
+                }}
+              >
+                Deny
+              </Button>
+              {editMode ? (
+                <Button
+                  variant="contained"
+                  onClick={() => submit_edits()}
+                  sx={{
+                    width: "40%",
+                    maxWidth: "220px",
+                    marginTop: "5px",
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  Submit Changes
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: "40%",
+                    maxWidth: "220px",
+                    marginTop: "5px",
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  Edit
+                </Button>
+              )}
+            </Box>
           </Paper>
           <Modal
             open={openChild}
@@ -546,7 +830,7 @@ export default function TasksAwaitingApproval() {
               handleCloseChild();
             }}
             sx={{
-              overflow:'scroll',
+              overflow: "scroll",
             }}
           >
             <Stack
@@ -565,45 +849,67 @@ export default function TasksAwaitingApproval() {
                 }}
                 elevation={3}
               >
-                <ClearIcon onClick={() => setOpenChild(false)}/>
-                
+                <ClearIcon onClick={() => setOpenChild(false)} />
+
                 <Typography
                   variant="h4"
                   component="h2"
                   sx={{ textDecoration: "underline" }}
-                >  
-                </Typography>
+                ></Typography>
                 <br />
-                
+
                 <TextField
                   type="text"
                   label="Add a comment..."
                   value={comment}
-                  multiline rows={2}
+                  multiline
+                  rows={2}
                   sx={{
                     "margin-left": "2px",
                     "margin-right": "2px",
                     "padding-left": "2px",
                     "padding-right": "2px",
-                    
                   }}
                   onChange={(event) => setComment(event.target.value)}
                   variant="outlined"
-                  InputProps={{endAdornment: <Button variant="contained" onClick={handleSubmitComment}>
-                  Send
-                </Button>}}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        variant="contained"
+                        onClick={handleSubmitComment}
+                        sx={{
+                          backgroundColor: "rgb(187, 41, 46)",
+                          "&:hover": {
+                            backgroundColor: "rgb(187, 41, 46)",
+                            transform: "scale(1.03)",
+                          },
+                        }}
+                      >
+                        Send
+                      </Button>
+                    ),
+                  }}
                 />
                 <Box>
-                  <List>                   
+                  <List>
                     {commentsForTask.length > 0 &&
                       commentsForTask.map((comment) => (
-                        <Card key={comment.comment_id} sx={{
-                          margin: "5px",
-                          padding: "20px",
-                          background: "white",
-                        }}>
-                         
-                          <Box sx={{ fontWeight: 'bold' }}>{comment.posted_by_first_name}</Box><Box sx={{ fontWeight: 'light' }}>{moment(comment.time_posted).format('MMMM DD, YYYY h:mma')}</Box>
+                        <Card
+                          key={comment.comment_id}
+                          sx={{
+                            margin: "5px",
+                            padding: "20px",
+                            background: "white",
+                          }}
+                        >
+                          <Box sx={{ fontWeight: "bold" }}>
+                            {comment.posted_by_first_name}
+                          </Box>
+                          <Box sx={{ fontWeight: "light" }}>
+                            {moment(comment.time_posted).format(
+                              "MMMM DD, YYYY h:mma"
+                            )}
+                          </Box>
                           <br />
                           {comment.content}{" "}
                         </Card>
