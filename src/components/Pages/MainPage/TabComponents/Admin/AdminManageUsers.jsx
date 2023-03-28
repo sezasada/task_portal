@@ -11,6 +11,8 @@ import {
 	TableBody,
 	Modal,
 	Button,
+	Snackbar,
+	Alert,
 } from "@mui/material";
 
 import moment from "moment";
@@ -35,29 +37,65 @@ export default function AdminManageUsers() {
 	const handleApprove = () => {
 		console.log("Approve button clicked");
 		dispatch({ type: "APPROVE_USER_REQUEST", payload: infoOfSpecificUser });
-
 		handleClose();
+		dispatch({
+			type: "SET_SNACKBAR_MESSAGE",
+			payload: <Alert severity="success">User Approved</Alert>,
+		});
+		handleOpenSnackbar();
 	};
 
 	const handleDeny = () => {
 		console.log("Deny button clicked");
 		dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
 		handleClose();
+		dispatch({
+			type: "SET_SNACKBAR_MESSAGE",
+			payload: <Alert severity="warning">User Deleted</Alert>,
+		});
+		handleOpenSnackbar();
 	};
 
 	const handlePromote = () => {
 		console.log("Promote button clicked");
 		dispatch({ type: "PROMOTE_USER", payload: infoOfSpecificUser });
 		handleClose();
+		dispatch({
+			type: "SET_SNACKBAR_MESSAGE",
+			payload: <Alert severity="success">User Promoted to Admin</Alert>,
+		});
+		handleOpenSnackbar();
 	};
 
 	const handleDemote = () => {
 		console.log("Demote button clicked");
 		dispatch({ type: "DEMOTE_USER", payload: infoOfSpecificUser });
 		handleClose();
+		dispatch({
+			type: "SET_SNACKBAR_MESSAGE",
+			payload: <Alert severity="warning">User Demoted from Admin</Alert>,
+		});
+		handleOpenSnackbar();
 	};
 
 	console.log(infoOfSpecificUser);
+
+	// -------------- Snackbar Stuff -------------- //
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+
+	const snackbarMessage = useSelector((store) => store.snackbarMessageReducer);
+
+	const handleOpenSnackbar = () => {
+		setOpenSnackbar(true);
+	};
+
+	const handleCloseSnackbar = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+		setOpenSnackbar(false);
+	};
+
 	return (
 		<div>
 			<Stack spacing={3}>
@@ -272,6 +310,13 @@ export default function AdminManageUsers() {
 						</Stack>
 					</Modal>
 				</Paper>
+				<Snackbar
+					open={openSnackbar}
+					autoHideDuration={3000}
+					onClose={handleCloseSnackbar}
+				>
+					{snackbarMessage}
+				</Snackbar>
 			</Stack>
 		</div>
 	);

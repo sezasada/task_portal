@@ -38,7 +38,6 @@ export default function Snackbar() {
 			autoHideDuration={6000}
 			onClose={handleClose}
 			message={snackbarMessage}
-			action={action}
 		/>
 	);
 }
