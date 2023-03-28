@@ -14,8 +14,8 @@ import {
   Modal,
   Button,
   List,
-  ListItem,
   TextField,
+  ImageList,
   Autocomplete,
   Box,
   Card,
@@ -494,10 +494,12 @@ export default function UserTaskList() {
               >
                 Notes: {infoOfSpecificTask.notes}
               </Typography>
+              <ImageList class="image_line"  >
               {photosForTask &&
                 photosForTask.map((item) => {
-                  return <img src={item.photo_url} width={100} />;
+                  return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }} />;
                 })}
+                </ImageList>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Button
                   variant="contained"

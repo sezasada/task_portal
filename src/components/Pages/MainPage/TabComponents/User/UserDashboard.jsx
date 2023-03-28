@@ -854,10 +854,12 @@ export default function UserDashboard() {
               <Typography variant="h6" component="h4">
                 Notes: {infoOfSpecificTask.notes}
               </Typography>
+              <ImageList class="image_line"  >
               {photosForTask &&
                 photosForTask.map((item) => {
-                  return <img src={item.photo_url} width={100} />;
+                  return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }}  />;
                 })}
+                </ImageList>
               <Button
                 variant="contained"
                 sx={{ backgroundColor: "rgb(187, 41, 46)" }}
