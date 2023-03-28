@@ -140,10 +140,10 @@ export default function UserDashboard() {
         <Table
           sx={{
             "& thead th:first-child": {
-              width: "70%",
+              width: "55%",
             },
             "& thead th:last-child": {
-              width: "30%",
+              width: "45%",
             },
           }}
         >
@@ -412,10 +412,10 @@ export default function UserDashboard() {
         <Table
           sx={{
             "& thead th:first-child": {
-              width: "70%",
+              width: "55%",
             },
             "& thead th:last-child": {
-              width: "30%",
+              width: "45%",
             },
           }}
         >
@@ -709,10 +709,10 @@ export default function UserDashboard() {
         <Table
           sx={{
             "& thead th:first-child": {
-              width: "70%",
+              width: "55%",
             },
             "& thead th:last-child": {
-              width: "30%",
+              width: "45%",
             },
           }}
         >

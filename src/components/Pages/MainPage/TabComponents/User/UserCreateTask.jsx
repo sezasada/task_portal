@@ -157,16 +157,35 @@ export default function UserCreateTask() {
 
   console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
   return (
-    <Stack spacing={3}>
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <Stack
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      spacing={3}
+    >
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         <Stack
           sx={{
-            backgroundColor: "rgb(241, 241, 241)",
-            padding: "10px",
-            borderRadius: "12px",
+            backgroundColor: "rgb(241, 241, 241)"
           }}
         >
-          <Typography sx={{fontSize: "3vh", display: "flex", justifyContent: "center", alignItems: "center", color: "rgb(187, 41, 46)"}}>Create a New Task</Typography>
+          <Typography
+            sx={{
+              fontSize: "3vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Create a New Task
+          </Typography>
           <form onSubmit={handleSubmitTask}>
             <Stack>
               <TextField
@@ -300,7 +319,6 @@ export default function UserCreateTask() {
                 type="submit"
                 sx={{
                   backgroundColor: "rgb(187, 41, 46)",
-                  marginBottom: 1,
                   width: 300,
                 }}
               >
@@ -309,7 +327,7 @@ export default function UserCreateTask() {
             </Stack>
           </form>
         </Stack>
-      </Box>
+      </Paper>
     </Stack>
   );
 }

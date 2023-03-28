@@ -155,8 +155,19 @@ export default function UserTaskList() {
   }
 
   return (
-    <Stack spacing={3}>
-      <Paper sx={{ p: 3 }}>
+    <Stack
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      spacing={3}
+    >
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         <Typography
           sx={{
             display: "flex",
@@ -179,6 +190,7 @@ export default function UserTaskList() {
             <TableRow>
               <TableCell
                 sx={{
+                  width: "33%",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                 }}
@@ -187,6 +199,7 @@ export default function UserTaskList() {
               </TableCell>
               <TableCell
                 sx={{
+                  width: "33%",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                 }}
@@ -195,6 +208,7 @@ export default function UserTaskList() {
               </TableCell>
               <TableCell
                 sx={{
+                  width: "33%",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                 }}
@@ -216,6 +230,7 @@ export default function UserTaskList() {
                   >
                     <TableCell
                       sx={{
+                        width: "33%",
                         wordWrap: "break-word",
                         whiteSpace: "normal",
                       }}
@@ -224,6 +239,7 @@ export default function UserTaskList() {
                     </TableCell>
                     <TableCell
                       sx={{
+                        width: "33%",
                         wordWrap: "break-word",
                         whiteSpace: "normal",
                       }}
@@ -232,6 +248,7 @@ export default function UserTaskList() {
                     </TableCell>
                     <TableCell
                       sx={{
+                        width: "33%",
                         wordWrap: "break-word",
                         whiteSpace: "normal",
                       }}
@@ -254,15 +271,16 @@ export default function UserTaskList() {
                       console.log(task);
                     }}
                   >
-                    <TableCell>{task.title}</TableCell>
+                    <TableCell
+                    >{task.title}</TableCell>
                     <TableCell>{task.location_name}</TableCell>
                     <TableCell>
-                      <ul>
+                      <div>
                         {task.tags &&
                           task.tags.map((tag) => (
-                            <li key={tag.tag_id}> {tag.tag_name} </li>
+                            <div key={tag.tag_id}> {tag.tag_name} </div>
                           ))}
-                      </ul>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
