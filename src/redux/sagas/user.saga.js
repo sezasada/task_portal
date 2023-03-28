@@ -138,6 +138,15 @@ function* resetPasswordDirect(action) {
   }
 }
 
+function* updateEmailPref(action){
+  try{
+    yield call(axios.put, '/api/user/update_email_pref');
+    yield put({ type: 'FETCH_USER' });
+  }catch (error){
+    console.log('update email pref failed', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('UPDATE_USER', updateUser);
@@ -147,6 +156,7 @@ function* userSaga() {
   yield takeLatest('NEW_PASSWORD', set_new_password);
   yield takeLatest('CHECK_IF_VALID', check_if_valid);
   yield takeLatest('RESET_PASSWORD_DIRECT', resetPasswordDirect);
+  yield takeLatest('UPDATE_EMAIL_PREF', updateEmailPref);
 
   
 }
