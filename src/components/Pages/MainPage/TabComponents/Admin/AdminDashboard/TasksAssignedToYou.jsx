@@ -349,7 +349,7 @@ export default function TasksAssignedToYou() {
                   },
                 }}
               >
-                Finish
+                Mark Task Complete
               </Button>
               <Button
                 variant="contained"
@@ -365,7 +365,7 @@ export default function TasksAssignedToYou() {
                   },
                 }}
               >
-                Didn't Finish
+                Send Back to Available Tasks
               </Button>
             </Box>
           </Paper>

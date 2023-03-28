@@ -824,11 +824,11 @@ export default function AdminManageTasks() {
 										: handleTakeTask
 								}
 							>
-								{infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
+								{infoOfSpecificTask.assigned_to_first_name ? "Unassign from personal list" : "Take"}
 							</Button>
 
 							<Button variant="contained" onClick={handleCompleteTask}>
-								Mark Complete
+								Mark Task Complete
 							</Button>
 
 							{editMode ? (
