@@ -411,6 +411,17 @@ export default function TasksAssignedToYou() {
                     "margin-right": "2px",
                     "padding-left": "2px",
                     "padding-right": "2px",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "black",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "black",
+                      },
+                    },
+                    "& .MuiFormLabel-root.Mui-focused": {
+                      color: "rgb(187, 41, 46)",
+                    },
                   }}
                   onChange={(event) => setComment(event.target.value)}
                   variant="outlined"
