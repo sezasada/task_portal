@@ -164,7 +164,7 @@ export default function UserCreateTask() {
       <Paper
         sx={{
           p: 3,
-          maxWidth: "750px",
+          maxWidth: "35vh",
           width: "90%",
           backgroundColor: "rgb(241, 241, 241)",
         }}
@@ -186,7 +186,7 @@ export default function UserCreateTask() {
           >
             Create a New Task
           </Typography>
-          <form onSubmit={handleSubmitTask}>
+          <form onSubmit={handleSubmitTask} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
             <Stack>
               <TextField
                 required
