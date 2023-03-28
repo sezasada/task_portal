@@ -3,30 +3,27 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
-	Paper,
-	Typography,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Modal,
-	Button,
-	List,
-	ListItem,
-	TextField,
-	Autocomplete,
-	Box,
-	Card,
-	InputAdornment,
-	OutlinedInput,
-	InputLabel,
-	FormControl,
-	Select,
-	MenuItem,
-	Snackbar,
-	IconButton,
-	Alert,
+  Paper,
+  Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Modal,
+  Button,
+  List,
+  TextField,
+  ImageList,
+  Autocomplete,
+  Box,
+  Card,
+  InputAdornment,
+  OutlinedInput,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import moment from "moment";
 import CloseIcon from "@mui/icons-material/Close";
@@ -408,59 +405,170 @@ export default function UserTaskList() {
 					}}
 					sx={{
 						margin: "0 auto",
-
-						width: "90%",
-						maxWidth: "750px",
-						overflow: "scroll",
-					}}
-				>
-					<Stack
-						sx={{
-							display: "flex",
-							alignItems: "center",
-						}}
-					>
-						<Paper
-							sx={{
-								display: "flex",
-								flexDirection: "column",
-								width: "90%",
-								padding: "40px",
-								backgroundColor: "rgb(241, 241, 241)",
-							}}
-						>
-							<ClearIcon onClick={() => setOpen(false)} />
-							{/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
-							<Typography
-								variant="h4"
-								component="h2"
-								sx={{
-									display: "flex",
-									justifyContent: "center",
-									alignItems: "center",
-									color: "rgb(187, 41, 46)",
-									borderBottom: "1px solid grey",
-								}}
-							>
-								Task Info
-							</Typography>
-							<br />
-							<Typography
-								variant="h6"
-								component="h4"
-								sx={{ borderBottom: "1px solid grey" }}
-							>
-								Title: {infoOfSpecificTask.title}
-							</Typography>
-							<br />
-							<Typography
-								variant="h6"
-								component="h4"
-								sx={{ borderBottom: "1px solid grey" }}
-							>
-								Tags:
-							</Typography>
-
+              <ul>
+                {specificTaskTags &&
+                  specificTaskTags.map((tag) => (
+                    <li key={tag.tag_id}>{tag.tag_name}</li>
+                  ))}
+              </ul>
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
+                Budget: ${infoOfSpecificTask.budget}
+              </Typography>
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
+                Location: {infoOfSpecificTask.location_name}
+              </Typography>
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
+                Due Date:{" "}
+                {infoOfSpecificTask.due_date != null
+                  ? moment(infoOfSpecificTask.due_date).format(
+                      "MMMM Do YYYY, h:mm a"
+                    )
+                  : " "}
+              </Typography>
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
+                Created By: {infoOfSpecificTask.created_by_first_name}{" "}
+                {infoOfSpecificTask.created_by_last_name}
+              </Typography>
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
+                Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
+                {infoOfSpecificTask.assigned_to_last_name}
+              </Typography>
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
+                Notes: {infoOfSpecificTask.notes}
+              </Typography>
+              <ImageList class="image_line"  >
+              {photosForTask &&
+                photosForTask.map((item) => {
+                  return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }} />;
+                })}
+                </ImageList>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleOpenChild();
+                  }}
+                  sx={{
+                    marginRight: "10%",
+                    width: "40%",
+                    maxWidth: "220px",
+                    marginTop: "10px",
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                    },
+                  }}
+                >
+                  Comments
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={
+                    infoOfSpecificTask.assigned_to_first_name
+                      ? handleDropTask
+                      : handleTakeTask
+                  }
+                  sx={{
+                    width: "40%",
+                    maxWidth: "220px",
+                    marginTop: "10px",
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                    },
+                  }}
+                >
+                  {infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
+                </Button>
+              </Box>
+            </Paper>
+            <Modal
+              open={openChild}
+              onClose={() => {
+                handleCloseChild();
+              }}
+              sx={{
+                overflow: "scroll",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Paper
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "20px",
+                    "background-color": "rgb(241, 241, 241)",
+                    width: "400px",
+                  }}
+                  elevation={3}
+                >
+                  <ClearIcon onClick={() => setOpenChild(false)} />
+                  {/* <pre>{JSON.stringify(commentsForSpecificTask)}</pre> */}
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    sx={{ textDecoration: "underline" }}
+                  ></Typography>
+                  <br />
+                  <TextField
+                    type="text"
+                    label="Comment"
+                    value={comment}
+                    multiline
+                    rows={2}
+                    sx={{
+                      "margin-left": "2px",
+                      "margin-right": "2px",
+                      "padding-left": "2px",
+                      "padding-right": "2px",
+                    }}
+                    onChange={(event) => setComment(event.target.value)}
+                    variant="outlined"
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          variant="contained"
+                          onClick={handleSubmitComment}
+                        >
+                          Send
+                        </Button>
+                      ),
+                    }}
+                  />
 							<ul>
 								{specificTaskTags &&
 									specificTaskTags.map((tag) => (
