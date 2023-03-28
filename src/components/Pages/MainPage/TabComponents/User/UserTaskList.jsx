@@ -157,13 +157,50 @@ export default function UserTaskList() {
   return (
     <Stack spacing={3}>
       <Paper sx={{ p: 3 }}>
-        <Typography>Available Tasks</Typography>
-        <Table>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          Available Tasks
+        </Typography>
+        <hr />
+        <Table
+          sx={{
+            width: "100%",
+            tableLayout: "fixed",
+          }}
+        >
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Tags</TableCell>
+              <TableCell
+                sx={{
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                Title
+              </TableCell>
+              <TableCell
+                sx={{
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                Location
+              </TableCell>
+              <TableCell
+                sx={{
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                Tags
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -177,9 +214,28 @@ export default function UserTaskList() {
                       console.log(task);
                     }}
                   >
-                    <TableCell>{task.title}</TableCell>
-                    <TableCell>{task.location_name}</TableCell>
-                    <TableCell>
+                    <TableCell
+                      sx={{
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                      }}
+                    >
+                      {task.title}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                      }}
+                    >
+                      {task.location_name}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                      }}
+                    >
                       <ul>
                         {task.tags &&
                           task.tags.map((tag) => (

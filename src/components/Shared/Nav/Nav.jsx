@@ -76,11 +76,12 @@ function Nav() {
 									alt="logo red.png"
 									className="logo-img"
 									style={{
+										marginLeft: "5px",
 										minWidth: "50px",
 										objectFit: "cover",
 										minHeight: "50px",
-										maxWidth: "100px",
-										maxHeight: "100px",
+										maxWidth: "50px",
+										maxHeight: "50px",
 									}}
 								/>
 							</Box>
