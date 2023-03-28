@@ -980,7 +980,6 @@ export default function UserDashboard() {
 				open={openSnackbar}
 				autoHideDuration={3000}
 				onClose={handleCloseSnackbar}
-				// message={snackbarMessage}
 				action={action}
 			>
 				{snackbarMessage}
