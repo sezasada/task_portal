@@ -5,6 +5,8 @@ const {
 const pool = require("../modules/pool");
 const router = express.Router();
 var moment = require('moment');
+require("dotenv").config();
+const sgMail = require("@sendgrid/mail");
 
 //route to GET all tags
 router.get("/tags", (req, res) => {
@@ -711,6 +713,33 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
     for (let tag of tags) {
       await pool.query(tags_per_task, [result.rows[0].id, tag.id]);
     }
+    const results = await pool.query(`SELECT "username" FROM "user"
+    WHERE "is_admin" = TRUE;`);
+
+    const adminEmails = results.rows;
+
+    console.log("adminEmails", adminEmails);
+
+    const linkToPortal = "http://localhost:3000/#/main";
+
+    for (email of adminEmails){
+    const msg = {
+      to: email.username,
+      from: "kathrynszombatfalvy@gmail.com",
+      subject: "Approval Request for Newly Created Task",
+      html: `
+  <p>Dear Admin,</p>
+  <p>A user has created a new task which requires your approval before further action can be taken. Please log in to the task portal to review the task details.</p>
+  <a href="${linkToPortal}">Link to Portal</a>
+  <p>Thank you.</p>`,
+    };
+
+    await sgMail
+      .send(msg);
+     
+
+  }
+
     res.send(result.rows[0]);
   } catch (error) {
     console.log("Error creating task", error);
