@@ -2,26 +2,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Stack } from "@mui/system";
 import {
-
-  Paper,
-  Card,
-  Typography,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Modal,
-  Button,
-  Box,
-  TextField,
-  List,
-  ImageList,
+	Paper,
+	Card,
+	Typography,
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
+	Modal,
+	Button,
+	Box,
+	TextField,
+	List,
+	ImageList,
 	ListItem,
 	IconButton,
 	Snackbar,
 	Alert,
-
 } from "@mui/material";
 import moment from "moment";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -137,18 +135,6 @@ export default function UserDashboard() {
 		setOpenSnackbar(false);
 	};
 
-	const action = (
-		<>
-			<IconButton
-				size="small"
-				aria-label="close"
-				color="inherit"
-				onClick={handleCloseSnackbar}
-			>
-				<CloseIcon fontSize="small" />
-			</IconButton>
-		</>
-	);
 	return (
 		<Stack
 			spacing={3}
@@ -160,7 +146,6 @@ export default function UserDashboard() {
           Welcome, {user.first_name}!
         </Typography>
       </Box> */}
-
 
 			<Paper
 				sx={{
@@ -325,12 +310,22 @@ export default function UserDashboard() {
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
-							<ImageList class="image_line"  >
-              {photosForTask &&
-                photosForTask.map((item) => {
-                  return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }} />;
-                })}
-                </ImageList>
+							<ImageList class="image_line">
+								{photosForTask &&
+									photosForTask.map((item) => {
+										return (
+											<img
+												src={item.photo_url}
+												style={{
+													width: "300px",
+													border: "1px solid black",
+													margin: "5px",
+													"border-radius": "3%",
+												}}
+											/>
+										);
+									})}
+							</ImageList>
 							<Button
 								variant="contained"
 								sx={{ backgroundColor: "rgb(187, 41, 46)" }}
@@ -600,12 +595,22 @@ export default function UserDashboard() {
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
-							<ImageList class="image_line"  >
-              {photosForTask &&
-                photosForTask.map((item) => {
-                  return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }} />;
-                })}
-                </ImageList>
+							<ImageList class="image_line">
+								{photosForTask &&
+									photosForTask.map((item) => {
+										return (
+											<img
+												src={item.photo_url}
+												style={{
+													width: "300px",
+													border: "1px solid black",
+													margin: "5px",
+													"border-radius": "3%",
+												}}
+											/>
+										);
+									})}
+							</ImageList>
 							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 								<Button
 									variant="contained"
@@ -900,12 +905,22 @@ export default function UserDashboard() {
 							<Typography variant="h6" component="h4">
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
-							<ImageList class="image_line"  >
-              {photosForTask &&
-                photosForTask.map((item) => {
-                  return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }}  />;
-                })}
-                </ImageList>
+							<ImageList class="image_line">
+								{photosForTask &&
+									photosForTask.map((item) => {
+										return (
+											<img
+												src={item.photo_url}
+												style={{
+													width: "300px",
+													border: "1px solid black",
+													margin: "5px",
+													"border-radius": "3%",
+												}}
+											/>
+										);
+									})}
+							</ImageList>
 							<Button
 								variant="contained"
 								sx={{ backgroundColor: "rgb(187, 41, 46)" }}
@@ -981,12 +996,9 @@ export default function UserDashboard() {
 				open={openSnackbar}
 				autoHideDuration={3000}
 				onClose={handleCloseSnackbar}
-				// message={snackbarMessage}
-				action={action}
 			>
 				{snackbarMessage}
 			</Snackbar>
 		</Stack>
 	);
-
 }
