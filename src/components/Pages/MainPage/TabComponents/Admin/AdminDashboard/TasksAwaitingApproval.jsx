@@ -19,6 +19,8 @@ import {
 	ListItem,
   Card,
   FormControl,
+  ImageList,
+  ImageListItem,
 } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import { useState } from "react";
@@ -178,6 +180,7 @@ export default function TasksAwaitingApproval() {
         .open();
   };
 
+
   // Manage opening and closing of first details modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -222,6 +225,9 @@ export default function TasksAwaitingApproval() {
         onClose={() => {
           handleClose();
           dispatch({ type: "UNVIEW_TASK_INFO" });
+        }}
+        sx={{
+          overflow:'scroll',
         }}
       >
         <Stack
@@ -477,12 +483,17 @@ export default function TasksAwaitingApproval() {
                   })}
               </>
             ) : (
-              <>
+              
+              <ImageList class="image_line"  >
                 {photosForTask != null &&
                   photosForTask.map((item) => {
-                    return <img src={item.photo_url} width={100} />;
+                    return <img src={item.photo_url}  style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }}  />;
+                    
                   })}
-              </>
+                  </ImageList>
+                  
+             
+             
             )}
             <Button
               variant="contained"

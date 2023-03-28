@@ -12,6 +12,8 @@ import {
 	TextField,
 	Card,
 	Typography,
+	ImageList,
+  	ImageListItem,
 } from "@mui/material";
 
 import ClearIcon from '@mui/icons-material/Clear';
@@ -114,6 +116,9 @@ export default function TasksAssignedToYou() {
 					handleClose2();
 					dispatch({ type: "UNVIEW_TASK_INFO" });
 				}}
+				sx={{
+					overflow:'scroll',
+				  }}
 			>
 				<Stack
 					sx={{
@@ -178,10 +183,13 @@ export default function TasksAssignedToYou() {
 						<Typography variant="h6" component="h4">
 							Notes: {infoOfSpecificTask.notes}
 						</Typography>
+
+						<ImageList class="image_line"  >
 						{photosForTask &&
 							photosForTask.map((item) => {
-								return <img src={item.photo_url} width={100} />;
+								return <img src={item.photo_url} style={{ width: '300px', border: "1px solid black", margin:"5px", "border-radius": "3%" }} />;
 							})}
+							</ImageList>
 						<Button
 							variant="contained"
 							onClick={() => {
