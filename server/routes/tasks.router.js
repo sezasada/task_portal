@@ -568,6 +568,7 @@ router.get("/all_available_tasks", rejectUnauthenticated, async (req, res) => {
 });
 //post route to add new task
 router.post("/admin", rejectUnauthenticated, async (req, res) => {
+  console.log("req.body", req.body);
   try {
     const {
       title,
@@ -637,6 +638,29 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
     for (let tag of tags) {
       await pool.query(tags_per_task, [result.rows[0].id, tag.id]);
     }
+
+// console.log("assigned_to_id", assigned_to_id );
+    //if assigned_to_id has something, then send an email to that user
+    if (assigned_to_id){
+      const userEmail = await pool.query(`SELECT "username" FROM "user" WHERE "id" = $1;`, [assigned_to_id]);
+        console.log("userEmail.rows[0].username", userEmail.rows[0].username);
+          
+        const msg = {
+          to: userEmail.rows[0].username,
+          from: "kathrynszombatfalvy@gmail.com",
+          subject: "Task Assigned to You",
+          html: `
+      <p>Hello,</p>
+      <p>A new task has been assigned to you.</p>
+      <a href="http://localhost:3000/#/main">View Task</a>
+      <p>Thank you.</p>`,
+        };
+       //send email to the user
+        await sgMail.send(msg);
+        console.log("Email sent");
+
+    }
+
     res.send(result.rows[0]);
   } catch (error) {
     console.log("Error creating task", error);
@@ -718,7 +742,7 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
 
     const adminEmails = results.rows;
 
-    console.log("adminEmails", adminEmails);
+    
 
     const linkToPortal = "http://localhost:3000/#/main";
 
@@ -850,22 +874,41 @@ router.put("/user_status_change", (req, res) => {
 
 /*ADMIN USER PUT ROUTES*/
 //admin assigns task
-router.put(`/admin_assign`, (req, res) => {
-  let user_id = req.body.user_id;
-  let time_assigned = req.body.time_assigned;
-  let task_id = req.body.task_id;
-  const queryText = `UPDATE "tasks"
-  SET "assigned_to_id" = $1, "time_assigned"=$2
-  WHERE "id" = $3;`;
+// router.put(`/admin_assign`, async (req, res) => {
 
-  pool
-    .query(queryText, [user_id, time_assigned, task_id])
-    .then((result) => res.send(result.rows[0]))
-    .catch((err) => {
-      console.log("error assigning task to user", err);
-      res.sendStatus(500);
-    });
-});
+//   try{
+//   let user_id = req.body.user_id;
+//   let time_assigned = req.body.time_assigned;
+//   let task_id = req.body.task_id;
+//   const queryText = `UPDATE "tasks"
+//   SET "assigned_to_id" = $1, "time_assigned"=$2
+//   WHERE "id" = $3;`;
+
+//   const result = await pool.query(queryText, [user_id, time_assigned, task_id]);
+//   const userEmail = await pool.query(`SELECT "username" FROM "user" WHERE "id" = $1;`, [user_id]);
+//   // console.log("result.rows", result.rows);
+    
+//   const msg = {
+//     to: userEmail,
+//     from: "kathrynszombatfalvy@gmail.com",
+//     subject: "Task Assigned to You",
+//     html: `
+// <p>Hello,</p>
+// <p>I new task has been assigned to you.</p>
+// <a href="http://localhost:3000/#/main">View Task</a>
+// <p>Thank you.</p>`,
+//   };
+//  //send email to the user
+//   await sgMail.send(msg);
+//  console.log("Email sent");
+    
+//   res.send(result.rows[0])
+    
+//   } catch (error){
+//     console.log("error with assigning task", error);
+//     res.sendStatus(500);
+//   }
+// });
 //admin unassigns task
 router.put(`/admin_unassign`, (req, res) => {
   let task_id = req.body.task_id;
@@ -932,6 +975,7 @@ router.put(`/admin_incomplete_task`, (req, res) => {
 
 //admin edits original settings for task
 router.put(`/admin_edit_task`, async (req, res) => {
+  // console.log("just getting into admin edit task, this is req.body", req.body);
 
   let title = req.body.title;
   let tagObjects = req.body.tags;
@@ -945,7 +989,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
   let due_date = req.body.due_date;
   let task_id = req.body.task_id;
   let photos = req.body.photos;
-  let assigned_to_id = req.body.assiged_to_id;
+  let assigned_to_id = req.body.assigned_to_id.id;
 
   if (due_date === ""){
     due_date = null;
@@ -954,6 +998,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
 
   try {
     //first edit the tasks table
+    // console.log("in edit task router");
     const queryText = `UPDATE "tasks"
   SET "title" =$1, "notes" =$2, "has_budget" =$3, "budget" =$4, "location_id" =$5, "is_time_sensitive" =$6, "due_date" =$7
   WHERE "id" = $8;`;
@@ -983,15 +1028,32 @@ router.put(`/admin_edit_task`, async (req, res) => {
     for (let photo of photos) {
       await pool.query(add_photos_query, [task_id, photo.photo_url]);
     }
-     
+    // console.log("about to check assigned_to_id", assigned_to_id);
     if(assigned_to_id ){
       //if there is an assiged to, update the assigned to id and time assigned in db
         const assignedQuery = `UPDATE "tasks"
-            SET "assigned_to_id" = $1, "time_assigned"=$2
+            SET "assigned_to_id" = $1, "time_assigned"=$2, "status"='In Progress'
             WHERE "id" = $3;`;
           const time_assigned = moment().format();
 
-        await pool.query(assignedQuery, [assigned_to_id.id, time_assigned, task_id] )
+        await pool.query(assignedQuery, [assigned_to_id, time_assigned, task_id] )
+
+        const userEmail = await pool.query(`SELECT "username" FROM "user" WHERE "id" = $1;`, [assigned_to_id]);
+        console.log("userEmail.rows[0].username", userEmail.rows[0].username);
+          
+        const msg = {
+          to: userEmail.rows[0].username,
+          from: "kathrynszombatfalvy@gmail.com",
+          subject: "Task Assigned to You",
+          html: `
+      <p>Hello,</p>
+      <p>A new task has been assigned to you.</p>
+      <a href="http://localhost:3000/#/main">View Task</a>
+      <p>Thank you.</p>`,
+        };
+       //send email to the user
+        await sgMail.send(msg);
+        console.log("Email sent");
 
     }
 
@@ -1017,7 +1079,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const task = await pool.query("SELECT * FROM tasks WHERE id = $1", [id]);
     if (task.rows.length === 0) {
-      console.log("no task is found");
+      // console.log("no task is found");
     }
     await pool.query(`DELETE FROM "comments" WHERE "task_id" = $1`, [id]);
     //delete related photos from photos table
@@ -1026,7 +1088,7 @@ router.delete("/:id", async (req, res) => {
     await pool.query(`DELETE FROM "tags_per_task" WHERE "task_id" = $1`, [id]);
     //delete task from task table
     await pool.query(`DELETE FROM "tasks" WHERE id = $1`, [id]);
-    console.log("task is deleted successfully");
+    // console.log("task is deleted successfully");
     return res.sendStatus(204);
   } catch (error) {
     console.error("Error trying to delete a task", error);

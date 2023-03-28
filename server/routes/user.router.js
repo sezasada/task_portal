@@ -219,7 +219,7 @@ router.put("/reset_password", async (req, res) => {
       sgMail
         .send(msg)
         .then(() => {
-          console.log("Email sent");
+          // console.log("Email sent");
           res.send("email sent");
         })
         .catch((error) => {
