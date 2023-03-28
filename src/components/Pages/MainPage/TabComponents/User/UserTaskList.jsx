@@ -155,15 +155,66 @@ export default function UserTaskList() {
   }
 
   return (
-    <Stack spacing={3}>
-      <Paper sx={{ p: 3 }}>
-        <Typography>Available Tasks</Typography>
-        <Table>
+    <Stack
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      spacing={3}
+    >
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          Available Tasks
+        </Typography>
+        <hr />
+        <Table
+          sx={{
+            width: "100%",
+            tableLayout: "fixed",
+          }}
+        >
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Tags</TableCell>
+              <TableCell
+                sx={{
+                  width: "33%",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                Title
+              </TableCell>
+              <TableCell
+                sx={{
+                  width: "33%",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                Location
+              </TableCell>
+              <TableCell
+                sx={{
+                  width: "33%",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                Tags
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -177,9 +228,31 @@ export default function UserTaskList() {
                       console.log(task);
                     }}
                   >
-                    <TableCell>{task.title}</TableCell>
-                    <TableCell>{task.location_name}</TableCell>
-                    <TableCell>
+                    <TableCell
+                      sx={{
+                        width: "33%",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                      }}
+                    >
+                      {task.title}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        width: "33%",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                      }}
+                    >
+                      {task.location_name}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        width: "33%",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                      }}
+                    >
                       <ul>
                         {task.tags &&
                           task.tags.map((tag) => (
@@ -198,15 +271,16 @@ export default function UserTaskList() {
                       console.log(task);
                     }}
                   >
-                    <TableCell>{task.title}</TableCell>
+                    <TableCell
+                    >{task.title}</TableCell>
                     <TableCell>{task.location_name}</TableCell>
                     <TableCell>
-                      <ul>
+                      <div>
                         {task.tags &&
                           task.tags.map((tag) => (
-                            <li key={tag.tag_id}> {tag.tag_name} </li>
+                            <div key={tag.tag_id}> {tag.tag_name} </div>
                           ))}
-                      </ul>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
