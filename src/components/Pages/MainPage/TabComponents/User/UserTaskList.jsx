@@ -175,11 +175,14 @@ export default function UserTaskList() {
             alignItems: "center",
             fontSize: "3vh",
             color: "rgb(187, 41, 46)",
+            
           }}
+       
         >
           Available Tasks
         </Typography>
-        <hr />
+        <hr/>
+   
         <Table
           sx={{
             width: "100%",
@@ -187,12 +190,14 @@ export default function UserTaskList() {
           }}
         >
           <TableHead>
-            <TableRow>
+            <TableRow >
               <TableCell
                 sx={{
                   width: "33%",
+                  fontSize: "2vh",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
+                  fontWeight: "bold"
                 }}
               >
                 Title
@@ -200,6 +205,8 @@ export default function UserTaskList() {
               <TableCell
                 sx={{
                   width: "33%",
+                  fontSize: "2vh",
+                  fontWeight: "bold",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                 }}
@@ -209,6 +216,8 @@ export default function UserTaskList() {
               <TableCell
                 sx={{
                   width: "33%",
+                  fontSize: "2vh",
+                  fontWeight: "bold",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                 }}
@@ -233,6 +242,7 @@ export default function UserTaskList() {
                         width: "33%",
                         wordWrap: "break-word",
                         whiteSpace: "normal",
+
                       }}
                     >
                       {task.title}
@@ -242,6 +252,7 @@ export default function UserTaskList() {
                         width: "33%",
                         wordWrap: "break-word",
                         whiteSpace: "normal",
+
                       }}
                     >
                       {task.location_name}
@@ -251,6 +262,7 @@ export default function UserTaskList() {
                         width: "33%",
                         wordWrap: "break-word",
                         whiteSpace: "normal",
+
                       }}
                     >
                       <ul>
@@ -272,9 +284,33 @@ export default function UserTaskList() {
                     }}
                   >
                     <TableCell
-                    >{task.title}</TableCell>
-                    <TableCell>{task.location_name}</TableCell>
-                    <TableCell>
+                      sx={{
+                        width: "33%",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+
+                      }}
+                    >
+                      {task.title}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        width: "33%",
+                        wordWrap: "break-word",
+
+                        whiteSpace: "normal",
+                      }}
+                    >
+                      {task.location_name}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        width: "33%",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+
+                      }}
+                    >
                       <div>
                         {task.tags &&
                           task.tags.map((tag) => (
@@ -288,8 +324,8 @@ export default function UserTaskList() {
         </Table>
         <br />
         <Box>
-          <Box>
-            <FormControl sx={{ width: 300 }}>
+          <Box sx={{display: "flex", justifyContent: "center"}}>
+            <FormControl sx={{ width: "45%", marginRight: "5%"}}>
               <InputLabel id="sort-by-location-label">
                 Sort By Location
               </InputLabel>
@@ -313,7 +349,7 @@ export default function UserTaskList() {
                 ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ width: 300 }}>
+            <FormControl sx={{ width: "45%" }}>
               <InputLabel id="sort-by-tags-label">Sort By Tags</InputLabel>
               <Select
                 id="sort-by-tags"
@@ -343,6 +379,13 @@ export default function UserTaskList() {
             handleClose();
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
+          sx={{
+            margin: "0 auto",
+
+            width: "90%",
+            maxWidth: "750px",
+            overflow: "scroll",
+          }}
         >
           <Stack
             sx={{
@@ -354,7 +397,9 @@ export default function UserTaskList() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
             >
               <ClearIcon onClick={() => setOpen(false)} />
@@ -362,16 +407,30 @@ export default function UserTaskList() {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "rgb(187, 41, 46)",
+                  borderBottom: "1px solid grey",
+                }}
               >
                 Task Info
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Title: {infoOfSpecificTask.title}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Tags:
               </Typography>
 
@@ -381,16 +440,27 @@ export default function UserTaskList() {
                     <li key={tag.tag_id}>{tag.tag_name}</li>
                   ))}
               </ul>
-              <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Budget: ${infoOfSpecificTask.budget}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Location: {infoOfSpecificTask.location_name}
               </Typography>
               <br />
-              <Typography>
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
@@ -399,41 +469,74 @@ export default function UserTaskList() {
                   : " "}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Created By: {infoOfSpecificTask.created_by_first_name}{" "}
                 {infoOfSpecificTask.created_by_last_name}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
                 {infoOfSpecificTask.assigned_to_last_name}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Notes: {infoOfSpecificTask.notes}
               </Typography>
               {photosForTask &&
                 photosForTask.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleOpenChild();
-                }}
-              >
-                Comments
-              </Button>
-              <Button
-                variant="contained"
-                onClick={
-                  infoOfSpecificTask.assigned_to_first_name
-                    ? handleDropTask
-                    : handleTakeTask
-                }
-              >
-                {infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
-              </Button>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleOpenChild();
+                  }}
+                  sx={{
+                    marginRight: "10%",
+                    width: "40%",
+                    maxWidth: "220px",
+                    marginTop: "10px",
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                    },
+                  }}
+                >
+                  Comments
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={
+                    infoOfSpecificTask.assigned_to_first_name
+                      ? handleDropTask
+                      : handleTakeTask
+                  }
+                  sx={{
+                    width: "40%",
+                    maxWidth: "220px",
+                    marginTop: "10px",
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                    },
+                  }}
+                >
+                  {infoOfSpecificTask.assigned_to_first_name ? "Drop" : "Take"}
+                </Button>
+              </Box>
             </Paper>
             <Modal
               open={openChild}

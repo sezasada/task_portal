@@ -172,7 +172,7 @@ export default function UserCreateTask() {
       >
         <Stack
           sx={{
-            backgroundColor: "rgb(241, 241, 241)"
+            backgroundColor: "rgb(241, 241, 241)",
           }}
         >
           <Typography
@@ -291,7 +291,13 @@ export default function UserCreateTask() {
                 variant="contained"
                 type="button"
                 onClick={openWidget}
-                sx={{ width: 300, backgroundColor: "rgb(187, 41, 46)" }}
+                sx={{
+                  width: 300,
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                  },
+                }}
               >
                 Pick File
               </Button>
@@ -319,6 +325,9 @@ export default function UserCreateTask() {
                 type="submit"
                 sx={{
                   backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                  },
                   width: 300,
                 }}
               >
