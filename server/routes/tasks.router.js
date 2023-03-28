@@ -804,6 +804,29 @@ router.get(`/comments/:task_id`, (req, res) => {
     });
 });
 
+//post new location
+router.post(`/add_location`, (req, res) => {
+  const location_name= req.body.location_name;
+  pool.query(`INSERT INTO locations ("location_name")
+  VALUES ($1);`, [location_name]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+});
+//post new tag
+router.post(`/add_tag`, (req, res) => {
+  const tag_name= req.body.tag_name;
+  pool.query(`INSERT INTO tags ("tag_name")
+  VALUES ($1);`, [tag_name]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+});
+//delete location
+router.delete(`/delete_location/:id`, (req, res) =>{
+  const location_id = req.params.id;
+  pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+});
+//delete tag
+router.delete(`/delete_tag/:id`, (req, res) =>{
+  const tag_id = req.params.id;
+  pool.query(`DELETE FROM tags WHERE "id"=$1`, [tag_id]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+});
+
 /*BASIC USER PUT ROUTES*/
 //user assigns task to themselves
 router.put(`/user_assign`, (req, res) => {
