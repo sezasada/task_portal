@@ -142,7 +142,7 @@ router.get("/unverified", (req, res) => {
 
 // Grab all verified users
 router.get("/verified", (req, res) => {
-  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "created_at", "is_verified", "is_admin" FROM "user" WHERE "is_verified" = TRUE;`;
+  const queryText = `SELECT "id", "first_name", "last_name", "username", "phone_number", "created_at", "is_verified", "is_admin", "send_emails" FROM "user" WHERE "is_verified" = TRUE;`;
   pool
     .query(queryText)
     .then((results) => res.send(results.rows))
@@ -313,5 +313,24 @@ router.put("/update_info", rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+//update email pref
+router.put("/update_email_pref", rejectUnauthenticated, (req, res) => {
+  const id = req.user.id;
+  
+  
+  const queryText = `UPDATE "user"
+  SET "send_emails" = NOT send_emails
+  WHERE "id" = $1`;
+
+  pool
+    .query(queryText, [id])
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.log("update email pref failed", err);
+      res.sendStatus(500);
+    });
+});
+
 
 module.exports = router;

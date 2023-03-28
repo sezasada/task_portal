@@ -10,6 +10,8 @@ function Profile() {
   const [phoneNumber, setPhoneNumber] = useState(user.phone_number);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [sendEmail, setSendEmail] = useState(user.send_emails)
+  console.log(sendEmail);
 
   const dispatch = useDispatch();
 
@@ -45,6 +47,11 @@ function Profile() {
       },
     });
   };
+
+  const updateEmailPref = () =>{
+    console.log("in updateemailpref")
+    dispatch({type: 'UPDATE_EMAIL_PREF'})
+  }
 
   return (
     <div>
@@ -142,6 +149,17 @@ function Profile() {
           </div>
         </>
       </form>
+
+
+      <form className="formPanel">
+        <h2>Update Email Preferences</h2>
+        {sendEmail ? 
+        <button onClick={() => updateEmailPref()}> Turn off email notifications</button>: 
+        <button onClick={() => updateEmailPref()}>Turn on email notifications</button>}
+      </form>
+
+
+
     </div>
   );
 }
