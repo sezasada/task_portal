@@ -139,8 +139,7 @@ export default function UserDashboard() {
 		<Stack
 			spacing={3}
 			sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-		> 
-    
+		>
 			{/* <Box>
         <Typography component="h5" variant="h5">
           Welcome, {user.first_name}!
@@ -166,7 +165,7 @@ export default function UserDashboard() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Tasks awaiting approval
+					Tasks Waiting to be Approved
 				</Typography>
 				<hr />
 				<Table
@@ -449,7 +448,7 @@ export default function UserDashboard() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Tasks assigned to you
+					Your Tasks
 				</Typography>
 				<hr />
 
@@ -759,7 +758,7 @@ export default function UserDashboard() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Previous Tasks
+					Your Completed Tasks
 				</Typography>
 				<hr />
 				<Table

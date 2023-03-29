@@ -1,4 +1,5 @@
 import {
+
   Button,
   Modal,
   Paper,
@@ -23,6 +24,7 @@ import {
   ImageListItem,
   Snackbar,
   Alert,
+
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
@@ -35,6 +37,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useScript } from "../../../../../../hooks/useScript";
 
 export default function TasksAwaitingApproval() {
+
   const dispatch = useDispatch();
 
   // Access redux stores and define new variables
@@ -738,6 +741,7 @@ export default function TasksAwaitingApproval() {
                     >
                       Assigned To: {""}{" "}
                       {`${infoOfSpecificTask.assigned_to_first_name}
+
 					          ${infoOfSpecificTask.assigned_to_last_name}`}
                     </Typography>
                     <br

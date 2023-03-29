@@ -31,6 +31,7 @@ import {
   Alert,
   TablePagination,
   TableContainer,
+  ImageList,
 } from "@mui/material";
 import moment from "moment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -69,22 +70,17 @@ export default function AdminManageTasks() {
   const [newLocation, setNewLocation] = useState("");
   const [newTag, setNewTag] = useState("");
   const handleDeleteTag = (tagId) => {
-	dispatch({type:"DELETE_TAG", payload: {tagID: tagId}});
-
-  }
+    dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
+  };
   const handleDeleteLocation = (locationId) => {
-	dispatch({type:"DELETE_LOCATION", payload: {locationID: locationId}});
-
-  }
-  const handleAddTag = () =>{
-	
-	dispatch({type:"ADD_TAG", payload: {tagName: newTag}});
-  }
-  const handleAddLocation = () =>{
-	dispatch({type:"ADD_LOCATION", payload: {locationName: newLocation}});
-	
-  }
-
+    dispatch({ type: "DELETE_LOCATION", payload: { LocationID: locationId } });
+  };
+  const handleAddTag = () => {
+    dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
+  };
+  const handleAddLocation = () => {
+    dispatch({ type: "ADD_LOCATION", payload: { locationName: newLocation } });
+  };
 
   //Manage edit mode
   const [editMode, setEditMode] = useState(false);
@@ -433,18 +429,77 @@ export default function AdminManageTasks() {
   };
 
   return (
-    <Stack spacing={3}>
-      <Paper sx={{ p: 3 }}>
-        <Typography>All Tasks</Typography>
-        {/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
+    <Stack
+      spacing={3}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          All Tasks
+        </Typography>
+        <hr />
         <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
+          <Table
+            stickyHeader
+            sx={{
+              width: "100%",
+              tableLayout: "fixed",
+            }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Due Date</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Title
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Location
+                </TableCell>
+                <TableCell
+                  sx={{
+                    backgroundColor: "rgb(241, 241, 241)",
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Status
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -463,17 +518,33 @@ export default function AdminManageTasks() {
                           dispatch({ type: "VIEW_TASK_INFO", payload: task });
                         }}
                       >
-                        <TableCell>{task.title}</TableCell>
-                        <TableCell>{task.location_name}</TableCell>
-                        <TableCell>
-                          {" "}
-                          {task.due_date != null
-                            ? moment(task.due_date).format(
-                                "MMMM Do YYYY, h:mm a"
-                              )
-                            : " "}
+                        <TableCell
+                          sx={{
+                            width: "33%",
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {task.title}
                         </TableCell>
-                        <TableCell>{task.status}</TableCell>
+                        <TableCell
+                          sx={{
+                            width: "33%",
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {task.location_name}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            width: "33%",
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {task.status}
+                        </TableCell>
                       </TableRow>
                     ))
                 : allApprovedTasks
@@ -490,23 +561,40 @@ export default function AdminManageTasks() {
                           dispatch({ type: "VIEW_TASK_INFO", payload: task });
                         }}
                       >
-                        <TableCell>{task.title}</TableCell>
-                        <TableCell>{task.location_name}</TableCell>
-                        <TableCell>
-                          {" "}
-                          {task.due_date != null
-                            ? moment(task.due_date).format(
-                                "MMMM Do YYYY, h:mm a"
-                              )
-                            : " "}
+                        <TableCell
+                          sx={{
+                            width: "33%",
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {task.title}
                         </TableCell>
-                        <TableCell>{task.status}</TableCell>
+                        <TableCell
+                          sx={{
+                            width: "33%",
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {task.location_name}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            width: "33%",
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {task.status}
+                        </TableCell>
                       </TableRow>
                     ))}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
+          sx={{ width: "100%" }}
           rowsPerPageOptions={[5, 15, 25]}
           component="div"
           count={allApprovedTasks.length}
@@ -515,10 +603,13 @@ export default function AdminManageTasks() {
           onPageChange={handleChangePage1}
           onRowsPerPageChange={handleChangeRowsPerPage1}
         />
-        <br />
+        <hr />
+        {/* <br /> */}
         <Box>
           <Box>
-            <FormControl sx={{ width: 300 }}>
+            <FormControl
+              sx={{ width: "31.5%", marginLeft: "5px", marginRight: "5px" }}
+            >
               <InputLabel id="sort-by-location-label">
                 Sort By Location
               </InputLabel>
@@ -532,6 +623,7 @@ export default function AdminManageTasks() {
                   setSortByStatus("");
                   setSortByTags("");
                 }}
+                sx={{}}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -543,7 +635,9 @@ export default function AdminManageTasks() {
                 ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ width: 300 }}>
+            <FormControl
+              sx={{ width: "31.5%", marginLeft: "5px", marginRight: "5px" }}
+            >
               <InputLabel id="sort-by-tags-label">Sort By Tags</InputLabel>
               <Select
                 id="sort-by-tags"
@@ -555,6 +649,7 @@ export default function AdminManageTasks() {
                   setSortByLocation("");
                   setSortByStatus("");
                 }}
+                sx={{}}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -566,7 +661,9 @@ export default function AdminManageTasks() {
                 ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ width: 300 }}>
+            <FormControl
+              sx={{ width: "31.5%", marginLeft: "5px", marginRight: "5px" }}
+            >
               <InputLabel id="sort-by-status-label">Sort By Status</InputLabel>
               <Select
                 id="sort-by-status"
@@ -579,6 +676,7 @@ export default function AdminManageTasks() {
                   setSortByLocation("");
                   setSortByTags("");
                 }}
+                sx={{}}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -598,10 +696,17 @@ export default function AdminManageTasks() {
             handleClose();
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
+          sx={{
+            margin: "0 auto",
+            width: "90%",
+            maxWidth: "750px",
+            overflow: "scroll",
+          }}
         >
           <Stack
             sx={{
               display: "flex",
+              justifyContent: "center",
               alignItems: "center",
             }}
           >
@@ -609,306 +714,575 @@ export default function AdminManageTasks() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
+              elevation={3}
             >
               <ClearIcon onClick={() => setOpen(false)} />
               {/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "rgb(187, 41, 46)",
+                  borderBottom: "1px solid grey",
+                }}
               >
                 Task Info
               </Typography>
               <br />
               <Typography variant="h6" component="h4">
-                Title: {""}
                 {editMode ? (
-                  <TextField
-                    required
-                    type="text"
-                    label="Title"
-                    value={editedTitle}
+                  <Box
                     sx={{
-                      marginBottom: 1,
-                      width: 300,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    variant="outlined"
-                    onChange={(event) => setEditedTitle(event.target.value)}
-                  />
-                ) : (
-                  infoOfSpecificTask.title
-                )}
-              </Typography>
-              <br />
-              <Typography variant="h6" component="h4">
-                Tags:{""}
-              </Typography>
-
-              {editMode ? (
-                <Autocomplete
-                  sx={{
-                    width: 300,
-                    marginBottom: 1,
-                  }}
-                  multiple
-                  value={editedTags}
-                  onChange={(event, newValue) => setEditedTags(newValue)}
-                  inputValue={editedTagInput}
-                  onInputChange={(event, newInputValue) =>
-                    setEditedTagInput(newInputValue)
-                  }
-                  id="all-tags-lookup"
-                  getOptionLabel={(allTags) => `${allTags.tag_name}`}
-                  options={allTags}
-                  isOptionEqualToValue={(option, value) =>
-                    option.tag_name === value.tag_name
-                  }
-                  noOptionsText={"No valid tags"}
-                  renderOption={(props, allTags) => (
-                    <Box component="li" {...props} key={allTags.id}>
-                      {allTags.tag_name}
-                    </Box>
-                  )}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Add Tags" />
-                  )}
-                />
-              ) : (
-                <ul>
-                  {specificTaskTags &&
-                    specificTaskTags.map((tag) => (
-                      <li key={tag.tag_id}>{tag.tag_name}</li>
-                    ))}
-                </ul>
-              )}
-              <br />
-              <Typography variant="h6" component="h4">
-                Budget: {""}
-                {editMode ? (
-                  <>
-                    <InputLabel htmlFor="budget-input">Budget</InputLabel>
-                    <OutlinedInput
-                      type="number"
-                      id="budget-input"
-                      label="Budget"
-                      value={editedBudget}
+                  >
+                    <TextField
+                      required
+                      type="text"
+                      label="Title"
+                      value={editedTitle}
                       sx={{
                         marginBottom: 1,
                         width: 300,
                       }}
-                      onChange={(event) => setEditedBudget(event.target.value)}
                       variant="outlined"
-                      startAdornment={
-                        <InputAdornment position="start">$</InputAdornment>
-                      }
+                      onChange={(event) => setEditedTitle(event.target.value)}
+                    />
+                  </Box>
+                ) : (
+                  <>
+                    <Box sx={{ borderBottom: "1px solid grey" }}>
+                      Title: {""} {infoOfSpecificTask.title}
+                    </Box>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
                     />
                   </>
-                ) : (
-                  `$${infoOfSpecificTask.budget}`
                 )}
               </Typography>
-              <br />
-              <Typography variant="h6" component="h4">
-                Location: {""}
-                {editMode ? (
+              {editMode ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <Autocomplete
-                    required
                     sx={{
                       width: 300,
                       marginBottom: 1,
                     }}
-                    value={editedLocation}
-                    onChange={(event, newValue) => setEditedLocation(newValue)}
-                    inputValue={editedLocationInput}
+                    multiple
+                    value={editedTags}
+                    onChange={(event, newValue) => setEditedTags(newValue)}
+                    inputValue={editedTagInput}
                     onInputChange={(event, newInputValue) =>
-                      setEditedLocationInput(newInputValue)
+                      setEditedTagInput(newInputValue)
                     }
-                    id="all-locations-lookup"
-                    getOptionLabel={(allLocations) =>
-                      `${allLocations.location_name}`
-                    }
-                    options={allLocations}
+                    id="all-tags-lookup"
+                    getOptionLabel={(allTags) => `${allTags.tag_name}`}
+                    options={allTags}
                     isOptionEqualToValue={(option, value) =>
-                      option.location_name === value.location_name
+                      option.tag_name === value.tag_name
                     }
-                    noOptionsText={"No valid locations"}
-                    renderOption={(props, allLocations) => (
-                      <Box component="li" {...props} key={allLocations.id}>
-                        {allLocations.location_name}
+                    noOptionsText={"No valid tags"}
+                    renderOption={(props, allTags) => (
+                      <Box component="li" {...props} key={allTags.id}>
+                        {allTags.tag_name}
                       </Box>
                     )}
                     renderInput={(params) => (
-                      <TextField {...params} label="Add Location" required />
+                      <TextField {...params} label="Add Tags" />
                     )}
                   />
+                </Box>
+              ) : (
+                <>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ borderBottom: "1px solid grey" }}
+                  >
+                    Tags:{""}
+                  </Typography>
+                  <ul>
+                    {specificTaskTags &&
+                      specificTaskTags.map((tag) => (
+                        <li key={tag.tag_id}>{tag.tag_name}</li>
+                      ))}
+                  </ul>
+                </>
+              )}
+
+              <Typography variant="h6" component="h4">
+                {editMode ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <>
+                      <FormControl sx={{ marginBottom: 1 }}>
+                        <InputLabel htmlFor="budget-input">Budget</InputLabel>
+                        <OutlinedInput
+                          type="number"
+                          id="budget-input"
+                          label="Budget"
+                          value={editedBudget}
+                          sx={{
+                            marginBottom: 1,
+                            width: 300,
+                          }}
+                          onChange={(event) =>
+                            setEditedBudget(event.target.value)
+                          }
+                          variant="outlined"
+                          startAdornment={
+                            <InputAdornment position="start">$</InputAdornment>
+                          }
+                        />
+                      </FormControl>
+                    </>
+                  </Box>
                 ) : (
-                  infoOfSpecificTask.location_name
+                  <>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      Budget: {""} {`$${infoOfSpecificTask.budget}`}
+                    </Typography>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
+                  </>
                 )}
               </Typography>
-              <br />
+
+              <Typography variant="h6" component="h4">
+                {editMode ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Autocomplete
+                      required
+                      sx={{
+                        width: 300,
+                        marginBottom: 1,
+                      }}
+                      value={editedLocation}
+                      onChange={(event, newValue) =>
+                        setEditedLocation(newValue)
+                      }
+                      inputValue={editedLocationInput}
+                      onInputChange={(event, newInputValue) =>
+                        setEditedLocationInput(newInputValue)
+                      }
+                      id="all-locations-lookup"
+                      getOptionLabel={(allLocations) =>
+                        `${allLocations.location_name}`
+                      }
+                      options={allLocations}
+                      isOptionEqualToValue={(option, value) =>
+                        option.location_name === value.location_name
+                      }
+                      noOptionsText={"No valid locations"}
+                      renderOption={(props, allLocations) => (
+                        <Box component="li" {...props} key={allLocations.id}>
+                          {allLocations.location_name}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Add Location" required />
+                      )}
+                    />
+                  </Box>
+                ) : (
+                  <>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      Location: {""} {infoOfSpecificTask.location_name}
+                    </Typography>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
+                  </>
+                )}
+              </Typography>
 
               <Typography>
-                Due Date:{" "}
                 {editMode ? (
-                  <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <DatePicker
-                      value={editedDueDate}
-                      sx={{ marginBottom: 1, width: 300 }}
-                      onChange={(newValue) => setEditedDueDate(newValue)}
-                    />
-                  </LocalizationProvider>
-                ) : infoOfSpecificTask.due_date != null ? (
-                  moment(infoOfSpecificTask.due_date).format(
-                    "MMMM Do YYYY, h:mm a"
-                  )
+                  <Box>
+                    <>
+                      {/* This just sets up the window.cloudinary widget */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <p style={{ marginRight: "5%" }}>Upload New File:</p>
+                        <Button
+                          variant="contained"
+                          type="button"
+                          onClick={openWidget}
+                          sx={{
+                            width: "20%",
+                            backgroundColor: "rgb(187, 41, 46)",
+                            "&:hover": {
+                              backgroundColor: "rgb(187, 41, 46)",
+                              transform: "scale(1.03)",
+                            },
+                          }}
+                        >
+                          Pick File
+                        </Button>
+                      </div>
+                      {editedPhotos &&
+                        editedPhotos.map((item) => {
+                          return <img src={item.photo_url} width={100} />;
+                        })}
+                    </>
+                  </Box>
                 ) : (
-                  " "
+                  // if there is no image, there's a big space under location. Might neet to fix that.
+                  <ImageList class="image_line">
+                    {photosForTask != null &&
+                      photosForTask.map((item) => {
+                        return (
+                          <img
+                            src={item.photo_url}
+                            style={{
+                              width: "300px",
+                              border: "1px solid black",
+                              margin: "5px",
+                              "border-radius": "3%",
+                            }}
+                          />
+                        );
+                      })}
+                  </ImageList>
                 )}
               </Typography>
-              <br />
-              <Typography variant="h6" component="h4">
-                Created By: {infoOfSpecificTask.created_by_first_name}{" "}
-                {infoOfSpecificTask.created_by_last_name}
-              </Typography>
-              <br />
-              <Typography variant="h6" component="h4">
-                Assigned To: {""}
+              <Typography>
                 {editMode ? (
-                  <Autocomplete
+                  <Box
                     sx={{
-                      width: 300,
-                      marginBottom: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    value={editedUserLookup}
-                    onChange={(event, newValue) => {
-                      setEditedUserLookup(newValue);
+                  >
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                      <DatePicker
+                        value={editedDueDate}
+                        sx={{ marginBottom: 1, width: 300 }}
+                        onChange={(newValue) => setEditedDueDate(newValue)}
+                      />
+                    </LocalizationProvider>
+                  </Box>
+                ) : infoOfSpecificTask.due_date != null ? (
+                  moment(infoOfSpecificTask.due_date).format(
+                    "MMMM DD YYYY, h:mm a"
+                  )
+                ) : (
+                  <>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      Due Date:{" "}
+                    </Typography>{" "}
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
+                  </>
+                )}
+              </Typography>
+              <Typography variant="h6" component="h4">
+                {editMode ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    inputValue={editedUserLookupInput}
-                    onInputChange={(event, newInputValue) =>
-                      setEditedUserLookupInput(newInputValue)
-                    }
-                    id="all-verified-users-lookup"
-                    getOptionLabel={(verifiedUsers) =>
-                      `${verifiedUsers.first_name} ${verifiedUsers.last_name}`
-                    }
-                    options={verifiedUsers}
-                    isOptionEqualToValue={(option, value) =>
-                      option.first_name === value.first_name
-                    }
-                    noOptionsText={"No valid users"}
-                    renderOption={(props, verifiedUsers) => (
-                      <Box component="li" {...props} key={verifiedUsers.id}>
-                        {verifiedUsers.first_name} {verifiedUsers.last_name}
-                      </Box>
-                    )}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Assign to User" />
-                    )}
-                  />
+                  >
+                    <Autocomplete
+                      sx={{
+                        width: 300,
+                        marginBottom: 1,
+                      }}
+                      value={editedUserLookup}
+                      onChange={(event, newValue) => {
+                        setEditedUserLookup(newValue);
+                      }}
+                      inputValue={editedUserLookupInput}
+                      onInputChange={(event, newInputValue) =>
+                        setEditedUserLookupInput(newInputValue)
+                      }
+                      id="all-verified-users-lookup"
+                      getOptionLabel={(verifiedUsers) =>
+                        `${verifiedUsers.first_name} ${verifiedUsers.last_name}`
+                      }
+                      options={verifiedUsers}
+                      isOptionEqualToValue={(option, value) =>
+                        option.first_name === value.first_name
+                      }
+                      noOptionsText={"No valid users"}
+                      renderOption={(props, verifiedUsers) => (
+                        <Box component="li" {...props} key={verifiedUsers.id}>
+                          {verifiedUsers.first_name} {verifiedUsers.last_name}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Assign to User" />
+                      )}
+                    />
+                  </Box>
                 ) : infoOfSpecificTask.assigned_to_first_name == null ? (
                   " "
                 ) : (
-                  `${infoOfSpecificTask.assigned_to_first_name}
-					${infoOfSpecificTask.assigned_to_last_name}`
-                )}
-              </Typography>
-              <br />
-              <Typography variant="h6" component="h4">
-                Notes: {""}
-                {editMode ? (
-                  <TextField
-                    type="text"
-                    label="Notes"
-                    value={editedNotes}
-                    sx={{
-                      marginBottom: 1,
-                      width: 300,
-                    }}
-                    onChange={(event) => setEditedNotes(event.target.value)}
-                    variant="outlined"
-                  />
-                ) : (
-                  `${infoOfSpecificTask.notes}`
-                )}
-              </Typography>
-              {editMode ? (
-                <>
-                  <Button
-                    variant="contained"
-                    type="button"
-                    onClick={openWidget}
-                    sx={{ width: 300 }}
-                  >
-                    Pick File
-                  </Button>
-
-                  {editedPhotos &&
-                    editedPhotos.map((item) => {
-                      return <img src={item.photo_url} width={100} />;
-                    })}
-                </>
-              ) : (
-                <>
-                  {photosForTask != null &&
-                    photosForTask.map((item) => {
-                      return <img src={item.photo_url} width={100} />;
-                    })}
-                </>
-              )}
-
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleOpenChild();
-                }}
-              >
-                {" "}
-                {commentsForSpecificTask?.length === 0 ? (
-                  `Comments`
-                ) : (
                   <>
-                    {" "}
-                    Comments&nbsp;
-                    <MarkChatUnreadRoundedIcon />{" "}
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      Assigned To: {""}{" "}
+                      {`${infoOfSpecificTask.assigned_to_first_name}
+					          ${infoOfSpecificTask.assigned_to_last_name}`}
+                    </Typography>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
                   </>
                 )}
-              </Button>
+              </Typography>
+              <Typography variant="h6" component="h4">
+                {editMode ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  ></Box>
+                ) : (
+                  <>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      Created By: {""}{" "}
+                      {infoOfSpecificTask.created_by_first_name}{" "}
+                      {infoOfSpecificTask.created_by_last_name}
+                    </Typography>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
+                  </>
+                )}
+              </Typography>
 
-              <Button
-                variant="contained"
-                onClick={
-                  infoOfSpecificTask.assigned_to_first_name
-                    ? handleDropTask
-                    : handleTakeTask
-                }
+              <Typography variant="h6" component="h4">
+                {editMode ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      type="text"
+                      label="Notes"
+                      value={editedNotes}
+                      sx={{
+                        marginBottom: 1,
+                        width: 300,
+                      }}
+                      onChange={(event) => setEditedNotes(event.target.value)}
+                      variant="outlined"
+                    />
+                  </Box>
+                ) : (
+                  <>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      Notes: {""} {`${infoOfSpecificTask.notes}`}
+                    </Typography>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
+                  </>
+                )}
+              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                {!editMode && (
+                  <>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleOpenChild();
+                      }}
+                      sx={{
+                        marginRight: "10%",
+                        width: "40%",
+                        maxWidth: "220px",
+                        marginTop: "5px",
+                        backgroundColor: "rgb(187, 41, 46)",
+                        "&:hover": {
+                          backgroundColor: "rgb(187, 41, 46)",
+                          transform: "scale(1.03)",
+                        },
+                      }}
+                    >
+                      {" "}
+                      {commentsForSpecificTask?.length === 0 ? (
+                        `Comments`
+                      ) : (
+                        <>
+                          {" "}
+                          Comments&nbsp;
+                          <MarkChatUnreadRoundedIcon />{" "}
+                        </>
+                      )}
+                    </Button>
+
+                    <Button
+                      variant="contained"
+                      onClick={
+                        infoOfSpecificTask.assigned_to_first_name
+                          ? handleDropTask
+                          : handleTakeTask
+                      }
+                      sx={{
+                        width: "40%",
+                        maxWidth: "220px",
+                        marginTop: "5px",
+                        backgroundColor: "rgb(187, 41, 46)",
+                        "&:hover": {
+                          backgroundColor: "rgb(187, 41, 46)",
+                          transform: "scale(1.03)",
+                        },
+                      }}
+                    >
+                      {infoOfSpecificTask.assigned_to_first_name
+                        ? "Drop Task"
+                        : "Take"}
+                    </Button>
+                  </>
+                )}
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                {!editMode && (
+                  <Button
+                    variant="contained"
+                    onClick={handleCompleteTask}
+                    sx={{
+                      marginRight: "10%",
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    Mark Task Complete
+                  </Button>
+                )}
+                {editMode ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => submit_edits()}
+                    sx={{
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    Submit Changes
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => setEditMode(!editMode)}
+                    sx={{
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    Edit
+                  </Button>
+                )}
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                {infoOfSpecificTask.assigned_to_first_name
-                  ? "Unassign from personal list"
-                  : "Take"}
-              </Button>
-
-              <Button variant="contained" onClick={handleCompleteTask}>
-                Mark Task Complete
-              </Button>
-
-              {editMode ? (
-                <Button variant="contained" onClick={() => submit_edits()}>
-                  Submit Changes
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  onClick={() => setEditMode(!editMode)}
-                >
-                  Edit
-                </Button>
-              )}
-
-              <Button variant="contained" onClick={handleDeny}>
-                Delete
-              </Button>
+                {!editMode && (
+                  <Button
+                    variant="contained"
+                    onClick={handleDeny}
+                    sx={{
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </Box>
             </Paper>
             <Modal
               open={openChild}
@@ -1001,10 +1375,42 @@ export default function AdminManageTasks() {
           </Stack>
         </Modal>
       </Paper>
-      <Paper>
-        <Stack>
-          <Typography>Create a New Task</Typography>
-          <form onSubmit={handleSubmitTask}>
+      <Stack
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        spacing={3}
+      >
+        <Paper
+          sx={{
+            p: 3,
+            maxWidth: "35vh",
+            width: "90%",
+            backgroundColor: "rgb(241, 241, 241)",
+          }}
+          elevation={3}
+        >
+          <Typography
+            sx={{
+              fontSize: "3vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Create a New Task
+          </Typography>
+          <form
+            onSubmit={handleSubmitTask}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Stack>
               <TextField
                 required
@@ -1138,7 +1544,13 @@ export default function AdminManageTasks() {
                 variant="contained"
                 type="button"
                 onClick={openWidget}
-                sx={{ width: 300 }}
+                sx={{
+                  width: 300,
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                  },
+                }}
               >
                 Pick File
               </Button>
@@ -1164,7 +1576,10 @@ export default function AdminManageTasks() {
                 variant="contained"
                 type="submit"
                 sx={{
-                  marginBottom: 1,
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                  },
                   width: 300,
                 }}
               >
@@ -1172,18 +1587,77 @@ export default function AdminManageTasks() {
               </Button>
             </Stack>
           </form>
-        </Stack>
-      </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
+        </Paper>
+      </Stack>
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         {/* <pre>{JSON.stringify(allCompletedTasks)}</pre> */}
-        <Typography>All Completed Tasks</Typography>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          All Completed Tasks
+        </Typography>
+        <hr />
+
         <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
+          <Table
+            stickyHeader
+            sx={{
+              width: "100%",
+              tableLayout: "fixed",
+            }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Completed By</TableCell>
-                <TableCell>Date Completed</TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Title
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Completed By
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Date Completed
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -1228,6 +1702,10 @@ export default function AdminManageTasks() {
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
           sx={{
+            margin: "0 auto",
+
+            width: "90%",
+            maxWidth: "750px",
             overflow: "scroll",
           }}
         >
@@ -1241,7 +1719,9 @@ export default function AdminManageTasks() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
               elevation={3}
             >
@@ -1249,16 +1729,30 @@ export default function AdminManageTasks() {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderBottom: "1px solid grey",
+                  color: "rgb(187, 41, 46)",
+                }}
               >
                 Task Info
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Title: {infoOfSpecificTask.title}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Tags:
               </Typography>
 
@@ -1268,16 +1762,28 @@ export default function AdminManageTasks() {
                     <li key={tag.tag_id}>{tag.tag_name}</li>
                   ))}
               </ul>
-              <br />
-              <Typography variant="h6" component="h4">
+
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Budget: ${infoOfSpecificTask.budget}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Location: {infoOfSpecificTask.location_name}
               </Typography>
               <br />
-              <Typography>
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
@@ -1286,21 +1792,37 @@ export default function AdminManageTasks() {
                   : " "}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Created By: {infoOfSpecificTask.created_by_first_name}{" "}
                 {infoOfSpecificTask.created_by_last_name}
               </Typography>
-              <Typography variant="h6" component="h4">
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
                 {infoOfSpecificTask.assigned_to_last_name}
               </Typography>
               <br />
-              <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Notes: {infoOfSpecificTask.notes}
               </Typography>
               {photosForTask ? (
-                <Typography variant="h6" component="h4">
+                <Typography
+                  variant="h6"
+                  component="h4"
+                  sx={{ borderBottom: "1px solid grey" }}
+                >
                   Photos:
                 </Typography>
               ) : (
@@ -1310,6 +1832,7 @@ export default function AdminManageTasks() {
                 photosForTask.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
+              <br />
               <Typography variant="h6" component="h4">
                 Comments:
               </Typography>
@@ -1343,145 +1866,228 @@ export default function AdminManageTasks() {
           </Stack>
         </Modal>
       </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
-        <Typography variant="h6" component="h4">
-          Manage Tags:
-        </Typography>
-		<TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Tag Name</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allTags
-                .map((tag) => (
-					
-                  <TableRow
-                    hover
-                    key={tag.id}
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center",  gap: 6,   flexWrap: "wrap", }}
+      >
+        <Paper
+          sx={{
+            p: 3,
+            backgroundColor: "rgb(241, 241, 241)",
+            maxWidth: "300px",
+            width: "100%",
+            marginBottom: 2,
+          }}
+          elevation={3}
+        >
+          <Typography
+            variant="h6"
+            component="h4"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "2.7vh",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Manage Tags:
+          </Typography>
+          <hr />
+          <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
                   >
+                    Tag Name
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Delete
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allTags.map((tag) => (
+                  <TableRow hover key={tag.id}>
                     <TableCell>{tag.tag_name}</TableCell>
                     <TableCell>
-					<Button
-                    variant="contained"
-                    type="button"
-                    onClick={()=> handleDeleteTag(tag.id)}
-                    sx={{ 
-						width: 100 ,
-						backgroundColor: "rgb(187, 41, 46)",
-						"&:hover": {
-							backgroundColor: "rgb(187, 41, 46)",
-							transform: "scale(1.03)",
-						  },
-					}}
-                  >Delete</Button>
+                      <Button
+                        variant="contained"
+                        type="button"
+                        onClick={() => handleDeleteTag(tag.id)}
+                        sx={{
+                          width: 75,
+                          backgroundColor: "rgb(187, 41, 46)",
+                          "&:hover": {
+                            backgroundColor: "rgb(187, 41, 46)",
+                            transform: "scale(1.03)",
+                          },
+                        }}
+                      >
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-		<TextField
-                    type="text"
-                    label="Add new tag"
-                    value={newTag}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TextField
+            type="text"
+            label="Add new tag"
+            value={newTag}
+            sx={{
+              marginBottom: 1,
+              width: 300,
+            }}
+            onChange={(event) => setNewTag(event.target.value)}
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <Button
+                  variant="contained"
+                  onClick={() => handleAddTag()}
+                  sx={{
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  Add
+                </Button>
+              ),
+            }}
+          />
+        </Paper>
+        <Paper
+          sx={{
+            p: 3,
+            backgroundColor: "rgb(241, 241, 241)",
+            maxWidth: "300px",
+            width: "100%",
+            marginBottom: 2,
+          }}
+          elevation={3}
+        >
+          <Typography
+            variant="h6"
+            component="h4"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "2.7vh",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Manage Locations:
+          </Typography>
+          <hr />
+          <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell
                     sx={{
-                      marginBottom: 1,
-                      width: 300,
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
                     }}
-                    onChange={(event) => setNewTag(event.target.value)}
-                    variant="outlined"
-					InputProps={{
-						endAdornment: (
-						  <Button
-							variant="contained"
-							onClick={() => handleAddTag()}
-							sx={{
-							  backgroundColor: "rgb(187, 41, 46)",
-							  "&:hover": {
-								backgroundColor: "rgb(187, 41, 46)",
-								transform: "scale(1.03)",
-							  },
-							}}
-						  >
-							Add
-						  </Button>
-						),
-					  }}
-                  />
-      </Paper>
-	  <Paper sx={{ p: 3 }} elevation={3}>
-        <Typography variant="h6" component="h4">
-          Manage Locations:
-        </Typography>
-		<TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Location</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allLocations
-                .map((location) => (
-                  <TableRow
-                    hover
-                    key={location.id}
                   >
+                    Location
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Delete
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allLocations.map((location) => (
+                  <TableRow hover key={location.id}>
                     <TableCell>{location.location_name}</TableCell>
                     <TableCell>
-					 <Button
-                    variant="contained"
-                    type="button"
-                    onClick={()=> handleDeleteLocation(location.id)}
-                    sx={{ 
-						width: 100 ,
-						backgroundColor: "rgb(187, 41, 46)",
-						"&:hover": {
-							backgroundColor: "rgb(187, 41, 46)",
-							transform: "scale(1.03)",
-						  },
-					 }}
-                  >Delete</Button>
+                      <Button
+                        variant="contained"
+                        type="button"
+                        onClick={() => handleDeleteLocation(location.id)}
+                        sx={{
+                          width: 100,
+                          backgroundColor: "rgb(187, 41, 46)",
+                          "&:hover": {
+                            backgroundColor: "rgb(187, 41, 46)",
+                            transform: "scale(1.03)",
+                          },
+                        }}
+                      >
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-		<TextField
-                    type="text"
-                    label="Add new location"
-                    value={newLocation}
-                    sx={{
-                      marginBottom: 1,
-                      width: 300,
-                    }}
-                    onChange={(event) => setNewLocation(event.target.value)}
-                    variant="outlined"
-					InputProps={{
-						endAdornment: (
-						  <Button
-							variant="contained"
-							onClick={() => handleAddLocation()}
-							sx={{
-							  backgroundColor: "rgb(187, 41, 46)",
-							  "&:hover": {
-								backgroundColor: "rgb(187, 41, 46)",
-								transform: "scale(1.03)",
-							  },
-							}}
-						  >
-							Add
-						  </Button>
-						),
-					  }}
-                  />
-      </Paper>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TextField
+            type="text"
+            label="Add new location"
+            value={newLocation}
+            sx={{
+              marginBottom: 1,
+              width: 300,
+            }}
+            onChange={(event) => setNewLocation(event.target.value)}
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <Button
+                  variant="contained"
+                  onClick={() => handleAddLocation()}
+                  sx={{
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  Add
+                </Button>
+              ),
+            }}
+          />
+        </Paper>
+      </Box>
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
@@ -1491,5 +2097,4 @@ export default function AdminManageTasks() {
       </Snackbar>
     </Stack>
   );
-  å;
 }
