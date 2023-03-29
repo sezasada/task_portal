@@ -73,7 +73,7 @@ export default function AdminManageTasks() {
 
   }
   const handleDeleteLocation = (locationId) => {
-	dispatch({type:"DELETE_LOCATION", payload: {LocationID: locationId}});
+	dispatch({type:"DELETE_LOCATION", payload: {locationID: locationId}});
 
   }
   const handleAddTag = () =>{
