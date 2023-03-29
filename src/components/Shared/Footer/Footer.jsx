@@ -10,7 +10,7 @@ import "./Footer.css";
 function Footer() {
 	return (
 		<footer>
-			<Typography>&copy; Farm in the Dell</Typography>
+			<Typography>&copy; Farm in the Dell of the Red River Valley</Typography>
 		</footer>
 	);
 }
