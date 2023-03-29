@@ -806,25 +806,43 @@ router.get(`/comments/:task_id`, (req, res) => {
 
 //post new location
 router.post(`/add_location`, (req, res) => {
-  const location_name= req.body.location_name;
+  const location_name= req.body.locationName;
   pool.query(`INSERT INTO locations ("location_name")
   VALUES ($1);`, [location_name]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
 });
 //post new tag
 router.post(`/add_tag`, (req, res) => {
-  const tag_name= req.body.tag_name;
+  const tag_name= req.body.tagName;
   pool.query(`INSERT INTO tags ("tag_name")
   VALUES ($1);`, [tag_name]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
 });
 //delete location
-router.delete(`/delete_location/:id`, (req, res) =>{
+//TODO after deploy make sure that the id you update to is the one marked Other in DB
+router.delete(`/delete_location/:id`, async (req, res) =>{
+  try{
   const location_id = req.params.id;
-  pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+  console.log("location_id", location_id);
+  await pool.query(`UPDATE "tasks"
+  SET "location_id" = 20 WHERE "location_id" = $1;`, [location_id]);
+  await pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]);
+  res.sendStatus(200);
+}catch(err){
+  console.log("Error deleting location", err);
+}
 });
 //delete tag
-router.delete(`/delete_tag/:id`, (req, res) =>{
+//TODO after deploy make sure that the id you update to is the one marked Other in DB
+router.delete(`/delete_tag/:id`, async(req, res) =>{
+  try{
   const tag_id = req.params.id;
-  pool.query(`DELETE FROM tags WHERE "id"=$1`, [tag_id]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+  //update the tags_per_tasks table
+  await pool.query(`UPDATE "tags_per_task" SET "tag_id" = 19 WHERE "tag_id" = $1;`, [tag_id]);
+
+  //update the tags table
+  await pool.query(`DELETE FROM tags WHERE "id"=$1`, [tag_id]);
+  }catch(err){
+    console.log("Error deleting tag", err);
+  }
 });
 
 /*BASIC USER PUT ROUTES*/
