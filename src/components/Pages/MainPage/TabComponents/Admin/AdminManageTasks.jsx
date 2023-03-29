@@ -73,18 +73,14 @@ export default function AdminManageTasks() {
     dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
   };
   const handleDeleteLocation = (locationId) => {
-	dispatch({type:"DELETE_LOCATION", payload: {LocationID: locationId}});
-
-  }
-  const handleAddTag = () =>{
-	
-	dispatch({type:"ADD_TAG", payload: {tagName: newTag}});
-  }
-  const handleAddLocation = () =>{
-	dispatch({type:"ADD_LOCATION", payload: {locationName: newLocation}});
-	
-  }
-
+    dispatch({ type: "DELETE_LOCATION", payload: { LocationID: locationId } });
+  };
+  const handleAddTag = () => {
+    dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
+  };
+  const handleAddLocation = () => {
+    dispatch({ type: "ADD_LOCATION", payload: { locationName: newLocation } });
+  };
 
   //Manage edit mode
   const [editMode, setEditMode] = useState(false);
@@ -607,7 +603,8 @@ export default function AdminManageTasks() {
           onPageChange={handleChangePage1}
           onRowsPerPageChange={handleChangeRowsPerPage1}
         />
-        <br />
+        <hr />
+        {/* <br /> */}
         <Box>
           <Box>
             <FormControl
@@ -1092,10 +1089,7 @@ export default function AdminManageTasks() {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                  >
-                    Created By: {infoOfSpecificTask.created_by_first_name}{" "}
-                    {infoOfSpecificTask.created_by_last_name}
-                  </Box>
+                  ></Box>
                 ) : (
                   <>
                     <Typography
@@ -1151,68 +1145,143 @@ export default function AdminManageTasks() {
                 )}
               </Typography>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    handleOpenChild();
-                  }}
-                  sx={{
-                    marginRight: "10%",
-                    width: "40%",
-                    maxWidth: "220px",
-                    marginTop: "5px",
-                    backgroundColor: "rgb(187, 41, 46)",
-                    "&:hover": {
-                      backgroundColor: "rgb(187, 41, 46)",
-                      transform: "scale(1.03)",
-                    },
-                  }}
-                >
-                  {" "}
-                  {commentsForSpecificTask?.length === 0 ? (
-                    `Comments`
-                  ) : (
-                    <>
+                {!editMode && (
+                  <>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleOpenChild();
+                      }}
+                      sx={{
+                        marginRight: "10%",
+                        width: "40%",
+                        maxWidth: "220px",
+                        marginTop: "5px",
+                        backgroundColor: "rgb(187, 41, 46)",
+                        "&:hover": {
+                          backgroundColor: "rgb(187, 41, 46)",
+                          transform: "scale(1.03)",
+                        },
+                      }}
+                    >
                       {" "}
-                      Comments&nbsp;
-                      <MarkChatUnreadRoundedIcon />{" "}
-                    </>
-                  )}
-                </Button>
+                      {commentsForSpecificTask?.length === 0 ? (
+                        `Comments`
+                      ) : (
+                        <>
+                          {" "}
+                          Comments&nbsp;
+                          <MarkChatUnreadRoundedIcon />{" "}
+                        </>
+                      )}
+                    </Button>
 
-                <Button
-                  variant="contained"
-                  onClick={
-                    infoOfSpecificTask.assigned_to_first_name
-                      ? handleDropTask
-                      : handleTakeTask
-                  }
-                >
-                  {infoOfSpecificTask.assigned_to_first_name
-                    ? "Unassign from personal list"
-                    : "Take"}
-                </Button>
-
-                <Button variant="contained" onClick={handleCompleteTask}>
-                  Mark Task Complete
-                </Button>
-
+                    <Button
+                      variant="contained"
+                      onClick={
+                        infoOfSpecificTask.assigned_to_first_name
+                          ? handleDropTask
+                          : handleTakeTask
+                      }
+                      sx={{
+                        width: "40%",
+                        maxWidth: "220px",
+                        marginTop: "5px",
+                        backgroundColor: "rgb(187, 41, 46)",
+                        "&:hover": {
+                          backgroundColor: "rgb(187, 41, 46)",
+                          transform: "scale(1.03)",
+                        },
+                      }}
+                    >
+                      {infoOfSpecificTask.assigned_to_first_name
+                        ? "Drop Task"
+                        : "Take"}
+                    </Button>
+                  </>
+                )}
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                {!editMode && (
+                  <Button
+                    variant="contained"
+                    onClick={handleCompleteTask}
+                    sx={{
+                      marginRight: "10%",
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    Mark Task Complete
+                  </Button>
+                )}
                 {editMode ? (
-                  <Button variant="contained" onClick={() => submit_edits()}>
+                  <Button
+                    variant="contained"
+                    onClick={() => submit_edits()}
+                    sx={{
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
                     Submit Changes
                   </Button>
                 ) : (
                   <Button
                     variant="contained"
                     onClick={() => setEditMode(!editMode)}
+                    sx={{
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
                   >
                     Edit
                   </Button>
                 )}
-
-                <Button variant="contained" onClick={handleDeny}>
-                  Delete
-                </Button>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {!editMode && (
+                  <Button
+                    variant="contained"
+                    onClick={handleDeny}
+                    sx={{
+                      width: "40%",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
               </Box>
             </Paper>
             <Modal
@@ -1306,10 +1375,42 @@ export default function AdminManageTasks() {
           </Stack>
         </Modal>
       </Paper>
-      <Paper>
-        <Stack>
-          <Typography>Create a New Task</Typography>
-          <form onSubmit={handleSubmitTask}>
+      <Stack
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        spacing={3}
+      >
+        <Paper
+          sx={{
+            p: 3,
+            maxWidth: "35vh",
+            width: "90%",
+            backgroundColor: "rgb(241, 241, 241)",
+          }}
+          elevation={3}
+        >
+          <Typography
+            sx={{
+              fontSize: "3vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Create a New Task
+          </Typography>
+          <form
+            onSubmit={handleSubmitTask}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Stack>
               <TextField
                 required
@@ -1443,7 +1544,13 @@ export default function AdminManageTasks() {
                 variant="contained"
                 type="button"
                 onClick={openWidget}
-                sx={{ width: 300 }}
+                sx={{
+                  width: 300,
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                  },
+                }}
               >
                 Pick File
               </Button>
@@ -1469,7 +1576,10 @@ export default function AdminManageTasks() {
                 variant="contained"
                 type="submit"
                 sx={{
-                  marginBottom: 1,
+                  backgroundColor: "rgb(187, 41, 46)",
+                  "&:hover": {
+                    backgroundColor: "rgb(187, 41, 46)",
+                  },
                   width: 300,
                 }}
               >
@@ -1477,18 +1587,77 @@ export default function AdminManageTasks() {
               </Button>
             </Stack>
           </form>
-        </Stack>
-      </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
+        </Paper>
+      </Stack>
+      <Paper
+        sx={{
+          p: 3,
+          maxWidth: "750px",
+          width: "90%",
+          backgroundColor: "rgb(241, 241, 241)",
+        }}
+        elevation={3}
+      >
         {/* <pre>{JSON.stringify(allCompletedTasks)}</pre> */}
-        <Typography>All Completed Tasks</Typography>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "3vh",
+            color: "rgb(187, 41, 46)",
+          }}
+        >
+          All Completed Tasks
+        </Typography>
+        <hr />
+
         <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
+          <Table
+            stickyHeader
+            sx={{
+              width: "100%",
+              tableLayout: "fixed",
+            }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Completed By</TableCell>
-                <TableCell>Date Completed</TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Title
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Completed By
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: "33%",
+                    fontSize: "2vh",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    fontWeight: "bold",
+                    backgroundColor: "rgb(241, 241, 241)",
+                  }}
+                >
+                  Date Completed
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -1533,6 +1702,10 @@ export default function AdminManageTasks() {
             dispatch({ type: "UNVIEW_TASK_INFO" });
           }}
           sx={{
+            margin: "0 auto",
+
+            width: "90%",
+            maxWidth: "750px",
             overflow: "scroll",
           }}
         >
@@ -1546,7 +1719,9 @@ export default function AdminManageTasks() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "20px",
+                width: "90%",
+                padding: "40px",
+                backgroundColor: "rgb(241, 241, 241)",
               }}
               elevation={3}
             >
@@ -1554,16 +1729,30 @@ export default function AdminManageTasks() {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textDecoration: "underline" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderBottom: "1px solid grey",
+                  color: "rgb(187, 41, 46)",
+                }}
               >
                 Task Info
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Title: {infoOfSpecificTask.title}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Tags:
               </Typography>
 
@@ -1573,16 +1762,28 @@ export default function AdminManageTasks() {
                     <li key={tag.tag_id}>{tag.tag_name}</li>
                   ))}
               </ul>
-              <br />
-              <Typography variant="h6" component="h4">
+
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Budget: ${infoOfSpecificTask.budget}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Location: {infoOfSpecificTask.location_name}
               </Typography>
               <br />
-              <Typography>
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Due Date:{" "}
                 {infoOfSpecificTask.due_date != null
                   ? moment(infoOfSpecificTask.due_date).format(
@@ -1591,21 +1792,37 @@ export default function AdminManageTasks() {
                   : " "}
               </Typography>
               <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Created By: {infoOfSpecificTask.created_by_first_name}{" "}
                 {infoOfSpecificTask.created_by_last_name}
               </Typography>
-              <Typography variant="h6" component="h4">
+              <br />
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Assigned To: {infoOfSpecificTask.assigned_to_first_name}{" "}
                 {infoOfSpecificTask.assigned_to_last_name}
               </Typography>
               <br />
-              <br />
-              <Typography variant="h6" component="h4">
+              <Typography
+                variant="h6"
+                component="h4"
+                sx={{ borderBottom: "1px solid grey" }}
+              >
                 Notes: {infoOfSpecificTask.notes}
               </Typography>
               {photosForTask ? (
-                <Typography variant="h6" component="h4">
+                <Typography
+                  variant="h6"
+                  component="h4"
+                  sx={{ borderBottom: "1px solid grey" }}
+                >
                   Photos:
                 </Typography>
               ) : (
@@ -1615,6 +1832,7 @@ export default function AdminManageTasks() {
                 photosForTask.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
+              <br />
               <Typography variant="h6" component="h4">
                 Comments:
               </Typography>
@@ -1648,140 +1866,228 @@ export default function AdminManageTasks() {
           </Stack>
         </Modal>
       </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
-        <Typography variant="h6" component="h4">
-          Manage Tags:
-        </Typography>
-        <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Tag Name</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allTags.map((tag) => (
-                <TableRow hover key={tag.id}>
-                  <TableCell>{tag.tag_name}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      type="button"
-                      onClick={() => handleDeleteTag(tag.id)}
-                      sx={{
-                        width: 100,
-                        backgroundColor: "rgb(187, 41, 46)",
-                        "&:hover": {
-                          backgroundColor: "rgb(187, 41, 46)",
-                          transform: "scale(1.03)",
-                        },
-                      }}
-                    >
-                      Delete
-                    </Button>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center",  gap: 6,   flexWrap: "wrap", }}
+      >
+        <Paper
+          sx={{
+            p: 3,
+            backgroundColor: "rgb(241, 241, 241)",
+            maxWidth: "300px",
+            width: "100%",
+            marginBottom: 2,
+          }}
+          elevation={3}
+        >
+          <Typography
+            variant="h6"
+            component="h4"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "2.7vh",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Manage Tags:
+          </Typography>
+          <hr />
+          <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Tag Name
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Delete
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TextField
-          type="text"
-          label="Add new tag"
-          value={newTag}
-          sx={{
-            marginBottom: 1,
-            width: 300,
-          }}
-          onChange={(event) => setNewTag(event.target.value)}
-          variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <Button
-                variant="contained"
-                onClick={() => handleAddTag()}
-                sx={{
-                  backgroundColor: "rgb(187, 41, 46)",
-                  "&:hover": {
-                    backgroundColor: "rgb(187, 41, 46)",
-                    transform: "scale(1.03)",
-                  },
-                }}
-              >
-                Add
-              </Button>
-            ),
-          }}
-        />
-      </Paper>
-      <Paper sx={{ p: 3 }} elevation={3}>
-        <Typography variant="h6" component="h4">
-          Manage Locations:
-        </Typography>
-        <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Location</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allLocations.map((location) => (
-                <TableRow hover key={location.id}>
-                  <TableCell>{location.location_name}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      type="button"
-                      onClick={() => handleDeleteLocation(location.id)}
-                      sx={{
-                        width: 100,
-                        backgroundColor: "rgb(187, 41, 46)",
-                        "&:hover": {
+              </TableHead>
+              <TableBody>
+                {allTags.map((tag) => (
+                  <TableRow hover key={tag.id}>
+                    <TableCell>{tag.tag_name}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        type="button"
+                        onClick={() => handleDeleteTag(tag.id)}
+                        sx={{
+                          width: 75,
                           backgroundColor: "rgb(187, 41, 46)",
-                          transform: "scale(1.03)",
-                        },
-                      }}
-                    >
-                      Delete
-                    </Button>
+                          "&:hover": {
+                            backgroundColor: "rgb(187, 41, 46)",
+                            transform: "scale(1.03)",
+                          },
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TextField
+            type="text"
+            label="Add new tag"
+            value={newTag}
+            sx={{
+              marginBottom: 1,
+              width: 300,
+            }}
+            onChange={(event) => setNewTag(event.target.value)}
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <Button
+                  variant="contained"
+                  onClick={() => handleAddTag()}
+                  sx={{
+                    backgroundColor: "rgb(187, 41, 46)",
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  Add
+                </Button>
+              ),
+            }}
+          />
+        </Paper>
+        <Paper
+          sx={{
+            p: 3,
+            backgroundColor: "rgb(241, 241, 241)",
+            maxWidth: "300px",
+            width: "100%",
+            marginBottom: 2,
+          }}
+          elevation={3}
+        >
+          <Typography
+            variant="h6"
+            component="h4"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "2.7vh",
+              color: "rgb(187, 41, 46)",
+            }}
+          >
+            Manage Locations:
+          </Typography>
+          <hr />
+          <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Location
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "rgb(241, 241, 241)",
+                      width: "40%",
+                      fontSize: "1.85vh",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Delete
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TextField
-          type="text"
-          label="Add new location"
-          value={newLocation}
-          sx={{
-            marginBottom: 1,
-            width: 300,
-          }}
-          onChange={(event) => setNewLocation(event.target.value)}
-          variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <Button
-                variant="contained"
-                onClick={() => handleAddLocation()}
-                sx={{
-                  backgroundColor: "rgb(187, 41, 46)",
-                  "&:hover": {
+              </TableHead>
+              <TableBody>
+                {allLocations.map((location) => (
+                  <TableRow hover key={location.id}>
+                    <TableCell>{location.location_name}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        type="button"
+                        onClick={() => handleDeleteLocation(location.id)}
+                        sx={{
+                          width: 100,
+                          backgroundColor: "rgb(187, 41, 46)",
+                          "&:hover": {
+                            backgroundColor: "rgb(187, 41, 46)",
+                            transform: "scale(1.03)",
+                          },
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TextField
+            type="text"
+            label="Add new location"
+            value={newLocation}
+            sx={{
+              marginBottom: 1,
+              width: 300,
+            }}
+            onChange={(event) => setNewLocation(event.target.value)}
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <Button
+                  variant="contained"
+                  onClick={() => handleAddLocation()}
+                  sx={{
                     backgroundColor: "rgb(187, 41, 46)",
-                    transform: "scale(1.03)",
-                  },
-                }}
-              >
-                Add
-              </Button>
-            ),
-          }}
-        />
-      </Paper>
+                    "&:hover": {
+                      backgroundColor: "rgb(187, 41, 46)",
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  Add
+                </Button>
+              ),
+            }}
+          />
+        </Paper>
+      </Box>
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
