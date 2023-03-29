@@ -96,7 +96,6 @@ export default function TasksAwaitingApproval() {
   );
   const [editedTaskID, setEditedTaskID] = useState("");
   const [editedPhotos, setEditedPhotos] = useState("");
-  console.log("editedLocation", editedLocation);
 
   useEffect(() => {
     if (editMode) {
