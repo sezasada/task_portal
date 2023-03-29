@@ -1015,11 +1015,11 @@ router.put(`/admin_incomplete_task`, (req, res) => {
 
 //admin edits original settings for task
 router.put(`/admin_edit_task`, async (req, res) => {
-  // console.log("just getting into admin edit task, this is req.body", req.body);
+   console.log("just getting into admin edit task, this is req.body", req.body);
 
   let title = req.body.title;
   let tagObjects = req.body.tags;
-  let tags = [];
+  let tags = req.body.tags;
   tagObjects.map((tag) => tags.push(tag.id));
   let notes = req.body.notes;
   let has_budget = req.body.has_budget;
@@ -1067,7 +1067,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
     for (let photo of photos) {
       await pool.query(add_photos_query, [task_id, photo.photo_url]);
     }
-    // console.log("about to check assigned_to_id", assigned_to_id);
+     console.log("about to check assigned_to_id", assigned_to_id);
     if (assigned_to_id) {
       //if there is an assiged to, update the assigned to id and time assigned in db
       const assignedQuery = `UPDATE "tasks"
@@ -1106,8 +1106,11 @@ router.put(`/admin_edit_task`, async (req, res) => {
     //then add all updated tags for this task to the tags_per_task table
     const queryText2 = `INSERT INTO "tags_per_task" ("task_id", "tag_id")
   VALUES ($1, $2)`;
+  console.log("tags", tags);
     for (let tag of tags) {
+      if (tag){
       await pool.query(queryText2, [task_id, tag]);
+      }
     }
     res.sendStatus(200);
   } catch (err) {

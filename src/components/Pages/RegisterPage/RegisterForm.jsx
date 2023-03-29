@@ -1,5 +1,4 @@
-import { TextFieldsRounded } from "@mui/icons-material";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, Paper } from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,76 +29,102 @@ function RegisterForm() {
 	}; // end registerUser
 
 	return (
-		<form className="formPanel" onSubmit={registerUser}>
-			<Typography component="h2" variant="h4">
-				Register User
-			</Typography>
-			{errors.registrationMessage && (
-				<Typography component="h3" variant="h6" className="alert" role="alert">
-					{errors.registrationMessage}
+		<Paper
+			sx={{
+				p: 3,
+				backgroundColor: "rgb(241, 241, 241)",
+			}}
+			elevation={3}
+		>
+			<form onSubmit={registerUser}>
+				<Typography
+					component="h2"
+					variant="h4"
+					sx={{ textDecoration: "underline" }}
+				>
+					Register
 				</Typography>
-			)}
-			<br />
-			<Stack spacing={1}>
-				<Box>
-					<TextField
-						type="text"
-						name="first-name"
-						label="Enter First Name"
-						value={firstName}
-						required
-						onChange={(event) => setFirstName(event.target.value)}
-					/>
-				</Box>
-				<Box>
-					<TextField
-						type="text"
-						name="last-name"
-						value={lastName}
-						label="Enter Last Name"
-						required
-						onChange={(event) => setLastName(event.target.value)}
-					/>
-				</Box>
-				<Box>
-					<TextField
-						type="email"
-						name="email"
-						value={username}
-						label="Enter Email Address"
-						required
-						onChange={(event) => setUsername(event.target.value)}
-					/>
-				</Box>
-				<Box>
-					<TextField
-						type="password"
-						name="password"
-						value={password}
-						label="Enter Password"
-						required
-						onChange={(event) => setPassword(event.target.value)}
-					/>
-				</Box>
-				<Box>
-					<MuiTelInput
-						value={phoneNumber}
-						label="Enter Phone Number"
-						required
-						defaultCountry="US"
-						flagSize="small"
-						onChange={(newPhone) => {
-							setPhoneNumber(newPhone);
-						}}
-					/>
-				</Box>
-				<Box>
-					<Button type="submit" variant="contained">
-						Register
-					</Button>
-				</Box>
-			</Stack>
-		</form>
+
+				{errors.registrationMessage && (
+					<>
+						<br />
+						<Typography
+							component="h3"
+							variant="h6"
+							className="alert"
+							role="alert"
+						>
+							{errors.registrationMessage}
+						</Typography>
+					</>
+				)}
+				<br />
+				<Stack spacing={1}>
+					<Box>
+						<TextField
+							sx={{ width: "238px" }}
+							type="text"
+							name="first-name"
+							label="Enter First Name"
+							value={firstName}
+							required
+							onChange={(event) => setFirstName(event.target.value)}
+						/>
+					</Box>
+					<Box>
+						<TextField
+							sx={{ width: "238px" }}
+							type="text"
+							name="last-name"
+							value={lastName}
+							label="Enter Last Name"
+							required
+							onChange={(event) => setLastName(event.target.value)}
+						/>
+					</Box>
+					<Box>
+						<TextField
+							sx={{ width: "238px" }}
+							type="email"
+							name="email"
+							value={username}
+							label="Enter Email Address"
+							required
+							onChange={(event) => setUsername(event.target.value)}
+						/>
+					</Box>
+					<Box>
+						<TextField
+							sx={{ width: "238px" }}
+							type="password"
+							name="password"
+							value={password}
+							label="Enter Password"
+							required
+							onChange={(event) => setPassword(event.target.value)}
+						/>
+					</Box>
+					<Box>
+						<MuiTelInput
+							sx={{ width: "238px" }}
+							value={phoneNumber}
+							label="Enter Phone Number"
+							required
+							defaultCountry="US"
+							flagSize="small"
+							onChange={(newPhone) => {
+								setPhoneNumber(newPhone);
+							}}
+						/>
+					</Box>
+					<Box>
+						<Button type="submit" variant="contained">
+							Register
+						</Button>
+					</Box>
+				</Stack>
+			</form>
+		</Paper>
 	);
 }
 
