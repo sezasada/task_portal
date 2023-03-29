@@ -73,14 +73,18 @@ export default function AdminManageTasks() {
     dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
   };
   const handleDeleteLocation = (locationId) => {
-    dispatch({ type: "DELETE_LOCATION", payload: { LocationID: locationId } });
-  };
-  const handleAddTag = () => {
-    dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
-  };
-  const handleAddLocation = () => {
-    dispatch({ type: "ADD_LOCATION", payload: { locationName: newLocation } });
-  };
+	dispatch({type:"DELETE_LOCATION", payload: {LocationID: locationId}});
+
+  }
+  const handleAddTag = () =>{
+	
+	dispatch({type:"ADD_TAG", payload: {tagName: newTag}});
+  }
+  const handleAddLocation = () =>{
+	dispatch({type:"ADD_LOCATION", payload: {locationName: newLocation}});
+	
+  }
+
 
   //Manage edit mode
   const [editMode, setEditMode] = useState(false);

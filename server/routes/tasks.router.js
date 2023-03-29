@@ -647,23 +647,23 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       );
       console.log("userEmail.rows[0].username", userEmail.rows[0].username);
       console.log("userEmail.rows[0].send_emails", userEmail.rows[0].send_emails);
-        //only send email if user is set to recieve emails
-      if(userEmail.rows[0].send_emails === true){
-      const msg = {
-        to: userEmail.rows[0].username,
-        from: "kathrynszombatfalvy@gmail.com",
-        subject: "Task Assigned to You",
-        html: `
+      //only send email if user is set to recieve emails
+      if (userEmail.rows[0].send_emails === true) {
+        const msg = {
+          to: userEmail.rows[0].username,
+          from: "kathrynszombatfalvy@gmail.com",
+          subject: "Task Assigned to You",
+          html: `
       <p>Hello,</p>
       <p>A new task has been assigned to you.</p>
       <a href="http://localhost:3000/#/main">View Task</a>
       <p>Thank you.</p>`,
-      };
-      //send email to the user
-      await sgMail.send(msg);
-      console.log("Email sent");
+        };
+        //send email to the user
+        await sgMail.send(msg);
+        console.log("Email sent");
+      }
     }
-  }
 
     res.send(result.rows[0]);
   } catch (error) {
@@ -747,7 +747,7 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
     const linkToPortal = "http://localhost:3000/#/main";
 
     for (email of adminEmails) {
-   
+
       const msg = {
         to: email.username,
         from: "kathrynszombatfalvy@gmail.com",
@@ -760,8 +760,8 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
       };
 
       await sgMail.send(msg);
-    
-  }
+
+    }
 
     res.send(result.rows[0]);
   } catch (error) {
@@ -806,25 +806,43 @@ router.get(`/comments/:task_id`, (req, res) => {
 
 //post new location
 router.post(`/add_location`, (req, res) => {
-  const location_name= req.body.location_name;
+  const location_name= req.body.locationName;
   pool.query(`INSERT INTO locations ("location_name")
   VALUES ($1);`, [location_name]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
 });
 //post new tag
 router.post(`/add_tag`, (req, res) => {
-  const tag_name= req.body.tag_name;
+  const tag_name= req.body.tagName;
   pool.query(`INSERT INTO tags ("tag_name")
   VALUES ($1);`, [tag_name]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
 });
 //delete location
-router.delete(`/delete_location/:id`, (req, res) =>{
+//TODO after deploy make sure that the id you update to is the one marked Other in DB
+router.delete(`/delete_location/:id`, async (req, res) =>{
+  try{
   const location_id = req.params.id;
-  pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+  console.log("location_id", location_id);
+  await pool.query(`UPDATE "tasks"
+  SET "location_id" = 20 WHERE "location_id" = $1;`, [location_id]);
+  await pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]);
+  res.sendStatus(200);
+}catch(err){
+  console.log("Error deleting location", err);
+}
 });
 //delete tag
-router.delete(`/delete_tag/:id`, (req, res) =>{
+//TODO after deploy make sure that the id you update to is the one marked Other in DB
+router.delete(`/delete_tag/:id`, async(req, res) =>{
+  try{
   const tag_id = req.params.id;
-  pool.query(`DELETE FROM tags WHERE "id"=$1`, [tag_id]).then((response) => res.sendStatus(200)).catch((err) => res.sendStatus(500));
+  //update the tags_per_tasks table
+  await pool.query(`UPDATE "tags_per_task" SET "tag_id" = 19 WHERE "tag_id" = $1;`, [tag_id]);
+
+  //update the tags table
+  await pool.query(`DELETE FROM tags WHERE "id"=$1`, [tag_id]);
+  }catch(err){
+    console.log("Error deleting tag", err);
+  }
 });
 
 /*BASIC USER PUT ROUTES*/
@@ -1064,22 +1082,22 @@ router.put(`/admin_edit_task`, async (req, res) => {
         [assigned_to_id]
       );
       console.log("userEmail.rows[0].username", userEmail.rows[0].username);
-      if(userEmail.rows[0].send_emails === true){
-      const msg = {
-        to: userEmail.rows[0].username,
-        from: "kathrynszombatfalvy@gmail.com",
-        subject: "Task Assigned to You",
-        html: `
+      if (userEmail.rows[0].send_emails === true) {
+        const msg = {
+          to: userEmail.rows[0].username,
+          from: "kathrynszombatfalvy@gmail.com",
+          subject: "Task Assigned to You",
+          html: `
       <p>Hello,</p>
       <p>A new task has been assigned to you.</p>
       <a href="http://localhost:3000/#/main">View Task</a>
       <p>Thank you.</p>`,
-      };
-      //send email to the user
-      await sgMail.send(msg);
-      console.log("Email sent");
+        };
+        //send email to the user
+        await sgMail.send(msg);
+        console.log("Email sent");
+      }
     }
-  }
 
     //then delete all current tags related to this task_id on the tags_per_task table
     const queryDelete = `DELETE FROM "tags_per_task" WHERE "task_id" = $1`;
@@ -1099,12 +1117,11 @@ router.put(`/admin_edit_task`, async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+  const id = req.params.id;
+  console.log("this is the id for the task we should be deleting", id);
   try {
-    const task = await pool.query("SELECT * FROM tasks WHERE id = $1", [id]);
-    if (task.rows.length === 0) {
-      // console.log("no task is found");
-    }
+    // const task = await pool.query("SELECT * FROM tasks WHERE id = $1", [id]);
+    // console.log(task);
     await pool.query(`DELETE FROM "comments" WHERE "task_id" = $1`, [id]);
     //delete related photos from photos table
     await pool.query(`DELETE FROM "photos" WHERE "task_id" = $1`, [id]);

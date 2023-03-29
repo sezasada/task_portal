@@ -16,11 +16,9 @@ import {
 	OutlinedInput,
 	InputLabel,
 	List,
-	ListItem,
 	Card,
 	FormControl,
 	ImageList,
-	ImageListItem,
 	Snackbar,
 	Alert,
 } from "@mui/material";
@@ -130,7 +128,7 @@ export default function TasksAwaitingApproval() {
 			due_date: editedDueDate,
 			task_id: editedTaskID,
 			photos: editedPhotos,
-			assiged_to_id: editedUserLookup,
+			assigned_to_id: editedUserLookup,
 		};
 		console.log("newObj", newObj);
 
@@ -231,7 +229,7 @@ export default function TasksAwaitingApproval() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Tasks awaiting approval
+					Tasks to be Reviewed
 				</Typography>
 				<hr />
 				<Table
@@ -594,7 +592,7 @@ export default function TasksAwaitingApproval() {
 								</Box>
 							) : (
 								// if there is no image, there's a big space under location. Might neet to fix that.
-								<ImageList class="image_line">
+								<ImageList className="image_line">
 									{photosForTask != null &&
 										photosForTask.map((item) => {
 											return (

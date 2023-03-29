@@ -18,10 +18,19 @@ function* deleteTagSaga(action) {
         console.log('Error with deleting tag:', error);
     }
 }
+function* addTagSaga(action) {
+    try{
+        yield axios.post(`/api/tasks/add_tag`, action.payload);
+        yield put({ type: "FETCH_ALL_TAGS" });
+    }catch(error){
+        console.log('Error with adding tag:', error);
+    }
+}
 
 function* tagsSaga() {
     yield takeLatest("FETCH_ALL_TAGS", fetchAllTagsSaga);
     yield takeLatest("DELETE_TAG", deleteTagSaga);
+    yield takeLatest("ADD_TAG", addTagSaga);
 }
 
 export default tagsSaga;
