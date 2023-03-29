@@ -214,7 +214,7 @@ export default function TasksAwaitingApproval() {
 				sx={{
 					p: 3,
 					maxWidth: "750px",
-					width: "90%",
+					// width: "",
 					backgroundColor: "rgb(241, 241, 241)",
 				}}
 				elevation={3}

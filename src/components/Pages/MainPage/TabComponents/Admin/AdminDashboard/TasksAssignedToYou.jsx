@@ -110,7 +110,6 @@ export default function TasksAssignedToYou() {
 				sx={{
 					p: 3,
 					maxWidth: "750px",
-					width: "90%",
 					backgroundColor: "rgb(241, 241, 241)",
 				}}
 				elevation={3}
