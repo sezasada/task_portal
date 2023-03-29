@@ -383,6 +383,18 @@ export default function AdminManageTasks() {
 		setPage(0);
 	};
 
+	const [page1, setPage1] = useState(0);
+	const [rowsPerPage1, setRowsPerPage1] = useState(5);
+
+	const handleChangePage1 = (event, newPage) => {
+		setPage1(newPage);
+	};
+
+	const handleChangeRowsPerPage1 = (event) => {
+		setRowsPerPage1(+event.target.value);
+		setPage1(0);
+	};
+
 	// -------------- Snackbar Stuff -------------- //
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -404,57 +416,84 @@ export default function AdminManageTasks() {
 			<Paper sx={{ p: 3 }}>
 				<Typography>All Tasks</Typography>
 				{/* <pre>{JSON.stringify(allApprovedTasks)}</pre> */}
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Title</TableCell>
-							<TableCell>Location</TableCell>
-							<TableCell>Due Date</TableCell>
-							<TableCell>Status</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{sortMode
-							? sortedTasks.map((task) => (
-									<TableRow
-										key={task.id}
-										onClick={() => {
-											handleOpen();
-											dispatch({ type: "VIEW_TASK_INFO", payload: task });
-										}}
-									>
-										<TableCell>{task.title}</TableCell>
-										<TableCell>{task.location_name}</TableCell>
-										<TableCell>
-											{" "}
-											{task.due_date != null
-												? moment(task.due_date).format("MMMM Do YYYY, h:mm a")
-												: " "}
-										</TableCell>
-										<TableCell>{task.status}</TableCell>
-									</TableRow>
-							  ))
-							: allApprovedTasks.map((task) => (
-									<TableRow
-										key={task.id}
-										onClick={() => {
-											handleOpen();
-											dispatch({ type: "VIEW_TASK_INFO", payload: task });
-										}}
-									>
-										<TableCell>{task.title}</TableCell>
-										<TableCell>{task.location_name}</TableCell>
-										<TableCell>
-											{" "}
-											{task.due_date != null
-												? moment(task.due_date).format("MMMM Do YYYY, h:mm a")
-												: " "}
-										</TableCell>
-										<TableCell>{task.status}</TableCell>
-									</TableRow>
-							  ))}
-					</TableBody>
-				</Table>
+				<TableContainer sx={{ height: "325px", overflow: "scroll" }}>
+					<Table stickyHeader>
+						<TableHead>
+							<TableRow>
+								<TableCell>Title</TableCell>
+								<TableCell>Location</TableCell>
+								<TableCell>Due Date</TableCell>
+								<TableCell>Status</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{sortMode
+								? sortedTasks
+										.slice(
+											page1 * rowsPerPage1,
+											page1 * rowsPerPage1 + rowsPerPage1
+										)
+										.map((task) => (
+											<TableRow
+												hover
+												key={task.id}
+												onClick={() => {
+													handleOpen();
+													dispatch({ type: "VIEW_TASK_INFO", payload: task });
+												}}
+											>
+												<TableCell>{task.title}</TableCell>
+												<TableCell>{task.location_name}</TableCell>
+												<TableCell>
+													{" "}
+													{task.due_date != null
+														? moment(task.due_date).format(
+																"MMMM Do YYYY, h:mm a"
+														  )
+														: " "}
+												</TableCell>
+												<TableCell>{task.status}</TableCell>
+											</TableRow>
+										))
+								: allApprovedTasks
+										.slice(
+											page1 * rowsPerPage1,
+											page1 * rowsPerPage1 + rowsPerPage1
+										)
+										.map((task) => (
+											<TableRow
+												hover
+												key={task.id}
+												onClick={() => {
+													handleOpen();
+													dispatch({ type: "VIEW_TASK_INFO", payload: task });
+												}}
+											>
+												<TableCell>{task.title}</TableCell>
+												<TableCell>{task.location_name}</TableCell>
+												<TableCell>
+													{" "}
+													{task.due_date != null
+														? moment(task.due_date).format(
+																"MMMM Do YYYY, h:mm a"
+														  )
+														: " "}
+												</TableCell>
+												<TableCell>{task.status}</TableCell>
+											</TableRow>
+										))}
+						</TableBody>
+					</Table>
+				</TableContainer>
+				<TablePagination
+					rowsPerPageOptions={[5, 15, 25]}
+					component="div"
+					count={allApprovedTasks.length}
+					rowsPerPage={rowsPerPage1}
+					page={page1}
+					onPageChange={handleChangePage1}
+					onRowsPerPageChange={handleChangeRowsPerPage1}
+				/>
 				<br />
 				<Box>
 					<Box>
@@ -1115,7 +1154,7 @@ export default function AdminManageTasks() {
 			<Paper sx={{ p: 3 }} elevation={3}>
 				{/* <pre>{JSON.stringify(allCompletedTasks)}</pre> */}
 				<Typography>All Completed Tasks</Typography>
-				<TableContainer sx={{ maxHeight: "300px", overflow: "scroll" }}>
+				<TableContainer sx={{ height: "325px", overflow: "scroll" }}>
 					<Table stickyHeader>
 						<TableHead>
 							<TableRow>
