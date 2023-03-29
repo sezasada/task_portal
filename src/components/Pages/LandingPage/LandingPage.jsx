@@ -1,76 +1,98 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import './LandingPage.css';
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import "./LandingPage.css";
 
 // CUSTOM COMPONENTS
-import RegisterForm from '../RegisterPage/RegisterForm';
+import RegisterForm from "../RegisterPage/RegisterForm";
+import { Box, Button, Paper, Typography } from "@mui/material";
 
 function LandingPage() {
-  const [heading, setHeading] = useState('Welcome');
-  const history = useHistory();
+	const history = useHistory();
 
-  const onLogin = (event) => {
-    history.push('/login');
-  };
+	const onLogin = (event) => {
+		history.push("/login");
+	};
 
-  return (
-    <div className="container">
-      <h2>{heading}</h2>
-
-      <div className="grid">
-        <div className="grid-col grid-col_8">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-            id felis metus. Vestibulum et pulvinar tortor. Morbi pharetra lacus
-            ut ex molestie blandit. Etiam et turpis sit amet risus mollis
-            interdum. Suspendisse et justo vitae metus bibendum fringilla sed
-            sed justo. Aliquam sollicitudin dapibus lectus, vitae consequat odio
-            elementum eget. Praesent efficitur eros vitae nunc interdum, eu
-            interdum justo facilisis. Sed pulvinar nulla ac dignissim efficitur.
-            Quisque eget eros metus. Vestibulum bibendum fringilla nibh a
-            luctus. Duis a sapien metus.
-          </p>
-
-          <p>
-            Praesent consectetur orci dui, id elementum eros facilisis id. Sed
-            id dolor in augue porttitor faucibus eget sit amet ante. Nunc
-            consectetur placerat pharetra. Aenean gravida ex ut erat commodo, ut
-            finibus metus facilisis. Nullam eget lectus non urna rhoncus
-            accumsan quis id massa. Curabitur sit amet dolor nisl. Proin
-            euismod, augue at condimentum rhoncus, massa lorem semper lacus, sed
-            lobortis augue mi vel felis. Duis ultrices sapien at est convallis
-            congue.
-          </p>
-
-          <p>
-            Fusce porta diam ac tortor elementum, ut imperdiet metus volutpat.
-            Suspendisse posuere dapibus maximus. Aliquam vitae felis libero. In
-            vehicula sapien at semper ultrices. Vivamus sed feugiat libero. Sed
-            sagittis neque id diam euismod, ut egestas felis ultricies. Nullam
-            non fermentum mauris. Sed in enim ac turpis faucibus pretium in sit
-            amet nisi.
-          </p>
-        </div>
-        <div className="grid-col grid-col_4">
-          <RegisterForm />
-
-          <center>
-            <h4>Already a Member?</h4>
-            <button className="btn btn_sizeSm" onClick={onLogin}>
-              Login
-            </button>
-
-            <button
-          type="button"
-          className="btn btn_sizeSm"
-          onClick={() => {
-            history.push("/request_reset");
-          }}>Reset Password</button>
-          </center>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<Box
+			sx={{
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				flexDirection: "column",
+				flexWrap: "wrap",
+				maxWidth: "100%",
+			}}
+		>
+			<Paper
+				sx={{
+					p: 3,
+					backgroundColor: "rgb(241, 241, 241)",
+					maxWidth: "750px",
+					minWidth: "275px",
+				}}
+				elevation={3}
+			>
+				<Typography
+					component="h2"
+					variant="h4"
+					sx={{ textDecoration: "underline", textAlign: "center" }}
+				>
+					Welcome to the Task Portal!
+				</Typography>
+			</Paper>
+			<br />
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+					maxWidth: "750px",
+					minWidth: "300px",
+				}}
+			>
+				<Box
+					sx={{
+						width: "50%",
+					}}
+				>
+					<Paper
+						sx={{
+							p: 3,
+							backgroundColor: "rgb(241, 241, 241)",
+						}}
+						elevation={3}
+					>
+						<Typography variant="p" component="p">
+							This application is designed to aid in task management for Farm in
+							Dell of the Red River Valley. After registering an account here
+							you must be approved to gain access to the rest of the
+							application. If you need to inquire about getting your account
+							approved, please contact the main office.
+						</Typography>
+					</Paper>
+				</Box>
+				<Box
+					sx={{
+						width: "40%",
+					}}
+				>
+					<RegisterForm />
+					<center>
+						<Typography component="h4" variant="subtitle1" fontWeight="bold">
+							Already a Member?
+						</Typography>
+						<Button
+							className="btn btn_sizeSm"
+							onClick={onLogin}
+							variant="contained"
+						>
+							Login
+						</Button>
+					</center>
+				</Box>
+			</Box>
+		</Box>
+	);
 }
 
 export default LandingPage;
