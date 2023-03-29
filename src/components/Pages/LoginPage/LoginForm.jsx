@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -28,55 +28,74 @@ function LoginForm() {
 	}; // end login
 
 	return (
-		<form className="formPanel" onSubmit={login}>
-			<Typography component="h2" variant="h4">
-				Login
-			</Typography>
-			{errors.loginMessage && (
-				<Typography variant="h6" component="h3" className="alert" role="alert">
-					{errors.loginMessage}
+		<Paper
+			sx={{ p: 3, backgroundColor: "rgb(241, 241, 241)", maxWidth: "750px" }}
+			elevation={3}
+		>
+			<form onSubmit={login}>
+				<Typography
+					component="h2"
+					variant="h4"
+					sx={{ textDecoration: "underline" }}
+				>
+					Login
 				</Typography>
-			)}
-			<br />
-			<Box>
-				<TextField
-					type="email"
-					name="username"
-					label="Email"
-					required
-					value={username}
-					onChange={(event) => setUsername(event.target.value)}
-				/>
-			</Box>
-			<br />
-			<Box>
-				<TextField
-					type="password"
-					name="password"
-					label="Password"
-					required
-					value={password}
-					onChange={(event) => setPassword(event.target.value)}
-				/>
-			</Box>
-			<br />
-			<Box>
-				<Button variant="contained" type="submit" name="submit" value="Log In">
-					Log In
+				{errors.loginMessage && (
+					<Typography
+						variant="h6"
+						component="h3"
+						className="alert"
+						role="alert"
+					>
+						{errors.loginMessage}
+					</Typography>
+				)}
+				<br />
+				<Box>
+					<TextField
+						type="email"
+						name="username"
+						label="Email"
+						required
+						value={username}
+						onChange={(event) => setUsername(event.target.value)}
+					/>
+				</Box>
+				<br />
+				<Box>
+					<TextField
+						type="password"
+						name="password"
+						label="Password"
+						required
+						value={password}
+						onChange={(event) => setPassword(event.target.value)}
+					/>
+				</Box>
+				<br />
+				<Box>
+					<Button
+						variant="contained"
+						type="submit"
+						name="submit"
+						value="Log In"
+					>
+						Log In
+					</Button>
+				</Box>
+				<br />
+				<Button
+					variant="contained"
+					type="button"
+					className="btn btn_sizeSm"
+					onClick={() => {
+						history.push("/request_reset");
+					}}
+				>
+					Reset Password
 				</Button>
-			</Box>
-			<br />
-			<Button
-				variant="contained"
-				type="button"
-				className="btn btn_sizeSm"
-				onClick={() => {
-					history.push("/request_reset");
-				}}
-			>
-				Reset Password
-			</Button>
-		</form>
+			</form>
+		</Paper>
 	);
 }
 

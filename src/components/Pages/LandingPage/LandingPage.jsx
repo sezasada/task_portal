@@ -22,6 +22,7 @@ function LandingPage() {
 				flexDirection: "column",
 				flexWrap: "wrap",
 				maxWidth: "100%",
+				p: 3,
 			}}
 		>
 			<Paper
