@@ -100,7 +100,8 @@ function* markTaskApprovedSaga(action) {
 // Deny means delete in this case
 function* denyTaskSaga(action) {
   try {
-    yield axios.delete(`/api/tasks/${action.payload}`);
+    console.log("deny task saga, action.payload", action.payload.task_id)
+    yield axios.delete(`/api/tasks/${action.payload.task_id}`);
     yield put({ type: "FETCH_INCOMING_TASKS" });
     const response = yield axios.get("/api/tasks/all_tasks");
     yield put({ type: "SET_ALL_TASKS", payload: response.data });
