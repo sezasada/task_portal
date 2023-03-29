@@ -100,7 +100,8 @@ function* markTaskApprovedSaga(action) {
 // Deny means delete in this case
 function* denyTaskSaga(action) {
   try {
-    yield axios.delete(`/api/tasks/${action.payload}`);
+    console.log("this is our payload:", action.payload);
+    yield axios.delete(`/api/tasks/${action.payload.task_id}`);
     yield put({ type: "FETCH_INCOMING_TASKS" });
     const response = yield axios.get("/api/tasks/all_tasks");
     yield put({ type: "SET_ALL_TASKS", payload: response.data });
@@ -112,26 +113,26 @@ function* denyTaskSaga(action) {
 }
 
 function* completeTaskSaga(action) {
-    try {
-        const updateCompletion = { ...action.payload, is_admin: true };
-        yield call(axios.put, '/api/user/update_admin', updateCompletion);
-        const response = yield axios.get('/api/user/verified');
-        yield put({ type: 'SET_VERIFIED_USERS', payload: response.data });
-    } catch (error) {
-        console.error('Error in demoting a user', error);
-    }
+  try {
+    const updateCompletion = { ...action.payload, is_admin: true };
+    yield call(axios.put, '/api/user/update_admin', updateCompletion);
+    const response = yield axios.get('/api/user/verified');
+    yield put({ type: 'SET_VERIFIED_USERS', payload: response.data });
+  } catch (error) {
+    console.error('Error in demoting a user', error);
+  }
 }
 
-function* submitEditsSaga(action){
+function* submitEditsSaga(action) {
   console.log("submit edits saga, action.payload", action.payload);
-  try{
+  try {
     yield axios.put('/api/tasks/admin_edit_task', action.payload);
 
     yield put({ type: "FETCH_ALL_TASKS" });
     yield put({ type: "FETCH_INCOMING_TASKS" });
 
 
-  } catch (error){
+  } catch (error) {
     console.log("error in edit task saga", error);
   }
 
@@ -147,7 +148,7 @@ function* tasksSaga() {
   yield takeLatest("MARK_TASK_APPROVED", markTaskApprovedSaga);
   yield takeLatest("DENY_TASK", denyTaskSaga);
   yield takeLatest("ADD_NEW_TASK", addNewTaskAdminSaga);
-  yield takeLatest("SUBMIT_EDITS", submitEditsSaga)
+  yield takeLatest("SUBMIT_EDITS", submitEditsSaga);
   yield takeLatest("FETCH_COMPLETED_USER_TASKS", fetchAllCompletedTasksForUserSaga);
   yield takeLatest("FETCH_ALL_AVAILABLE_TASKS", fetchAllAvailableTasksSaga);
 }
