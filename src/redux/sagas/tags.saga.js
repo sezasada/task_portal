@@ -10,8 +10,18 @@ function* fetchAllTagsSaga() {
     }
 }
 
+function* deleteTagSaga(action) {
+    try{
+        yield axios.delete(`/api/tasks/delete_tag/${action.payload.tagID}`);
+        yield put({ type: "FETCH_ALL_TAGS" });
+    }catch(error){
+        console.log('Error with deleting tag:', error);
+    }
+}
+
 function* tagsSaga() {
     yield takeLatest("FETCH_ALL_TAGS", fetchAllTagsSaga);
+    yield takeLatest("DELETE_TAG", deleteTagSaga);
 }
 
 export default tagsSaga;
