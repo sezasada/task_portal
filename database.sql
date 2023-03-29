@@ -5,9 +5,10 @@ CREATE TABLE "user" (
 	"username" TEXT NOT NULL,
 	"password" varchar(80) NOT NULL,
 	"phone_number" TEXT NOT NULL,
-	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"is_verified" BOOLEAN NOT NULL DEFAULT 'FALSE',
-	"is_admin" BOOLEAN NOT NULL DEFAULT 'FALSE'
+	"is_admin" BOOLEAN NOT NULL DEFAULT 'FALSE',
+	"send_emails" BOOLEAN NOT NULL DEFAULT 'TRUE'
 );
 
 CREATE TABLE "tags" (
@@ -68,10 +69,10 @@ CREATE TABLE "password_reset_tokens" (
 );
 
 INSERT INTO "tags" ("tag_name")
-VALUES ('maintenance'), ('cleaning'), ('farm work'), ('administrative');
+VALUES ('Cleaning'), ('Maintenance'), ('Planting'), ('Harvesting'), ('Weeding'), ('Washing'), ('Organizing'), ('Building'), ('Signage'), ('Equipment');
 
 INSERT INTO "locations" ("location_name")
-VALUES ('north'), ('east'), ('south'), ('west');
+VALUES ('Garden - Section 1A'), ('Garden - Section 1B'), ('Garden - Section 2A'), ('Garden - Section 2B'), ('Garden - Section 3A'), ('Garden - Section 3B'), ('Garden - Section 4A'), ('Garden - Section 4B'), ('Barn'), ('Cold Frame'), ('Office'), ('Wash Pack Area'), ('Strawberry Patch'), ('Asparagus Patch'), ('Parking Lot') ;
 
 -- HERE IS THE BIGGEST JOIN IN THE WORLD -- 
 SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status",
