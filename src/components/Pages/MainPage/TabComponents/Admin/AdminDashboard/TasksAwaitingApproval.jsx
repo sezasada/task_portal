@@ -33,6 +33,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useScript } from "../../../../../../hooks/useScript";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 export default function TasksAwaitingApproval() {
 	const dispatch = useDispatch();
@@ -110,6 +111,11 @@ export default function TasksAwaitingApproval() {
 				location_name: infoOfSpecificTask.location_name,
 			};
 
+			let photos = [];
+			infoOfSpecificTask.photos
+				? (photos = infoOfSpecificTask.photos)
+				: (photos = []);
+
 			setEditedTitle(infoOfSpecificTask.title);
 			setEditedTags(currentTags);
 			setEditedLocation(currentLocationObject);
@@ -118,12 +124,20 @@ export default function TasksAwaitingApproval() {
 			setEditedNotes(infoOfSpecificTask.notes);
 			setEditedDueDate(moment(formattedDate));
 			setEditedTaskID(infoOfSpecificTask.task_id);
-			setEditedPhotos(infoOfSpecificTask.photos);
+			setEditedPhotos(photos);
 		} else {
 			setEditedTitle("");
 			setEditedBudget("");
 			setEditedNotes("");
 			setEditedDueDate("");
+			setEditedUserLookup();
+			setEditedUserLookupInput("");
+			setEditedTags([]);
+			setEditedTagInput("");
+			setEditedLocation(allLocations[0]);
+			setEditedLocationInput("");
+			setEditedTaskID("");
+			setEditedPhotos("");
 		}
 	}, [editMode, incomingTasks]);
 
@@ -249,7 +263,7 @@ export default function TasksAwaitingApproval() {
 				sx={{
 					p: 3,
 					maxWidth: "750px",
-					width: "100%",
+					// width: "100%",
 					backgroundColor: "rgb(241, 241, 241)",
 				}}
 				elevation={3}
@@ -264,7 +278,7 @@ export default function TasksAwaitingApproval() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Tasks awaiting approval
+					Tasks Awaiting Approval
 				</Typography>
 				<hr />
 				<Table
@@ -313,6 +327,7 @@ export default function TasksAwaitingApproval() {
 					<TableBody>
 						{incomingTasks.map((task) => (
 							<TableRow
+								hover
 								key={task.id}
 								onClick={() => {
 									handleOpen();
@@ -397,7 +412,7 @@ export default function TasksAwaitingApproval() {
 									borderBottom: "1px solid grey",
 								}}
 							>
-								Task Info
+								{editMode ? "Edit Task" : "Task Details"}
 							</Typography>
 							<br />
 							<Typography variant="h6" component="h4">
@@ -587,7 +602,8 @@ export default function TasksAwaitingApproval() {
 											component="h4"
 											sx={{ borderBottom: "1px solid grey" }}
 										>
-											Location: {""} {infoOfSpecificTask.location_name}
+											<LocationOnIcon />
+											{""} {infoOfSpecificTask.location_name}
 										</Typography>
 										<br
 											style={{ display: "block", height: "1em", content: '""' }}
@@ -667,18 +683,16 @@ export default function TasksAwaitingApproval() {
 										</LocalizationProvider>
 									</Box>
 								) : infoOfSpecificTask.due_date != null ? (
-									moment(infoOfSpecificTask.due_date).format(
-										"MMMM DD YYYY, h:mm a"
-									)
+									<Typography
+										variant="h6"
+										component="h4"
+										sx={{ borderBottom: "1px solid grey" }}
+									>
+										Suggested Due Date:{" "}
+										{moment(infoOfSpecificTask.due_date).format("MMMM DD YYYY")}
+									</Typography>
 								) : (
 									<>
-										<Typography
-											variant="h6"
-											component="h4"
-											sx={{ borderBottom: "1px solid grey" }}
-										>
-											Due Date:{" "}
-										</Typography>{" "}
 										<br
 											style={{ display: "block", height: "1em", content: '""' }}
 										/>
@@ -767,21 +781,25 @@ export default function TasksAwaitingApproval() {
 											}}
 											onChange={(event) => setEditedNotes(event.target.value)}
 											variant="outlined"
+											multiline
+											rows={4}
 										/>
 									</Box>
 								) : (
-									<>
+									<Box sx={{ wordBreak: "break-word" }}>
 										<Typography
 											variant="h6"
 											component="h4"
-											sx={{ borderBottom: "1px solid grey" }}
+											sx={{
+												borderBottom: "1px solid grey",
+											}}
 										>
 											Notes: {""} {`${infoOfSpecificTask.notes}`}
 										</Typography>
 										<br
 											style={{ display: "block", height: "1em", content: '""' }}
 										/>
-									</>
+									</Box>
 								)}
 							</Typography>
 
