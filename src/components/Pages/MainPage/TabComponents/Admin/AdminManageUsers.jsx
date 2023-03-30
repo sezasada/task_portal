@@ -475,7 +475,6 @@ export default function AdminManageUsers() {
 					page={page}
 					onPageChange={handleChangePage}
 					onRowsPerPageChange={handleChangeRowsPerPage}
-					sx={{ width: "345px" }}
 				/>
 				<Modal
 					open={open2}
