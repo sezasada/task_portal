@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Stack } from "@mui/system";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
 	Paper,
 	Typography,
@@ -44,14 +45,11 @@ export default function AdminManageUsers() {
 	const handleClose2 = () => setOpen2(false);
 
 	const handleApprove = () => {
-		console.log("Approve button clicked");
 		dispatch({ type: "APPROVE_USER_REQUEST", payload: infoOfSpecificUser });
-
 		handleClose();
 	};
 
 	const handleDeny = () => {
-		console.log("Deny button clicked");
 		dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
 		handleClose();
 		dispatch({
@@ -62,7 +60,6 @@ export default function AdminManageUsers() {
 	};
 
 	const handlePromote = () => {
-		console.log("Promote button clicked");
 		dispatch({ type: "PROMOTE_USER", payload: infoOfSpecificUser });
 		handleClose();
 		dispatch({
@@ -73,7 +70,6 @@ export default function AdminManageUsers() {
 	};
 
 	const handleDemote = () => {
-		console.log("Demote button clicked");
 		dispatch({ type: "DEMOTE_USER", payload: infoOfSpecificUser });
 		handleClose();
 		dispatch({
@@ -82,8 +78,6 @@ export default function AdminManageUsers() {
 		});
 		handleOpenSnackbar();
 	};
-
-	console.log(infoOfSpecificUser);
 
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -112,8 +106,6 @@ export default function AdminManageUsers() {
 		}
 		setOpenSnackbar(false);
 	};
-
-	console.log("these are the verified users", verifiedUsers);
 
 	return (
 		<Stack
@@ -254,6 +246,7 @@ export default function AdminManageUsers() {
 							}}
 							elevation={3}
 						>
+							<ClearIcon onClick={() => setOpen(false)} />
 							{/* <pre>{JSON.stringify(infoOfSpecificUser)}</pre> */}
 							<Typography
 								variant="h4"
@@ -506,6 +499,7 @@ export default function AdminManageUsers() {
 							}}
 							elevation={3}
 						>
+							<ClearIcon onClick={() => setOpen2(false)} />
 							<Typography
 								variant="h4"
 								component="h2"
@@ -564,13 +558,14 @@ export default function AdminManageUsers() {
 													: handlePromote
 											}
 											sx={{
-												marginRight: "10%",
-												width: "40%",
+												marginRight: "3px",
+												width: "200px",
 												maxWidth: "220px",
 												marginTop: "10px",
 												backgroundColor: "rgb(187, 41, 46)",
 												"&:hover": {
 													backgroundColor: "rgb(187, 41, 46)",
+													transform: "scale(1.03)",
 												},
 											}}
 										>
@@ -581,12 +576,14 @@ export default function AdminManageUsers() {
 											variant="contained"
 											onClick={handleDeny}
 											sx={{
-												width: "40%",
+												width: "200px",
 												maxWidth: "220px",
 												marginTop: "10px",
+												marginLeft:"3px",
 												backgroundColor: "rgb(187, 41, 46)",
 												"&:hover": {
 													backgroundColor: "rgb(187, 41, 46)",
+													transform: "scale(1.03)",
 												},
 											}}
 										>
