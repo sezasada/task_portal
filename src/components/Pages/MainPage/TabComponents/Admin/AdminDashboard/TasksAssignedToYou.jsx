@@ -16,8 +16,9 @@ import {
 	Snackbar,
 	Alert,
 } from "@mui/material";
-
+import { IconButton } from '@mui/material';
 import ClearIcon from "@mui/icons-material/Clear";
+import CommentIcon from "@mui/icons-material/Comment";
 import { Box, Stack } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
@@ -342,25 +343,13 @@ export default function TasksAssignedToYou() {
 									})}
 							</ImageList>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
-								<Button
-									variant="contained"
-									sx={{
-										marginRight: "10%",
-										width: "30%",
-										maxWidth: "220px",
-										marginTop: "5px",
-										backgroundColor: "rgb(187, 41, 46)",
-										"&:hover": {
-											backgroundColor: "rgb(187, 41, 46)",
-											transform: "scale(1.03)",
-										},
-									}}
+								<IconButton
 									onClick={() => {
 										handleOpenChild();
 									}}
 								>
-									Comments
-								</Button>
+									<CommentIcon />
+								</IconButton>
 								<Button
 									variant="contained"
 									onClick={handleCompleteTask}

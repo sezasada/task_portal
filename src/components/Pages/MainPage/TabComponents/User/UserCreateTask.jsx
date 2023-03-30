@@ -198,6 +198,7 @@ export default function UserCreateTask() {
 				<Stack
 					sx={{
 						backgroundColor: "rgb(241, 241, 241)",
+						
 					}}
 				>
 					<Typography
@@ -217,6 +218,7 @@ export default function UserCreateTask() {
 							display: "flex",
 							justifyContent: "center",
 							alignItems: "center",
+							
 						}}
 					>
 						<Stack>
