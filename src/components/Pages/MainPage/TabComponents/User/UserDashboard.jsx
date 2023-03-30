@@ -22,8 +22,13 @@ import {
   Alert,
 } from "@mui/material";
 import moment from "moment";
+import CommentIcon from "@mui/icons-material/Comment";
 import ClearIcon from "@mui/icons-material/Clear";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+
+
+
 
 export default function UserDashboard() {
   const dispatch = useDispatch();
@@ -330,7 +335,7 @@ export default function UserDashboard() {
                 <Button
                   variant="contained"
                   sx={{
-                    width: "40%",
+                    width: "100px",
                     backgroundColor: "rgb(187, 41, 46)",
                     "&:hover": {
                       backgroundColor: "rgb(187, 41, 46)",
@@ -341,7 +346,7 @@ export default function UserDashboard() {
                     handleOpenChild();
                   }}
                 >
-                  Comments
+                  <CommentIcon />
                 </Button>
               </Box>
             </Paper>
@@ -419,7 +424,8 @@ export default function UserDashboard() {
                             },
                           }}
                         >
-                          Send
+                          <AddIcon />
+                          
                         </Button>
                       ),
                     }}
@@ -639,26 +645,32 @@ export default function UserDashboard() {
                     );
                   })}
               </ImageList>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Button
                   variant="contained"
                   sx={{
+                    marginBottom:"5px",
                     backgroundColor: "rgb(187, 41, 46)",
                     "&:hover": {
                       backgroundColor: "rgb(187, 41, 46)",
                       transform: "scale(1.03)",
+                      
                     },
-                    width: "30%",
+                    width: "100px",
                   }}
                   onClick={() => {
                     handleOpenChild();
                   }}
                 >
-                  Comments
+                  <CommentIcon />
                 </Button>
+                </Box>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+
                 <Button
                   variant="contained"
                   sx={{
+                    marginRight:"3px",
                     backgroundColor: "rgb(187, 41, 46)",
                     "&:hover": {
                       backgroundColor: "rgb(187, 41, 46)",
@@ -668,11 +680,12 @@ export default function UserDashboard() {
                   }}
                   onClick={handleCompleteTask}
                 >
-                  Complete
+                  Mark Complete
                 </Button>
                 <Button
                   variant="contained"
                   sx={{
+                    marginLeft:"3px",
                     backgroundColor: "rgb(187, 41, 46)",
                     "&:hover": {
                       backgroundColor: "rgb(187, 41, 46)",
@@ -682,7 +695,7 @@ export default function UserDashboard() {
                   }}
                   onClick={handleDropTask}
                 >
-                  Didn't Complete
+                  Can't Complete
                 </Button>
               </Box>
             </Paper>
@@ -980,7 +993,7 @@ export default function UserDashboard() {
                 <Button
                   variant="contained"
                   sx={{
-                    width: "40%",
+                    width: "100px",
                     backgroundColor: "rgb(187, 41, 46)",
                     "&:hover": {
                       backgroundColor: "rgb(187, 41, 46)",
@@ -991,7 +1004,7 @@ export default function UserDashboard() {
                     handleOpenChild();
                   }}
                 >
-                  Comments
+                  <CommentIcon />
                 </Button>
               </Box>
             </Paper>
