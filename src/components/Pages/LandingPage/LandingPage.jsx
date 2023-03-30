@@ -49,12 +49,21 @@ function LandingPage() {
           justifyContent: "space-between",
           maxWidth: "750px",
           minWidth: "300px",
+
+		  
+          flexDirection: "row",
+          flexWrap: "wrap",
+          '@media(max-width: 600px)': {
+            flexDirection: "column",
+            alignItems: "center",
+          },
         }}
       >
         <Box
           sx={{
-            width: "50%",
+            width: "348px",
 			marginTop: "8px",
+			marginRight: "10px",
           }}
         >
           <Paper
@@ -110,15 +119,10 @@ function LandingPage() {
             <Button
               className="btn btn_sizeSm"
               onClick={onLogin}
-              variant="contained"
 			  sx={{
-				color: "white",
-				backgroundColor: "rgb(187, 41, 46)",
-				"&:hover": {
-				  backgroundColor: "rgb(187, 41, 46)",
-				  transform: "scale(1.03)",
-				},
-				width: 300,
+				textDecoration:"underline",
+				color:"black",
+				
 			  }}
             >
               Login
