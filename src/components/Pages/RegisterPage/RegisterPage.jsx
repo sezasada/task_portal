@@ -40,15 +40,10 @@ function RegisterPage() {
               history.push("/login");
             }}
             sx={{
-              color: "white",
-              backgroundColor: "rgb(187, 41, 46)",
-              "&:hover": {
-                backgroundColor: "rgb(187, 41, 46)",
-                transform: "scale(1.03)",
-                color: "white",
-              },
-              width: 300,
-            }}
+              textDecoration:"underline",
+              color:"black",
+              
+              }}
           >
             Login
           </Button>

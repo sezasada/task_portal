@@ -41,20 +41,15 @@ function LoginPage() {
             <Button
               type="button"
               varient="contained"
-            className="btn btn_asLink"
+              className="btn btn_asLink"
+			  sx={{
+				textDecoration:"underline",
+				color:"black",
+				
+			  }}
               onClick={() => {
                 history.push("/registration");
               }}
-			  sx={{
-				color: "white",
-				backgroundColor: "rgb(187, 41, 46)",
-				"&:hover": {
-				  backgroundColor: "rgb(187, 41, 46)",
-				  transform: "scale(1.03)",
-				  color: "white",
-				},
-				width: 200,
-			  }}
             >
               Register
             </Button>

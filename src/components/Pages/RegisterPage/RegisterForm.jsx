@@ -172,7 +172,7 @@ function RegisterForm() {
 				  backgroundColor: "rgb(187, 41, 46)",
 				  transform: "scale(1.03)",
 				},
-				width: 300,
+				width: 242,
 			  }}>
                 Register
               </Button>
