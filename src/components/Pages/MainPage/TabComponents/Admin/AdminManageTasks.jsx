@@ -3,8 +3,14 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useScript } from "../../../../../hooks/useScript";
 import { useEffect } from "react";
-import MarkChatUnreadRoundedIcon from "@mui/icons-material/MarkChatUnreadRounded";
+
+import DeleteIcon from '@mui/icons-material/Delete';
 import ClearIcon from "@mui/icons-material/Clear";
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import CommentIcon from '@mui/icons-material/Comment';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CheckIcon from '@mui/icons-material/Check';
 import {
   Paper,
   Typography,
@@ -995,7 +1001,7 @@ export default function AdminManageTasks() {
                           alignItems: "center",
                         }}
                       >
-                        <p style={{ marginRight: "5%" }}>Upload New File:</p>
+                        <p style={{ marginRight: "5%" }}></p>
                         <Button
                           variant="contained"
                           type="button"
@@ -1009,7 +1015,7 @@ export default function AdminManageTasks() {
                             },
                           }}
                         >
-                          Pick File
+                          <AddAPhotoIcon />
                         </Button>
                       </div>
                       {editedPhotos &&
@@ -1195,6 +1201,7 @@ export default function AdminManageTasks() {
                   </>
                 )}
               </Typography>
+              
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 {!editMode && (
                   <>
@@ -1204,8 +1211,8 @@ export default function AdminManageTasks() {
                         handleOpenChild();
                       }}
                       sx={{
-                        marginRight: "10%",
-                        width: "40%",
+                        margin:"3px",
+                        width: "20px",
                         maxWidth: "220px",
                         marginTop: "5px",
                         backgroundColor: "rgb(187, 41, 46)",
@@ -1215,51 +1222,14 @@ export default function AdminManageTasks() {
                         },
                       }}
                     >
-                      {" "}
-                      {commentsForSpecificTask?.length === 0 ? (
-                        `Comments`
-                      ) : (
-                        <>
-                          {" "}
-                          Comments&nbsp;
-                          <MarkChatUnreadRoundedIcon />{" "}
-                        </>
-                      )}
+                      <CommentIcon />
                     </Button>
-
                     <Button
-                      variant="contained"
-                      onClick={
-                        infoOfSpecificTask.assigned_to_first_name
-                          ? handleDropTask
-                          : handleTakeTask
-                      }
-                      sx={{
-                        width: "40%",
-                        maxWidth: "220px",
-                        marginTop: "5px",
-                        backgroundColor: "rgb(187, 41, 46)",
-                        "&:hover": {
-                          backgroundColor: "rgb(187, 41, 46)",
-                          transform: "scale(1.03)",
-                        },
-                      }}
-                    >
-                      {infoOfSpecificTask.assigned_to_first_name
-                        ? "Drop Task"
-                        : "Take"}
-                    </Button>
-                  </>
-                )}
-              </Box>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                {!editMode && (
-                  <Button
                     variant="contained"
-                    onClick={handleCompleteTask}
+                    onClick={() => setEditMode(!editMode)}
                     sx={{
-                      marginRight: "10%",
-                      width: "40%",
+                      margin:"3px",
+                      width: "20px",
                       maxWidth: "220px",
                       marginTop: "5px",
                       backgroundColor: "rgb(187, 41, 46)",
@@ -1269,10 +1239,30 @@ export default function AdminManageTasks() {
                       },
                     }}
                   >
-                    Mark Task Complete
+                    <EditIcon />
                   </Button>
-                )}
-                {editMode ? (
+                  <Button
+                    variant="contained"
+                    onClick={handleDeny}
+                    sx={{
+                      margin:"3px",
+                      width: "20px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                    </>
+                    )}
+
+                    {editMode && (
+                    
                   <Button
                     variant="contained"
                     onClick={() => submit_edits()}
@@ -1287,39 +1277,19 @@ export default function AdminManageTasks() {
                       },
                     }}
                   >
-                    Submit Changes
+                    <CheckIcon />
                   </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={() => setEditMode(!editMode)}
-                    sx={{
-                      width: "40%",
-                      maxWidth: "220px",
-                      marginTop: "5px",
-                      backgroundColor: "rgb(187, 41, 46)",
-                      "&:hover": {
-                        backgroundColor: "rgb(187, 41, 46)",
-                        transform: "scale(1.03)",
-                      },
-                    }}
-                  >
-                    Edit
-                  </Button>
-                )}
+
+                  )}
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 {!editMode && (
+                  <>
                   <Button
                     variant="contained"
-                    onClick={handleDeny}
+                    onClick={handleCompleteTask}
                     sx={{
+                      marginRight: "3px",
                       width: "40%",
                       maxWidth: "220px",
                       marginTop: "5px",
@@ -1330,9 +1300,36 @@ export default function AdminManageTasks() {
                       },
                     }}
                   >
-                    Delete
+                    Mark Task Complete
                   </Button>
-                )}
+                
+                 <Button
+                      variant="contained"
+                      onClick={
+                        infoOfSpecificTask.assigned_to_first_name
+                          ? handleDropTask
+                          : handleTakeTask
+                      }
+                      sx={{
+                        width: "40%",
+                        maxWidth: "220px",
+                        marginTop: "5px",
+                        marginLeft:"3px",
+                        backgroundColor: "rgb(187, 41, 46)",
+                        "&:hover": {
+                          backgroundColor: "rgb(187, 41, 46)",
+                          transform: "scale(1.03)",
+                        },
+                      }}
+                    >
+                      {infoOfSpecificTask.assigned_to_first_name
+                        ? "Drop Task"
+                        : "Take"}
+                    </Button>
+                    </>
+
+)}
+                
               </Box>
             </Paper>
             <Modal
@@ -1370,7 +1367,7 @@ export default function AdminManageTasks() {
                   <br />
                   <TextField
                     type="text"
-                    label="Comment"
+                    label="Add a comment..."
                     value={comment}
                     multiline
                     rows={2}
@@ -1388,7 +1385,7 @@ export default function AdminManageTasks() {
                           variant="contained"
                           onClick={handleSubmitComment}
                         >
-                          Send
+                          <AddIcon />
                         </Button>
                       ),
                     }}
@@ -1587,7 +1584,7 @@ export default function AdminManageTasks() {
                 </LocalizationProvider>
               </FormControl>
 
-              <p>Upload New File</p>
+             
               {/* This just sets up the window.cloudinary widget */}
               {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
 
@@ -1603,7 +1600,7 @@ export default function AdminManageTasks() {
                   },
                 }}
               >
-                Pick File
+                <AddAPhotoIcon />
               </Button>
               <br />
 
@@ -1634,7 +1631,7 @@ export default function AdminManageTasks() {
                   width: 300,
                 }}
               >
-                Submit
+                <AddIcon />
               </Button>
             </Stack>
           </form>
@@ -1952,7 +1949,7 @@ export default function AdminManageTasks() {
           <hr />
           <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
             <Table stickyHeader>
-              <TableHead>
+              {/* <TableHead>
                 <TableRow>
                   <TableCell
                     sx={{
@@ -1964,7 +1961,7 @@ export default function AdminManageTasks() {
                       fontWeight: "bold",
                     }}
                   >
-                    Tag Name
+                    
                   </TableCell>
                   <TableCell
                     sx={{
@@ -1976,10 +1973,10 @@ export default function AdminManageTasks() {
                       fontWeight: "bold",
                     }}
                   >
-                    Delete
+                   
                   </TableCell>
                 </TableRow>
-              </TableHead>
+              </TableHead> */}
               <TableBody>
                 {allTags.map((tag) => (
                   <TableRow hover key={tag.id}>
@@ -1998,7 +1995,7 @@ export default function AdminManageTasks() {
                           },
                         }}
                       >
-                        Delete
+                        <DeleteIcon />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -2029,7 +2026,7 @@ export default function AdminManageTasks() {
                     },
                   }}
                 >
-                  Add
+                  <AddIcon />
                 </Button>
               ),
             }}
@@ -2061,7 +2058,7 @@ export default function AdminManageTasks() {
           <hr />
           <TableContainer sx={{ height: "325px", overflow: "scroll" }}>
             <Table stickyHeader>
-              <TableHead>
+              {/* <TableHead>
                 <TableRow>
                   <TableCell
                     sx={{
@@ -2073,7 +2070,7 @@ export default function AdminManageTasks() {
                       fontWeight: "bold",
                     }}
                   >
-                    Location
+                    
                   </TableCell>
                   <TableCell
                     sx={{
@@ -2085,10 +2082,10 @@ export default function AdminManageTasks() {
                       fontWeight: "bold",
                     }}
                   >
-                    Delete
+                    
                   </TableCell>
                 </TableRow>
-              </TableHead>
+              </TableHead> */}
               <TableBody>
                 {allLocations.map((location) => (
                   <TableRow hover key={location.id}>
@@ -2099,7 +2096,7 @@ export default function AdminManageTasks() {
                         type="button"
                         onClick={() => handleDeleteLocation(location.id)}
                         sx={{
-                          width: 100,
+                          width: 75,
                           backgroundColor: "rgb(187, 41, 46)",
                           "&:hover": {
                             backgroundColor: "rgb(187, 41, 46)",
@@ -2107,7 +2104,7 @@ export default function AdminManageTasks() {
                           },
                         }}
                       >
-                        Delete
+                        <DeleteIcon />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -2138,7 +2135,7 @@ export default function AdminManageTasks() {
                     },
                   }}
                 >
-                  Add
+                  <AddIcon />
                 </Button>
               ),
             }}
