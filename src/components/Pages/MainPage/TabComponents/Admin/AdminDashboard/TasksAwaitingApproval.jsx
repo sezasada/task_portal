@@ -420,7 +420,6 @@ export default function TasksAwaitingApproval() {
                   }}
                 >
                   {editMode ? "Edit Task" : "Task Details"}
-                  
                 </Typography>
               </Box>
               <br />
@@ -800,127 +799,130 @@ export default function TasksAwaitingApproval() {
                 )}
               </Typography>
 
-			<Box sx={{ display: "flex", justifyContent: "center" }}>
-				{!editMode && 
-			<Button
-			variant="contained"
-			sx={{
-			  width: "150px",
-			  maxWidth: "220px",
-			  marginTop: "5px",
-			  marginRight: "3px",
-			  backgroundColor: "rgb(187, 41, 46)",
-			  "&:hover": {
-				backgroundColor: "rgb(187, 41, 46)",
-				transform: "scale(1.03)",
-			  },
-			}}
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                {!editMode && (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
                     onClick={() => {
                       handleOpenChild();
                     }}
                   >
                     <CommentIcon />
                   </Button>
-}
+                )}
 
-                  {editMode ? (
-                    <Button
-					sx={{
-						color:"white",
-						width: "150px",
-						maxWidth: "220px",
-						marginTop: "5px",
-						marginRight: "3px",
-						backgroundColor: "rgb(187, 41, 46)",
-						"&:hover": {
-						  backgroundColor: "rgb(187, 41, 46)",
-						  transform: "scale(1.03)",
-						},
-					  }}
-                      onClick={() => submit_edits()}
-                      
-                    >
-                      <CheckIcon />
-                    </Button>
-                  ) : (
-                    <Button 
-					variant="contained"
-                  sx={{
-					marginLeft:"3px",
-                    width: "150px",
-                    maxWidth: "220px",
-                    marginTop: "5px",
-					
-                    backgroundColor: "rgb(187, 41, 46)",
-                    "&:hover": {
+                {editMode ? (
+                  <Button
+                    sx={{
+                      color: "white",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
                       backgroundColor: "rgb(187, 41, 46)",
-                      transform: "scale(1.03)",
-                    },
-                  }}onClick={() => setEditMode(!editMode)}>
-                      <EditIcon />
-                    </Button>
-                  )}
-			</Box>
-			  {!editMode && 
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    width: "150px",
-                    maxWidth: "220px",
-                    marginTop: "5px",
-					marginRight:"3px",
-                    backgroundColor: "rgb(187, 41, 46)",
-                    "&:hover": {
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => submit_edits()}
+                  >
+                    <CheckIcon />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      marginLeft: "3px",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+
                       backgroundColor: "rgb(187, 41, 46)",
-                      transform: "scale(1.03)",
-                    },
-                  }}
-                  onClick={() => {
-                    dispatch({
-                      type: "MARK_TASK_APPROVED",
-                      payload: { task_id: infoOfSpecificTask.task_id },
-                    });
-                    handleClose();
-                    dispatch({
-                      type: "SET_SNACKBAR_MESSAGE",
-                      payload: <Alert severity="success">Task Approved</Alert>,
-                    });
-                    handleOpenSnackbar();
-                  }}
-                >
-                  Approve
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    marginLeft:"3px",
-                    width: "150px",
-                    maxWidth: "220px",
-                    marginTop: "5px",
-                    backgroundColor: "rgb(187, 41, 46)",
-                    "&:hover": {
-                      backgroundColor: "rgb(187, 41, 46)",
-                      transform: "scale(1.03)",
-                    },
-                  }}
-                  onClick={() => {
-                    dispatch({
-                      type: "DENY_TASK",
-                      payload: infoOfSpecificTask,
-                    });
-                    handleClose();
-                    dispatch({
-                      type: "SET_SNACKBAR_MESSAGE",
-                      payload: <Alert severity="warning">Task Denied</Alert>,
-                    });
-                    handleOpenSnackbar();
-                  }}
-                >
-                  Deny
-                </Button>
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    <EditIcon />
+                  </Button>
+                )}
               </Box>
-}
+              {!editMode && (
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch({
+                        type: "MARK_TASK_APPROVED",
+                        payload: { task_id: infoOfSpecificTask.task_id },
+                      });
+                      handleClose();
+                      dispatch({
+                        type: "SET_SNACKBAR_MESSAGE",
+                        payload: (
+                          <Alert severity="success">Task Approved</Alert>
+                        ),
+                      });
+                      handleOpenSnackbar();
+                    }}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      marginLeft: "3px",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch({
+                        type: "DENY_TASK",
+                        payload: infoOfSpecificTask,
+                      });
+                      handleClose();
+                      dispatch({
+                        type: "SET_SNACKBAR_MESSAGE",
+                        payload: <Alert severity="warning">Task Denied</Alert>,
+                      });
+                      handleOpenSnackbar();
+                    }}
+                  >
+                    Deny
+                  </Button>
+                </Box>
+              )}
             </Paper>
             <Modal
               open={openChild}

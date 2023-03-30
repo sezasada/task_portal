@@ -5,24 +5,18 @@ import { useScript } from "../../../../../hooks/useScript";
 import {
 	Paper,
 	Typography,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Modal,
 	Button,
 	TextField,
 	Autocomplete,
 	Box,
 	InputAdornment,
-	OutlinedInput,
-	InputLabel,
 	FormControl,
 	Snackbar,
 	Alert,
 } from "@mui/material";
 import moment from "moment";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import AddIcon from "@mui/icons-material/Add";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -368,16 +362,20 @@ export default function UserCreateTask() {
 								</LocalizationProvider>
 							</FormControl>
 
-							<p>Upload New File</p>
+					
 							{/* This just sets up the window.cloudinary widget */}
 							{useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
-
+							<Box sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}>
 							<Button
 								variant="contained"
 								type="button"
 								onClick={openWidget}
 								sx={{
-									width: 300,
+									width:"100px",
 									backgroundColor: "rgb(187, 41, 46)",
 									"&:hover": {
 										backgroundColor: "rgb(187, 41, 46)",
@@ -385,10 +383,10 @@ export default function UserCreateTask() {
 									},
 								}}
 							>
-								Pick File
+								<AddAPhotoIcon />
 							</Button>
-							<br />
-
+							</Box>
+							
 							{state.length != 0 &&
 								state.map((item) => {
 									console.log;
@@ -418,6 +416,13 @@ export default function UserCreateTask() {
 								multiline
 								rows={4}
 							/>
+							<Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
 							<Button
 								variant="contained"
 								type="submit"
@@ -427,11 +432,12 @@ export default function UserCreateTask() {
 										backgroundColor: "rgb(187, 41, 46)",
 										transform: "scale(1.03)",
 									},
-									width: 300,
+									width: "100px",
 								}}
 							>
-								Submit
+								<AddIcon />
 							</Button>
+							</Box>
 						</Stack>
 					</form>
 				</Stack>
