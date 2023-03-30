@@ -1,0 +1,30 @@
+.text-animation {
+  position: absolute;
+  animation: textAnimation 10s ease-in-out infinite;
+  white-space: nowrap;
+  opacity: 0;
+  font-size: 3vh;
+  color: rgb(187, 41, 46);
+}
+
+.text-animation:nth-child(2) {
+  animation-delay: 5s;
+}
+
+@keyframes textAnimation {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(-50%);
+    opacity: 0;
+  }
+  10%,
+  40% {
+    transform: translateY(-50%) translateX(-50%);
+    opacity: 1;
+  }
+  50%,
+  60% {
+    transform: translateY(-50%) translateX(-50%);
+    opacity: 0;
+  }
+}
