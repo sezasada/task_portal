@@ -187,6 +187,7 @@ export default function UserDashboard() {
           <TableBody>
             {incomingTasks.map((task) => (
               <TableRow
+			  hover
                 key={task.id}
                 onClick={() => {
                   handleOpen();
@@ -498,6 +499,7 @@ export default function UserDashboard() {
           <TableBody>
             {tasksForAdmin.map((task) => (
               <TableRow
+			  hover
                 key={task.id}
                 onClick={() => {
                   handleOpen2();
@@ -833,6 +835,7 @@ export default function UserDashboard() {
           <TableBody>
             {userCompletedTasks.map((task) => (
               <TableRow
+			  hover
                 key={task.id}
                 onClick={() => {
                   handleOpen3();
@@ -973,7 +976,7 @@ export default function UserDashboard() {
                     );
                   })}
               </ImageList>
-              <Box sx={{display: "flex", justifyContent: "center"}}>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Button
                   variant="contained"
                   sx={{

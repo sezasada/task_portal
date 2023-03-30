@@ -263,6 +263,7 @@ export default function UserTaskList() {
               {sortMode
                 ? sortedTasks.map((task) => (
                     <TableRow
+                      hover
                       key={task.id}
                       onClick={() => {
                         handleOpen();
@@ -306,6 +307,7 @@ export default function UserTaskList() {
                   ))
                 : allAvailableTasks.map((task) => (
                     <TableRow
+					hover
                       key={task.id}
                       onClick={() => {
                         handleOpen();
