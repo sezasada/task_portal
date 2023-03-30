@@ -1063,10 +1063,11 @@ router.put(`/admin_edit_task`, async (req, res) => {
       "task_id", 
       "photo_url"
       )VALUES ($1, $2);`;
-
+   if (photos){
     for (let photo of photos) {
       await pool.query(add_photos_query, [task_id, photo.photo_url]);
     }
+  }
      console.log("about to check assigned_to_id", assigned_to_id);
     if (assigned_to_id) {
       //if there is an assiged to, update the assigned to id and time assigned in db

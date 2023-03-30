@@ -90,29 +90,59 @@ export default function AdminManageTasks() {
   const [editedLocation, setEditedLocation] = useState(allLocations[0]);
   const [editedLocationInput, setEditedLocationInput] = useState("");
   const [editedBudget, setEditedBudget] = useState("");
-  const [editedUserLookup, setEditedUserLookup] = useState(verifiedUsers[0]);
-  const [editedUserLookupInput, setEditedUserLookupInput] = useState("");
+  const [editedUserLookup, setEditedUserLookup] = useState();
+  const [editedUserLookupInput, setEditedUserLookupInput] = useState();
   const [editedNotes, setEditedNotes] = useState("");
-  const [editedDueDate, setEditedDueDate] = useState("");
+  const [editedDueDate, setEditedDueDate] = useState();
   const [editedTaskID, setEditedTaskID] = useState("");
   const [editedPhotos, setEditedPhotos] = useState("");
-  const [editedAssignedTo, setEditedAssignedTo] = useState("");
 
   useEffect(() => {
     if (editMode) {
+      let currentAssignedTo = verifiedUsers.find(user => user.id === infoOfSpecificTask.assigned_to_id);
+       console.log("currentAssignedTo",currentAssignedTo);
+
+      const formattedDate = moment(infoOfSpecificTask.due_date).format(
+        "YYYY-MM-DD"
+      );
+      let currentTags;
+      infoOfSpecificTask.tags
+        ? (currentTags = infoOfSpecificTask.tags)
+        : (currentTags = []);
+
+      let currentLocationObject = {
+        id: infoOfSpecificTask.location_id,
+        location_name: infoOfSpecificTask.location_name,
+      };
+
+      let photos = [];
+      infoOfSpecificTask.photos
+        ? (photos = infoOfSpecificTask.photos)
+        : (photos = []);
       setEditedTitle(infoOfSpecificTask.title);
-      setEditedTags([]);
-      setEditedLocation(allLocations[0]);
+      setEditedTags(currentTags);
+      setEditedLocation(currentLocationObject);
+      setEditedLocationInput(infoOfSpecificTask.location_name);
       setEditedBudget(infoOfSpecificTask.budget);
       setEditedNotes(infoOfSpecificTask.notes);
-      setEditedDueDate("");
+      setEditedDueDate(moment(formattedDate));
       setEditedTaskID(infoOfSpecificTask.task_id);
-      setEditedPhotos([]);
+      setEditedPhotos(photos);
+      setEditedUserLookup(currentAssignedTo);
+      setEditedUserLookupInput(currentAssignedTo.first_name);
     } else {
       setEditedTitle("");
       setEditedBudget("");
       setEditedNotes("");
       setEditedDueDate("");
+      setEditedUserLookup();
+      setEditedUserLookupInput("");
+      setEditedTags([]);
+      setEditedTagInput("");
+      setEditedLocation(allLocations[0]);
+      setEditedLocationInput("");
+      setEditedTaskID("");
+      setEditedPhotos("");
     }
   }, [editMode, allApprovedTasks]);
 
@@ -120,13 +150,27 @@ export default function AdminManageTasks() {
     let has_budget = determineIfHasBudget(editedBudget);
     let is_time_sensitive;
 
+    let assigned_to_id;
+    !editedUserLookup
+      ? (assigned_to_id = "none")
+      : (assigned_to_id = editedUserLookup);
+
+    let listOfTagIds = [];
+    for (let tag of editedTags) {
+      if (tag.id) {
+        listOfTagIds.push(tag.id);
+      } else if (tag.tag_id) {
+        listOfTagIds.push(tag.tag_id);
+      }
+    }
+
     editedDueDate == null
       ? (is_time_sensitive = false)
       : (is_time_sensitive = true);
 
     const newObj = {
       title: editedTitle,
-      tags: editedTags,
+      tags: listOfTagIds,
       notes: editedNotes,
       has_budget: has_budget,
       budget: editedBudget,
@@ -135,8 +179,9 @@ export default function AdminManageTasks() {
       due_date: editedDueDate,
       task_id: editedTaskID,
       photos: editedPhotos,
-      assigned_to_id: editedUserLookup,
+      assigned_to_id: assigned_to_id,
     };
+    console.log("newObj", newObj);
 
     dispatch({ type: "SUBMIT_EDITS", payload: newObj });
     setEditMode(!editMode);
@@ -153,7 +198,10 @@ export default function AdminManageTasks() {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setEditMode(false);
+  };
 
   // Manage opening and closing of second details modal
   const [open2, setOpen2] = useState(false);
@@ -720,7 +768,12 @@ export default function AdminManageTasks() {
               }}
               elevation={3}
             >
-              <ClearIcon onClick={() => setOpen(false)} />
+              <ClearIcon
+                onClick={() => {
+                  setOpen(false);
+                  setEditMode(false);
+                }}
+              />
               {/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
               <Typography
                 variant="h4"
@@ -1036,9 +1089,7 @@ export default function AdminManageTasks() {
                         marginBottom: 1,
                       }}
                       value={editedUserLookup}
-                      onChange={(event, newValue) => {
-                        setEditedUserLookup(newValue);
-                      }}
+                      onChange={(event, newValue) => setEditedUserLookup(newValue)}
                       inputValue={editedUserLookupInput}
                       onInputChange={(event, newInputValue) =>
                         setEditedUserLookupInput(newInputValue)
@@ -1867,7 +1918,13 @@ export default function AdminManageTasks() {
         </Modal>
       </Paper>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center",  gap: 6,   flexWrap: "wrap", }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 6,
+          flexWrap: "wrap",
+        }}
       >
         <Paper
           sx={{
