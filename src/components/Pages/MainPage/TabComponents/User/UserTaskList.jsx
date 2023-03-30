@@ -353,7 +353,23 @@ export default function UserTaskList() {
           <br />
           <Box>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <FormControl sx={{ width: "45%", marginRight: "5%" }}>
+              <FormControl
+                sx={{
+                  width: "45%",
+                  marginRight: "5%",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "black",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "black",
+                    },
+                  },
+                  "& .MuiFormLabel-root.Mui-focused": {
+                    color: "rgb(187, 41, 46)",
+                  },
+                }}
+              >
                 <InputLabel id="sort-by-location-label">
                   Sort By Location
                 </InputLabel>
@@ -377,7 +393,22 @@ export default function UserTaskList() {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl sx={{ width: "45%" }}>
+              <FormControl
+                sx={{
+                  width: "45%",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "black",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "black",
+                    },
+                  },
+                  "& .MuiFormLabel-root.Mui-focused": {
+                    color: "rgb(187, 41, 46)",
+                  },
+                }}
+              >
                 <InputLabel id="sort-by-tags-label">Sort By Tags</InputLabel>
                 <Select
                   id="sort-by-tags"
