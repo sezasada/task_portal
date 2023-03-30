@@ -112,6 +112,11 @@ export default function TasksAwaitingApproval() {
 			location_name: infoOfSpecificTask.location_name,
 		}
 
+		let photos = [];
+      infoOfSpecificTask.photos
+        ? (photos = infoOfSpecificTask.photos)
+        : (photos = []);
+
       setEditedTitle(infoOfSpecificTask.title);
       setEditedTags(currentTags);
       setEditedLocation(currentLocationObject);
@@ -120,12 +125,20 @@ export default function TasksAwaitingApproval() {
       setEditedNotes(infoOfSpecificTask.notes);
       setEditedDueDate(moment(formattedDate));
       setEditedTaskID(infoOfSpecificTask.task_id);
-      setEditedPhotos(infoOfSpecificTask.photos);
+      setEditedPhotos(photos);
     } else {
-      setEditedTitle("");
-      setEditedBudget("");
-      setEditedNotes("");
-      setEditedDueDate("");
+		setEditedTitle("");
+		setEditedBudget("");
+		setEditedNotes("");
+		setEditedDueDate("");
+		setEditedUserLookup();
+		setEditedUserLookupInput("");
+		setEditedTags([]);
+		setEditedTagInput("");
+		setEditedLocation(allLocations[0]);
+		setEditedLocationInput("");
+		setEditedTaskID("");
+		setEditedPhotos("");
     }
   }, [editMode, incomingTasks]);
   

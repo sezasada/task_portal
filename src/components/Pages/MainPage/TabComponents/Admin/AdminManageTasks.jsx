@@ -91,19 +91,16 @@ export default function AdminManageTasks() {
   const [editedLocationInput, setEditedLocationInput] = useState("");
   const [editedBudget, setEditedBudget] = useState("");
   const [editedUserLookup, setEditedUserLookup] = useState();
-  const [editedUserLookupInput, setEditedUserLookupInput] = useState("");
+  const [editedUserLookupInput, setEditedUserLookupInput] = useState();
   const [editedNotes, setEditedNotes] = useState("");
   const [editedDueDate, setEditedDueDate] = useState();
   const [editedTaskID, setEditedTaskID] = useState("");
   const [editedPhotos, setEditedPhotos] = useState("");
-  
 
-console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
   useEffect(() => {
     if (editMode) {
-
-      // let currentAssignedTo = verifiedUsers.filter(user => user.id === infoOfSpecificTask.assigned_to_id);
-      // console.log("currentAssignedTo",currentAssignedTo);
+      let currentAssignedTo = verifiedUsers.find(user => user.id === infoOfSpecificTask.assigned_to_id);
+       console.log("currentAssignedTo",currentAssignedTo);
 
       const formattedDate = moment(infoOfSpecificTask.due_date).format(
         "YYYY-MM-DD"
@@ -112,14 +109,16 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
       infoOfSpecificTask.tags
         ? (currentTags = infoOfSpecificTask.tags)
         : (currentTags = []);
-  
-    let currentLocationObject = {
-      id: infoOfSpecificTask.location_id,
-      location_name: infoOfSpecificTask.location_name,
-    }
 
-    let photos = [];
-    infoOfSpecificTask.photos ? photos = infoOfSpecificTask.photos : photos = [];
+      let currentLocationObject = {
+        id: infoOfSpecificTask.location_id,
+        location_name: infoOfSpecificTask.location_name,
+      };
+
+      let photos = [];
+      infoOfSpecificTask.photos
+        ? (photos = infoOfSpecificTask.photos)
+        : (photos = []);
       setEditedTitle(infoOfSpecificTask.title);
       setEditedTags(currentTags);
       setEditedLocation(currentLocationObject);
@@ -129,20 +128,23 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
       setEditedDueDate(moment(formattedDate));
       setEditedTaskID(infoOfSpecificTask.task_id);
       setEditedPhotos(photos);
-      // setEditedUserLookup(currentAssignedTo);
-      // setEditedUserLookupInput(currentAssignedTo);
-
+      setEditedUserLookup(currentAssignedTo);
+      setEditedUserLookupInput(currentAssignedTo.first_name);
     } else {
       setEditedTitle("");
       setEditedBudget("");
       setEditedNotes("");
       setEditedDueDate("");
+      setEditedUserLookup();
+      setEditedUserLookupInput("");
+      setEditedTags([]);
+      setEditedTagInput("");
+      setEditedLocation(allLocations[0]);
+      setEditedLocationInput("");
+      setEditedTaskID("");
+      setEditedPhotos("");
     }
-
-    
   }, [editMode, allApprovedTasks]);
-  // console.log("editedUserLookup, editedUserLookupInput",editedUserLookup, editedUserLookupInput);
-  console.log("editedPhotos", editedPhotos);
 
   const submit_edits = () => {
     let has_budget = determineIfHasBudget(editedBudget);
@@ -153,7 +155,7 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
       ? (assigned_to_id = "none")
       : (assigned_to_id = editedUserLookup);
 
-      let listOfTagIds = [];
+    let listOfTagIds = [];
     for (let tag of editedTags) {
       if (tag.id) {
         listOfTagIds.push(tag.id);
@@ -199,7 +201,7 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
   const handleClose = () => {
     setOpen(false);
     setEditMode(false);
-  }
+  };
 
   // Manage opening and closing of second details modal
   const [open2, setOpen2] = useState(false);
@@ -766,11 +768,12 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
               }}
               elevation={3}
             >
-              <ClearIcon onClick={() => {
-                setOpen(false)
-                setEditMode(false);
-               }}
-                />
+              <ClearIcon
+                onClick={() => {
+                  setOpen(false);
+                  setEditMode(false);
+                }}
+              />
               {/* <pre>{JSON.stringify(infoOfSpecificTask)}</pre> */}
               <Typography
                 variant="h4"
@@ -1009,7 +1012,7 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
                           Pick File
                         </Button>
                       </div>
-                    {editedPhotos &&
+                      {editedPhotos &&
                         editedPhotos.map((item) => {
                           return <img src={item.photo_url} width={100} />;
                         })}
@@ -1086,9 +1089,7 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
                         marginBottom: 1,
                       }}
                       value={editedUserLookup}
-                      onChange={(event, newValue) => {
-                        setEditedUserLookup(newValue);
-                      }}
+                      onChange={(event, newValue) => setEditedUserLookup(newValue)}
                       inputValue={editedUserLookupInput}
                       onInputChange={(event, newInputValue) =>
                         setEditedUserLookupInput(newInputValue)
@@ -1917,7 +1918,13 @@ console.log("infoOfSpecificTask.due_date", infoOfSpecificTask.due_date);
         </Modal>
       </Paper>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center",  gap: 6,   flexWrap: "wrap", }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 6,
+          flexWrap: "wrap",
+        }}
       >
         <Paper
           sx={{
