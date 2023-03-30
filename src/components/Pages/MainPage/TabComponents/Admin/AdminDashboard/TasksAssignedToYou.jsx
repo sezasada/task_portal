@@ -124,7 +124,7 @@ export default function TasksAssignedToYou() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Tasks assigned to you
+					Your Tasks
 				</Typography>
 				<hr />
 				<Table
@@ -173,6 +173,7 @@ export default function TasksAssignedToYou() {
 					<TableBody>
 						{tasksForAdmin.map((task) => (
 							<TableRow
+								hover
 								key={task.id}
 								onClick={() => {
 									handleOpen2();
@@ -252,7 +253,7 @@ export default function TasksAssignedToYou() {
 									borderBottom: "1px solid grey",
 								}}
 							>
-								Task Info
+								Task Details
 							</Typography>
 							<br />
 							<Typography
