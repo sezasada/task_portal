@@ -17,6 +17,8 @@ import {
 	Alert,
 } from "@mui/material";
 import { IconButton } from '@mui/material';
+import AddIcon from "@mui/icons-material/Add";
+
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
 import { Box, Stack } from "@mui/system";
@@ -343,20 +345,33 @@ export default function TasksAssignedToYou() {
 									})}
 							</ImageList>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
-								<IconButton
+								<Button
+								sx={{
+									width: "100px",
+									
+									color:"white",
+									maxWidth: "220px",
+									marginTop: "5px",
+									backgroundColor: "rgb(187, 41, 46)",
+									"&:hover": {
+										backgroundColor: "rgb(187, 41, 46)",
+										transform: "scale(1.03)",
+									},
+								}}
 									onClick={() => {
 										handleOpenChild();
 									}}
 								>
 									<CommentIcon />
-								</IconButton>
+								</Button>
+								</Box>
+							<Box sx={{ display: "flex", justifyContent: "center" }}>
 								<Button
 									variant="contained"
 									onClick={handleCompleteTask}
 									sx={{
-										width: "30%",
-										marginRight: "10%",
-
+										width: "200px",
+										marginRight: "3px",
 										maxWidth: "220px",
 										marginTop: "5px",
 										backgroundColor: "rgb(187, 41, 46)",
@@ -372,9 +387,10 @@ export default function TasksAssignedToYou() {
 									variant="contained"
 									onClick={handleDropTask}
 									sx={{
-										width: "30%",
+										width: "200px",
 										maxWidth: "220px",
 										marginTop: "5px",
+										marginLeft:"3px",
 										backgroundColor: "rgb(187, 41, 46)",
 										"&:hover": {
 											backgroundColor: "rgb(187, 41, 46)",
@@ -455,7 +471,7 @@ export default function TasksAssignedToYou() {
 														},
 													}}
 												>
-													Send
+													<AddIcon />
 												</Button>
 											),
 										}}
