@@ -11,6 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CommentIcon from "@mui/icons-material/Comment";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import CheckIcon from "@mui/icons-material/Check";
+import swal from 'sweetalert';
 import {
   Paper,
   Typography,
@@ -78,10 +79,41 @@ export default function AdminManageTasks() {
   const [newLocation, setNewLocation] = useState("");
   const [newTag, setNewTag] = useState("");
   const handleDeleteTag = (tagId) => {
-    dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
+    swal({
+      title: "Are you sure?",
+      text: 'This action will delete this tag from the system. If any tasks are assigned to this tag, they will be updated to the tag "Other"',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(willDelete => {
+      if (willDelete) {
+        swal("Tag Deleted", "", "success");
+        dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
+      }
+      else {
+        swal("Tag not deleted.");
+      }
+    });
   };
   const handleDeleteLocation = (locationId) => {
-    dispatch({ type: "DELETE_LOCATION", payload: { locationID: locationId } });
+    
+    swal({
+      title: "Are you sure?",
+      text: 'This action will delete this location from the system. If any tasks are assigned to this location, they will be updated to the location "Other"',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(willDelete => {
+      if (willDelete) {
+        swal("Location Deleted", "", "success");
+        dispatch({ type: "DELETE_LOCATION", payload: { locationID: locationId } });
+      }
+      else {
+        swal("Location not deleted.");
+      }
+    });
   };
   const handleAddTag = () => {
     dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
@@ -382,16 +414,34 @@ export default function AdminManageTasks() {
   };
 
   const handleDeny = () => {
-    dispatch({
-      type: "DENY_TASK",
-      payload: infoOfSpecificTask,
+    swal({
+      title: "Are you sure?",
+      text: "This action will delete this task from the system.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(willDelete => {
+      if (willDelete) {
+        swal("Task Deleted", "", "success");
+        dispatch({
+          type: "DENY_TASK",
+          payload: infoOfSpecificTask,
+        });
+        handleClose();
+        dispatch({
+          type: "SET_SNACKBAR_MESSAGE",
+          payload: <Alert severity="error">Task Deleted</Alert>,
+        });
+        handleOpenSnackbar();
+      }
+      else {
+        swal("Task not deleted.");
+      }
     });
-    handleClose();
-    dispatch({
-      type: "SET_SNACKBAR_MESSAGE",
-      payload: <Alert severity="error">Task Deleted</Alert>,
-    });
-    handleOpenSnackbar();
+
+    
+
   };
 
   // ------------- TABLE SORTING --------------- //
@@ -1313,7 +1363,7 @@ export default function AdminManageTasks() {
                         },
                       }}
                     >
-                      Mark Task Complete
+                      Mark Complete
                     </Button>
 
                     <Button

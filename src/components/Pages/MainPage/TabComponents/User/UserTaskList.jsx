@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
+import AddIcon from "@mui/icons-material/Add";
+import { Tooltip } from "@mui/material";
 import {
   Paper,
   Typography,
@@ -574,6 +576,7 @@ export default function UserTaskList() {
                 </ImageList>
                 
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Tooltip title="View comments" placement="top">
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -593,6 +596,7 @@ export default function UserTaskList() {
                   >
                     <CommentIcon />
                   </Button>
+                  </Tooltip>
                   </Box>
                   <Box sx={{ display: "flex", justifyContent: "center" }}>
                   <Button
@@ -682,6 +686,7 @@ export default function UserTaskList() {
                   variant="outlined"
                   InputProps={{
                     endAdornment: (
+                      <Tooltip title="Add comment">
                       <Button
                         variant="contained"
                         onClick={handleSubmitComment}
@@ -693,8 +698,9 @@ export default function UserTaskList() {
                           },
                         }}
                       >
-                        Send
+                        <AddIcon />
                       </Button>
+                      </Tooltip>
                     ),
                   }}
                 />
