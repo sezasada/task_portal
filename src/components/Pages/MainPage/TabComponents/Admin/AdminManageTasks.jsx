@@ -1268,6 +1268,7 @@ export default function AdminManageTasks() {
                 )}
 
                 {editMode && (
+                  <Tooltip title="Complete edits">
                   <Button
                     variant="contained"
                     onClick={() => submit_edits()}
@@ -1284,6 +1285,7 @@ export default function AdminManageTasks() {
                   >
                     <CheckIcon />
                   </Button>
+                  </Tooltip>
                 )}
               </Box>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -1328,7 +1330,7 @@ export default function AdminManageTasks() {
                     >
                       {infoOfSpecificTask.assigned_to_first_name
                         ? "Drop Task"
-                        : "Take"}
+                        : "Take Task"}
                     </Button>
                   </>
                 )}

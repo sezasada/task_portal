@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Stack } from "@mui/system";
 import ClearIcon from "@mui/icons-material/Clear";
+import CommentIcon from "@mui/icons-material/Comment";
 import {
   Paper,
   Typography,
@@ -571,6 +572,7 @@ export default function UserTaskList() {
                       );
                     })}
                 </ImageList>
+                
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                   <Button
                     variant="contained"
@@ -578,8 +580,8 @@ export default function UserTaskList() {
                       handleOpenChild();
                     }}
                     sx={{
-                      marginRight: "10%",
-                      width: "40%",
+                      
+                      width: "100",
                       maxWidth: "220px",
                       marginTop: "10px",
                       backgroundColor: "rgb(187, 41, 46)",
@@ -589,8 +591,10 @@ export default function UserTaskList() {
                       },
                     }}
                   >
-                    Comments
+                    <CommentIcon />
                   </Button>
+                  </Box>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
                   <Button
                     variant="contained"
                     onClick={
@@ -610,10 +614,11 @@ export default function UserTaskList() {
                     }}
                   >
                     {infoOfSpecificTask.assigned_to_first_name
-                      ? "Drop"
-                      : "Take"}
+                      ? "Drop Task"
+                      : "Take Task"}
                   </Button>
-                </Box>
+                  </Box>
+                
               </Paper>
             </Stack>
           </Modal>
