@@ -1787,10 +1787,13 @@ export default function AdminManageTasks() {
                 .map((task) => (
                   <TableRow
                     hover
-                    key={task.id}
+                    key={task.task_id}
                     onClick={() => {
                       handleOpen2();
+                      //TODO dispatch to update the comments
+                      dispatch({type:'FETCH_COMMENTS_FOR_TASK', payload: {task_id: task.task_id}})
                       dispatch({ type: "VIEW_TASK_INFO", payload: task });
+                      
                     }}
                   >
                     <TableCell>{task.title}</TableCell>

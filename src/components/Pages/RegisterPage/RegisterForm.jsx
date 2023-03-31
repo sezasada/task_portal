@@ -58,13 +58,7 @@ function RegisterForm() {
       }}
       spacing={3}
     >
-      <Paper
-        sx={{
-          p: 3,
-          backgroundColor: "rgb(241, 241, 241)",
-        }}
-        elevation={3}
-      >
+      
         <form onSubmit={registerUser}>
 		<Stack
 		sx={{
@@ -180,7 +174,7 @@ function RegisterForm() {
           </Stack>
 		  </Stack>
         </form>
-      </Paper>
+     
     </Stack>
   );
 }

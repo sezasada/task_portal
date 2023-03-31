@@ -2,6 +2,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
 function* fetchAllCommentsForTaskSaga(action) {
+    console.log("in comments saga, action.payload", action.payload);
     try {
         const response = yield axios.get(`/api/tasks/comments/${action.payload.task_id}`);
         yield put({ type: "SET_ALL_COMMENTS_FOR_TASK", payload: response.data });
