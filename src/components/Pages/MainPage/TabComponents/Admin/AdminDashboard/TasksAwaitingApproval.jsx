@@ -24,6 +24,7 @@ import {
 	Snackbar,
 	Alert,
 } from "@mui/material";
+import { Tooltip } from '@mui/material';
 import { IconButton } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -561,80 +562,82 @@ export default function TasksAwaitingApproval() {
 								)}
 							</Typography>
 
-							<Typography variant="h6" component="h4">
-								{editMode ? (
-									<Box
-										sx={{
-											display: "flex",
-											justifyContent: "center",
-											alignItems: "center",
-										}}
-									>
-										<Autocomplete
-											required
-											sx={{
-												width: 300,
-												marginBottom: 1,
-											}}
-											value={editedLocation}
-											onChange={(event, newValue) =>
-												setEditedLocation(newValue)
-											}
-											inputValue={editedLocationInput}
-											onInputChange={(event, newInputValue) =>
-												setEditedLocationInput(newInputValue)
-											}
-											id="all-locations-lookup"
-											getOptionLabel={(allLocations) =>
-												`${allLocations.location_name}`
-											}
-											options={allLocations}
-											isOptionEqualToValue={(option, value) =>
-												option.location_name === value.location_name
-											}
-											noOptionsText={"No valid locations"}
-											renderOption={(props, allLocations) => (
-												<Box component="li" {...props} key={allLocations.id}>
-													{allLocations.location_name}
-												</Box>
-											)}
-											renderInput={(params) => (
-												<TextField {...params} label="Add Location" required />
-											)}
-										/>
-									</Box>
-								) : (
-									<>
-										<Typography
-											variant="h6"
-											component="h4"
-											sx={{ borderBottom: "1px solid grey" }}
-										>
-											Location:
-											{""} {infoOfSpecificTask.location_name}
-										</Typography>
-										<br
-											style={{ display: "block", height: "1em", content: '""' }}
-										/>
-									</>
-								)}
-							</Typography>
-							{editMode ? (
-								<Box>
-									<>
-										{/* This just sets up the window.cloudinary widget */}
-										<div
-											style={{
-												display: "flex",
-												justifyContent: "center",
-												alignItems: "center",
-											}}
-										>
-											<p style={{ marginRight: "5%" }}></p>
-											<IconButton onClick={openWidget}>
-												<AddAPhotoIcon />
-											</IconButton>
-										</div>
+              <Typography variant="h6" component="h4">
+                {editMode ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Autocomplete
+                      required
+                      sx={{
+                        width: 300,
+                        marginBottom: 1,
+                      }}
+                      value={editedLocation}
+                      onChange={(event, newValue) =>
+                        setEditedLocation(newValue)
+                      }
+                      inputValue={editedLocationInput}
+                      onInputChange={(event, newInputValue) =>
+                        setEditedLocationInput(newInputValue)
+                      }
+                      id="all-locations-lookup"
+                      getOptionLabel={(allLocations) =>
+                        `${allLocations.location_name}`
+                      }
+                      options={allLocations}
+                      isOptionEqualToValue={(option, value) =>
+                        option.location_name === value.location_name
+                      }
+                      noOptionsText={"No valid locations"}
+                      renderOption={(props, allLocations) => (
+                        <Box component="li" {...props} key={allLocations.id}>
+                          {allLocations.location_name}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Add Location" required />
+                      )}
+                    />
+                  </Box>
+                ) : (
+                  <>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      sx={{ borderBottom: "1px solid grey" }}
+                    >
+                      <LocationOnIcon />
+                      {""} {infoOfSpecificTask.location_name}
+                    </Typography>
+                    <br
+                      style={{ display: "block", height: "1em", content: '""' }}
+                    />
+                  </>
+                )}
+              </Typography>
+              {editMode ? (
+                <Box>
+                  <>
+                    {/* This just sets up the window.cloudinary widget */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p style={{ marginRight: "5%" }}></p>
+					  <Tooltip title="Add a photo" placement="right">
+                      <IconButton onClick={openWidget}>
+                        <AddAPhotoIcon />
+                      </IconButton>
+					  </Tooltip>
+                    </div>
 
 										{editedPhotos &&
 											editedPhotos.map((item) => {
@@ -798,237 +801,243 @@ export default function TasksAwaitingApproval() {
 									</Box>
 								)}
 							</Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                {!editMode && (
+					<Tooltip title="View Comments" placement="top">
+                  <Button
+                    variant="contained"
+                    sx={{
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
+                      handleOpenChild();
+                    }}
+                  >
+                    <CommentIcon />
+					
+                  </Button>
+				  </Tooltip>
+                )}
 
-							<Box sx={{ display: "flex", justifyContent: "center" }}>
-								{!editMode && (
-									<Button
-										variant="contained"
-										sx={{
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-											marginRight: "3px",
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => {
-											handleOpenChild();
-										}}
-									>
-										<CommentIcon />
-									</Button>
-								)}
+                {editMode ? (
+					<Tooltip title="Save Edits">
+                  <Button
+                    sx={{
+                      color: "white",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => submit_edits()}
+                  >
+                    <CheckIcon />
+                  </Button>
+				  </Tooltip>
+                ) : (
+					<Tooltip title="Edit Task" placement="top">
+                  <Button
+                    variant="contained"
+                    sx={{
+                      marginLeft: "3px",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
 
-								{editMode ? (
-									<Button
-										sx={{
-											color: "white",
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-											marginRight: "3px",
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => submit_edits()}
-									>
-										<CheckIcon />
-									</Button>
-								) : (
-									<Button
-										variant="contained"
-										sx={{
-											marginLeft: "3px",
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => setEditMode(!editMode)}
-									>
-										<EditIcon />
-									</Button>
-								)}
-							</Box>
-							{!editMode && (
-								<Box sx={{ display: "flex", justifyContent: "center" }}>
-									<Button
-										variant="contained"
-										sx={{
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-											marginRight: "3px",
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => {
-											dispatch({
-												type: "MARK_TASK_APPROVED",
-												payload: { task_id: infoOfSpecificTask.task_id },
-											});
-											handleClose();
-											dispatch({
-												type: "SET_SNACKBAR_MESSAGE",
-												payload: (
-													<Alert severity="success">Task Approved</Alert>
-												),
-											});
-											handleOpenSnackbar();
-										}}
-									>
-										Approve
-									</Button>
-									<Button
-										variant="contained"
-										sx={{
-											marginLeft: "3px",
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => {
-											dispatch({
-												type: "DENY_TASK",
-												payload: infoOfSpecificTask,
-											});
-											handleClose();
-											dispatch({
-												type: "SET_SNACKBAR_MESSAGE",
-												payload: <Alert severity="warning">Task Denied</Alert>,
-											});
-											handleOpenSnackbar();
-										}}
-									>
-										Deny
-									</Button>
-								</Box>
-							)}
-						</Paper>
-						<Modal
-							open={openChild}
-							onClose={() => {
-								handleCloseChild();
-							}}
-							sx={{
-								overflow: "scroll",
-							}}
-						>
-							<Stack
-								sx={{
-									display: "flex",
-									alignItems: "center",
-								}}
-							>
-								<Paper
-									sx={{
-										display: "flex",
-										flexDirection: "column",
-										padding: "20px",
-										"background-color": "rgb(241, 241, 241)",
-										width: "400px",
-									}}
-									elevation={3}
-								>
-									<ClearIcon onClick={() => setOpenChild(false)} />
-
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    <EditIcon />
+                  </Button>
+				  </Tooltip>
+                )}
+              </Box>
+              {!editMode && (
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch({
+                        type: "MARK_TASK_APPROVED",
+                        payload: { task_id: infoOfSpecificTask.task_id },
+                      });
+                      handleClose();
+                      dispatch({
+                        type: "SET_SNACKBAR_MESSAGE",
+                        payload: (
+                          <Alert severity="success">Task Approved</Alert>
+                        ),
+                      });
+                      handleOpenSnackbar();
+                    }}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      marginLeft: "3px",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch({
+                        type: "DENY_TASK",
+                        payload: infoOfSpecificTask,
+                      });
+                      handleClose();
+                      dispatch({
+                        type: "SET_SNACKBAR_MESSAGE",
+                        payload: <Alert severity="warning">Task Denied</Alert>,
+                      });
+                      handleOpenSnackbar();
+                    }}
+                  >
+                    Deny
+                  </Button>
+                </Box>
+              )}
+            </Paper>
+            <Modal
+              open={openChild}
+              onClose={() => {
+                handleCloseChild();
+              }}
+              sx={{
+                overflow: "scroll",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Paper
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "20px",
+                    "background-color": "rgb(241, 241, 241)",
+                    width: "400px",
+                  }}
+                  elevation={3}
+                >
+                  <ClearIcon onClick={() => setOpenChild(false)} />
 									<Typography
 										variant="h4"
 										component="h2"
 										sx={{ textDecoration: "underline" }}
 									></Typography>
 									<br />
-
-									<TextField
-										type="text"
-										label="Add a comment..."
-										value={comment}
-										multiline
-										rows={2}
-										sx={{
-											"margin-left": "2px",
-											"margin-right": "2px",
-											"padding-left": "2px",
-											"padding-right": "2px",
-										}}
-										onChange={(event) => setComment(event.target.value)}
-										variant="outlined"
-										InputProps={{
-											endAdornment: (
-												<Button
-													variant="contained"
-													onClick={handleSubmitComment}
-													sx={{
-														backgroundColor: "rgb(187, 41, 46)",
-														"&:hover": {
-															backgroundColor: "rgb(187, 41, 46)",
-															transform: "scale(1.03)",
-														},
-													}}
-												>
-													<AddIcon />
-												</Button>
-											),
-										}}
-									/>
-									<Box>
-										<List>
-											{commentsForTask.length > 0 &&
-												commentsForTask.map((comment) => (
-													<Card
-														key={comment.comment_id}
-														sx={{
-															margin: "5px",
-															padding: "20px",
-															background: "white",
-														}}
-													>
-														<Box sx={{ fontWeight: "bold" }}>
-															{comment.posted_by_first_name}
-														</Box>
-														<Box sx={{ fontWeight: "light" }}>
-															{moment(comment.time_posted).format(
-																"MMMM DD, YYYY h:mma"
-															)}
-														</Box>
-														<br />
-														{comment.content}{" "}
-													</Card>
-												))}
-										</List>
-									</Box>
-								</Paper>
-							</Stack>
-						</Modal>
-					</Stack>
-				</Modal>
-			</Paper>
-			<Snackbar
-				open={openSnackbar}
-				autoHideDuration={3000}
-				onClose={handleCloseSnackbar}
-			>
-				{snackbarMessage}
-			</Snackbar>
-		</>
-	);
+                  <TextField
+                    type="text"
+                    label="Add a comment..."
+                    value={comment}
+                    multiline
+                    rows={2}
+                    sx={{
+                      "margin-left": "2px",
+                      "margin-right": "2px",
+                      "padding-left": "2px",
+                      "padding-right": "2px",
+                    }}
+                    onChange={(event) => setComment(event.target.value)}
+                    variant="outlined"
+                    InputProps={{
+                      endAdornment: (
+						<Tooltip title="Add comment">
+                        <Button
+                          variant="contained"
+                          onClick={handleSubmitComment}
+                          sx={{
+                            backgroundColor: "rgb(187, 41, 46)",
+                            "&:hover": {
+                              backgroundColor: "rgb(187, 41, 46)",
+                              transform: "scale(1.03)",
+                            },
+                          }}
+                        >
+                          <AddIcon />
+                        </Button>
+						</Tooltip>
+                      ),
+                    }}
+                  />
+                  <Box>
+                    <List>
+                      {commentsForTask.length > 0 &&
+                        commentsForTask.map((comment) => (
+                          <Card
+                            key={comment.comment_id}
+                            sx={{
+                              margin: "5px",
+                              padding: "20px",
+                              background: "white",
+                            }}
+                          >
+                            <Box sx={{ fontWeight: "bold" }}>
+                              {comment.posted_by_first_name}
+                            </Box>
+                            <Box sx={{ fontWeight: "light" }}>
+                              {moment(comment.time_posted).format(
+                                "MMMM DD, YYYY h:mma"
+                              )}
+                            </Box>
+                            <br />
+                            {comment.content}{" "}
+                          </Card>
+                        ))}
+                    </List>
+                  </Box>
+                </Paper>
+              </Stack>
+            </Modal>
+          </Stack>
+        </Modal>
+      </Paper>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        {snackbarMessage}
+      </Snackbar>
+    </>
+  );
 }

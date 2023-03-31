@@ -129,7 +129,7 @@ export default function AdminManageUsers() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					Users awaiting approval
+					Users Awaiting Approval
 				</Typography>
 				<hr />
 				<Table
@@ -259,7 +259,7 @@ export default function AdminManageUsers() {
 									borderBottom: "1px solid grey",
 								}}
 							>
-								User Info
+								User Details
 							</Typography>
 							<br />
 							<Typography
@@ -320,6 +320,7 @@ export default function AdminManageUsers() {
 												backgroundColor: "rgb(187, 41, 46)",
 												"&:hover": {
 													backgroundColor: "rgb(187, 41, 46)",
+													transform: "scale(1.03)",
 												},
 											}}
 										>
@@ -336,6 +337,7 @@ export default function AdminManageUsers() {
 												backgroundColor: "rgb(187, 41, 46)",
 												"&:hover": {
 													backgroundColor: "rgb(187, 41, 46)",
+													transform: "scale(1.03)",
 												},
 											}}
 										>
@@ -511,7 +513,7 @@ export default function AdminManageUsers() {
 									borderBottom: "1px solid grey",
 								}}
 							>
-								User Info
+								User Details
 							</Typography>
 							<br />
 							<Typography

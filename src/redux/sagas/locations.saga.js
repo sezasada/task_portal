@@ -11,6 +11,7 @@ function* fetchAllLocationsSaga() {
     }
 }
 function* deleteLocationSaga(action) {
+    console.log("deleteLocationSaga action.payload", action.payload);
     try{
         yield axios.delete(`/api/tasks/delete_location/${action.payload.locationID}`);
         yield put({ type: "FETCH_ALL_LOCATIONS" });
