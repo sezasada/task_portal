@@ -399,7 +399,6 @@ export default function AdminManageTasks() {
 	const [sortByStatus, setSortByStatus] = useState("");
 
 	const statuses = [
-		// { id: undefined, status_name: "None" },
 		{ id: 1, status_name: "Available" },
 		{ id: 2, status_name: "In Progress" },
 	];
@@ -418,14 +417,16 @@ export default function AdminManageTasks() {
 	};
 
 	function handleSubmitSort(event, type) {
-		if (event.target.value.id === undefined) {
+		console.log("this is the id:", event.target.value.id);
+		console.log("this is the value:", event.target.value);
+		if (event.target.value.id === undefined && event.target.value === "") {
 			deactivateSortMode();
 			if (type === "FETCH_BY_LOCATION") {
 				setSortByLocation(event.target.value);
 			} else if (type === "FETCH_BY_TAGS") {
 				setSortByTags(event.target.value);
 			} else if (type === "FETCH_BY_STATUS") {
-				setSortByStatus(event.target.value.status_name);
+				setSortByStatus(event.target.value);
 			}
 			return;
 		}
@@ -436,8 +437,12 @@ export default function AdminManageTasks() {
 		} else if (type === "FETCH_BY_TAGS") {
 			setSortByTags(event.target.value);
 		} else if (type === "FETCH_BY_STATUS") {
-			setSortByStatus(event.target.value.status_name);
-			handleSort(type, event.target.value.status_name);
+			if (event.target.value === "Available") {
+				setSortByStatus("Available");
+			} else if (event.target.value === "In Progress") {
+				setSortByStatus("In Progress");
+			}
+			handleSort(type, event.target.value);
 			return;
 		}
 
@@ -738,7 +743,7 @@ export default function AdminManageTasks() {
 									<em>None</em>
 								</MenuItem>
 								{statuses.map((status) => (
-									<MenuItem key={status.id} value={status}>
+									<MenuItem key={status.id} value={status.status_name}>
 										{status.status_name}
 									</MenuItem>
 								))}

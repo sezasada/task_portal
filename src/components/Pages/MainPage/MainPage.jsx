@@ -17,19 +17,15 @@ function UserPage() {
 	const user = useSelector((store) => store.user);
 	// Grab all needed data on page load
 	useEffect(() => {
-		const interval = setInterval(() => {
-			dispatch({ type: "FETCH_UNVERIFIED_USERS" });
-			dispatch({ type: "FETCH_INCOMING_TASKS" });
-			dispatch({ type: "FETCH_ALL_TASKS" });
-			dispatch({ type: "FETCH_ALL_TAGS" });
-			dispatch({ type: "FETCH_ALL_LOCATIONS" });
-			dispatch({ type: "FETCH_VERIFIED_USERS" });
-			dispatch({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
-			dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
-			dispatch({ type: "FETCH_COMPLETED_USER_TASKS" });
-		}, 10000);
-
-		return () => clearInterval(interval);
+		dispatch({ type: "FETCH_UNVERIFIED_USERS" });
+		dispatch({ type: "FETCH_INCOMING_TASKS" });
+		dispatch({ type: "FETCH_ALL_TASKS" });
+		dispatch({ type: "FETCH_ALL_TAGS" });
+		dispatch({ type: "FETCH_ALL_LOCATIONS" });
+		dispatch({ type: "FETCH_VERIFIED_USERS" });
+		dispatch({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
+		dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
+		dispatch({ type: "FETCH_COMPLETED_USER_TASKS" });
 	}, []);
 
 	return (
