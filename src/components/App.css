@@ -123,3 +123,10 @@ input {
   margin: 5px;
   margin-bottom: 10px;
 }
+
+.slick-prev, .slick-next {
+  background-color: gray !important;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+}
