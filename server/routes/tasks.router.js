@@ -825,7 +825,7 @@ router.delete(`/delete_location/:id`, async (req, res) =>{
   await pool.query(`UPDATE "tasks"
   SET "location_id" = 20 WHERE "location_id" = $1;`, [location_id]);
   await pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]);
-  res.sendStatus(200);
+  res.sendStatus(204);
 }catch(err){
   console.log("Error deleting location", err);
 }
@@ -840,6 +840,7 @@ router.delete(`/delete_tag/:id`, async(req, res) =>{
 
   //update the tags table
   await pool.query(`DELETE FROM tags WHERE "id"=$1`, [tag_id]);
+  res.sendStatus(204);
   }catch(err){
     console.log("Error deleting tag", err);
   }

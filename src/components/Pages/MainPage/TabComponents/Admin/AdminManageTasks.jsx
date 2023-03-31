@@ -73,6 +73,7 @@ export default function AdminManageTasks() {
 
   const photosForTask = infoOfSpecificTask.photos;
 
+ 
   //Manage locations and tags
   const [newLocation, setNewLocation] = useState("");
   const [newTag, setNewTag] = useState("");
@@ -80,13 +81,15 @@ export default function AdminManageTasks() {
     dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
   };
   const handleDeleteLocation = (locationId) => {
-    dispatch({ type: "DELETE_LOCATION", payload: { LocationID: locationId } });
+    dispatch({ type: "DELETE_LOCATION", payload: { locationID: locationId } });
   };
   const handleAddTag = () => {
     dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
+    setNewTag("");
   };
   const handleAddLocation = () => {
     dispatch({ type: "ADD_LOCATION", payload: { locationName: newLocation } });
+    setNewLocation("");
   };
 
   //Manage edit mode
