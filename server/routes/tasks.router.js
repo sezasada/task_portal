@@ -10,7 +10,7 @@ const sgMail = require("@sendgrid/mail");
 
 //route to GET all tags
 router.get("/tags", (req, res) => {
-  const queryText = `SELECT * FROM "tags";`;
+  const queryText = `SELECT * FROM "tags" ORDER BY "tag_name" ASC;`;
 
   pool
     .query(queryText)
@@ -24,7 +24,7 @@ router.get("/tags", (req, res) => {
 });
 //route to GET all locations
 router.get("/locations", (req, res) => {
-  const queryText = `SELECT * FROM "locations";`;
+  const queryText = `SELECT * FROM "locations" ORDER BY "location_name" ASC;`;
 
   pool
     .query(queryText)
