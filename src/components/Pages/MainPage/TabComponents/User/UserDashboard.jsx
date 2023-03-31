@@ -22,6 +22,7 @@ import {
   Alert,
 } from "@mui/material";
 import moment from "moment";
+import { Tooltip } from '@mui/material';
 import CommentIcon from "@mui/icons-material/Comment";
 import ClearIcon from "@mui/icons-material/Clear";
 import CloseIcon from "@mui/icons-material/Close";
@@ -332,6 +333,7 @@ export default function UserDashboard() {
                   })}
               </ImageList>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Tooltip title="View Comments">
                 <Button
                   variant="contained"
                   sx={{
@@ -348,6 +350,7 @@ export default function UserDashboard() {
                 >
                   <CommentIcon />
                 </Button>
+                </Tooltip>
               </Box>
             </Paper>
             <Modal
@@ -413,6 +416,7 @@ export default function UserDashboard() {
                     variant="outlined"
                     InputProps={{
                       endAdornment: (
+                        <Tooltip title="Add Comment">
                         <Button
                           variant="contained"
                           onClick={handleSubmitComment}
@@ -427,6 +431,7 @@ export default function UserDashboard() {
                           <AddIcon />
                           
                         </Button>
+                        </Tooltip>
                       ),
                     }}
                   />
@@ -646,6 +651,7 @@ export default function UserDashboard() {
                   })}
               </ImageList>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Tooltip title="View Comments" placement="top">
                 <Button
                   variant="contained"
                   sx={{
@@ -664,6 +670,7 @@ export default function UserDashboard() {
                 >
                   <CommentIcon />
                 </Button>
+                </Tooltip>
                 </Box>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
 
@@ -758,6 +765,7 @@ export default function UserDashboard() {
                     variant="outlined"
                     InputProps={{
                       endAdornment: (
+                        <Tooltip title="Add comment">
                         <Button
                           variant="contained"
                           onClick={handleSubmitComment}
@@ -769,8 +777,9 @@ export default function UserDashboard() {
                             },
                           }}
                         >
-                          Send
+                          <AddIcon />
                         </Button>
+                        </Tooltip>
                       ),
                     }}
                   />
@@ -990,6 +999,7 @@ export default function UserDashboard() {
                   })}
               </ImageList>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Tooltip title="View Comments">
                 <Button
                   variant="contained"
                   sx={{
@@ -1006,6 +1016,7 @@ export default function UserDashboard() {
                 >
                   <CommentIcon />
                 </Button>
+                </Tooltip>
               </Box>
             </Paper>
             <Modal
