@@ -24,6 +24,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import { Tooltip } from '@mui/material';
 import { IconButton } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -631,9 +632,11 @@ export default function TasksAwaitingApproval() {
                       }}
                     >
                       <p style={{ marginRight: "5%" }}></p>
+					  <Tooltip title="Add a photo" placement="right">
                       <IconButton onClick={openWidget}>
                         <AddAPhotoIcon />
                       </IconButton>
+					  </Tooltip>
                     </div>
 
                     {editedPhotos &&
@@ -801,6 +804,7 @@ export default function TasksAwaitingApproval() {
 
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 {!editMode && (
+					<Tooltip title="View Comments" placement="top">
                   <Button
                     variant="contained"
                     sx={{
@@ -819,10 +823,13 @@ export default function TasksAwaitingApproval() {
                     }}
                   >
                     <CommentIcon />
+					
                   </Button>
+				  </Tooltip>
                 )}
 
                 {editMode ? (
+					<Tooltip title="Save Edits">
                   <Button
                     sx={{
                       color: "white",
@@ -840,7 +847,9 @@ export default function TasksAwaitingApproval() {
                   >
                     <CheckIcon />
                   </Button>
+				  </Tooltip>
                 ) : (
+					<Tooltip title="Edit Task" placement="top">
                   <Button
                     variant="contained"
                     sx={{
@@ -859,6 +868,7 @@ export default function TasksAwaitingApproval() {
                   >
                     <EditIcon />
                   </Button>
+				  </Tooltip>
                 )}
               </Box>
               {!editMode && (
@@ -974,6 +984,7 @@ export default function TasksAwaitingApproval() {
                     variant="outlined"
                     InputProps={{
                       endAdornment: (
+						<Tooltip title="Add comment">
                         <Button
                           variant="contained"
                           onClick={handleSubmitComment}
@@ -987,6 +998,7 @@ export default function TasksAwaitingApproval() {
                         >
                           <AddIcon />
                         </Button>
+						</Tooltip>
                       ),
                     }}
                   />

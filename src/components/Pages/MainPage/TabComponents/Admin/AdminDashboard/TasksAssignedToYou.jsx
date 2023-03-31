@@ -16,6 +16,7 @@ import {
 	Snackbar,
 	Alert,
 } from "@mui/material";
+import { Tooltip } from '@mui/material';
 import { IconButton } from '@mui/material';
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -344,6 +345,7 @@ export default function TasksAssignedToYou() {
 									})}
 							</ImageList>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
+							<Tooltip title="View comments" placement="top">
 								<Button
 								sx={{
 									width: "100px",
@@ -363,6 +365,7 @@ export default function TasksAssignedToYou() {
 								>
 									<CommentIcon />
 								</Button>
+								</Tooltip>
 								</Box>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
 								<Button
@@ -459,6 +462,7 @@ export default function TasksAssignedToYou() {
 										variant="outlined"
 										InputProps={{
 											endAdornment: (
+												<Tooltip title="Add comment">
 												<Button
 													variant="contained"
 													onClick={handleSubmitComment}
@@ -472,6 +476,7 @@ export default function TasksAssignedToYou() {
 												>
 													<AddIcon />
 												</Button>
+												</Tooltip>
 											),
 										}}
 									/>
