@@ -11,6 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CommentIcon from "@mui/icons-material/Comment";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import CheckIcon from "@mui/icons-material/Check";
+import swal from 'sweetalert';
 import {
   Paper,
   Typography,
@@ -78,10 +79,41 @@ export default function AdminManageTasks() {
   const [newLocation, setNewLocation] = useState("");
   const [newTag, setNewTag] = useState("");
   const handleDeleteTag = (tagId) => {
-    dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
+    swal({
+      title: "Are you sure?",
+      text: 'This action will delete this tag from the system. If any tasks are assigned to this tag, they will be updated to the tag "Other"',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(willDelete => {
+      if (willDelete) {
+        swal("Tag Deleted", "", "success");
+        dispatch({ type: "DELETE_TAG", payload: { tagID: tagId } });
+      }
+      else {
+        swal("Tag not deleted.");
+      }
+    });
   };
   const handleDeleteLocation = (locationId) => {
-    dispatch({ type: "DELETE_LOCATION", payload: { locationID: locationId } });
+    
+    swal({
+      title: "Are you sure?",
+      text: 'This action will delete this location from the system. If any tasks are assigned to this location, they will be updated to the location "Other"',
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(willDelete => {
+      if (willDelete) {
+        swal("Location Deleted", "", "success");
+        dispatch({ type: "DELETE_LOCATION", payload: { locationID: locationId } });
+      }
+      else {
+        swal("Location not deleted.");
+      }
+    });
   };
   const handleAddTag = () => {
     dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
@@ -141,7 +173,7 @@ export default function AdminManageTasks() {
       setEditedTaskID(infoOfSpecificTask.task_id);
       setEditedPhotos(photos);
       setEditedUserLookup(currentAssignedTo);
-      setEditedUserLookupInput(currentAssignedTo.first_name);
+      // setEditedUserLookupInput(currentAssignedTo.first_name);
     } else {
       setEditedTitle("");
       setEditedBudget("");
@@ -382,16 +414,34 @@ export default function AdminManageTasks() {
   };
 
   const handleDeny = () => {
-    dispatch({
-      type: "DENY_TASK",
-      payload: infoOfSpecificTask,
+    swal({
+      title: "Are you sure?",
+      text: "This action will delete this task from the system.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(willDelete => {
+      if (willDelete) {
+        swal("Task Deleted", "", "success");
+        dispatch({
+          type: "DENY_TASK",
+          payload: infoOfSpecificTask,
+        });
+        handleClose();
+        dispatch({
+          type: "SET_SNACKBAR_MESSAGE",
+          payload: <Alert severity="error">Task Deleted</Alert>,
+        });
+        handleOpenSnackbar();
+      }
+      else {
+        swal("Task not deleted.");
+      }
     });
-    handleClose();
-    dispatch({
-      type: "SET_SNACKBAR_MESSAGE",
-      payload: <Alert severity="error">Task Deleted</Alert>,
-    });
-    handleOpenSnackbar();
+
+    
+
   };
 
   // ------------- TABLE SORTING --------------- //
@@ -1019,14 +1069,17 @@ export default function AdminManageTasks() {
                           <AddAPhotoIcon />
                         </IconButton>
                       </div>
+                      <Box sx={{ display: "flex", justifyContent: "center" }}>
                       {editedPhotos &&
                         editedPhotos.map((item) => {
                           return <img src={item.photo_url} width={100} />;
                         })}
+                        </Box>
                     </>
                   </Box>
                 ) : (
                   // if there is no image, there's a big space under location. Might neet to fix that.
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
                   <ImageList class="image_line">
                     {photosForTask != null &&
                       photosForTask.map((item) => {
@@ -1043,6 +1096,7 @@ export default function AdminManageTasks() {
                         );
                       })}
                   </ImageList>
+                  </Box>
                 )}
               </Typography>
               <Typography>
@@ -1309,7 +1363,7 @@ export default function AdminManageTasks() {
                         },
                       }}
                     >
-                      Mark Task Complete
+                      Mark Complete
                     </Button>
 
                     <Button
@@ -1617,11 +1671,13 @@ export default function AdminManageTasks() {
               </Tooltip>
               </Box>
             
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
               {state &&
                 state.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
-              <br />
+                </Box>
+              
               <TextField
                 type="text"
                 label="Notes"
@@ -1731,10 +1787,13 @@ export default function AdminManageTasks() {
                 .map((task) => (
                   <TableRow
                     hover
-                    key={task.id}
+                    key={task.task_id}
                     onClick={() => {
                       handleOpen2();
+                      //TODO dispatch to update the comments
+                      dispatch({type:'FETCH_COMMENTS_FOR_TASK', payload: {task_id: task.task_id}})
                       dispatch({ type: "VIEW_TASK_INFO", payload: task });
+                      
                     }}
                   >
                     <TableCell>{task.title}</TableCell>
@@ -1893,10 +1952,12 @@ export default function AdminManageTasks() {
               ) : (
                 ""
               )}
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
               {photosForTask &&
                 photosForTask.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
+                </Box>
               <br />
               <Typography variant="h6" component="h4">
                 Comments:

@@ -7,6 +7,7 @@ function* promoteUser(action) {
         yield call(axios.put, '/api/user/update_admin', updatedUserStatus);
         const response = yield axios.get('/api/user/verified');
         yield put({ type: 'SET_VERIFIED_USERS', payload: response.data });
+        yield put({ type: 'FETCH_USER'})
     } catch (error) {
         console.error('Error in demoting a user', error);
     }
@@ -18,6 +19,8 @@ function* demoteUser(action) {
         yield call(axios.put, '/api/user/update_admin', updatedUserStatus);
         const response = yield axios.get('/api/user/verified');
         yield put({ type: 'SET_VERIFIED_USERS', payload: response.data });
+        yield put({ type: 'FETCH_USER'})
+
     } catch (error) {
         console.error('Error in promoting a user', error);
     }

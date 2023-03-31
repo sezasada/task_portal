@@ -18,7 +18,7 @@ import {
 	TableContainer,
 	TablePagination,
 } from "@mui/material";
-
+import swal from 'sweetalert';
 import moment from "moment";
 
 export default function AdminManageUsers() {
@@ -50,13 +50,29 @@ export default function AdminManageUsers() {
 	};
 
 	const handleDeny = () => {
-		dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
+		swal({
+			title: "Are you sure?",
+			text: 'This action will delete the user from the system',
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		  })
+		  .then(willDelete => {
+			if (willDelete) {
+			  swal("User Deleted", "", "success");
+			  dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
 		handleClose();
 		dispatch({
 			type: "SET_SNACKBAR_MESSAGE",
 			payload: <Alert severity="warning">User Deleted</Alert>,
 		});
 		handleOpenSnackbar();
+			}
+			else {
+			  swal("User not deleted");
+			}
+		  });
+		
 	};
 
 	const handlePromote = () => {

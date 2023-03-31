@@ -22,7 +22,8 @@ import {
 	Snackbar,
 	Alert,
 } from "@mui/material";
-import { Tooltip } from "@mui/material";
+import swal from 'sweetalert';
+import { Tooltip } from '@mui/material';
 import { IconButton } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -589,7 +590,6 @@ export default function TasksAwaitingApproval() {
 									</>
 								)}
 							</Typography>
-
 							<Typography variant="h6" component="h4">
 								{editMode ? (
 									<Box
@@ -648,7 +648,6 @@ export default function TasksAwaitingApproval() {
 									</>
 								)}
 							</Typography>
-
 							<Typography>
 								{editMode ? (
 									<Box
@@ -901,109 +900,125 @@ export default function TasksAwaitingApproval() {
 												width: "150px",
 												maxWidth: "220px",
 												marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    <EditIcon />
+                  </Button>
+				  </Tooltip>
+                )}
+              </Box>
+              {!editMode && (
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      marginRight: "3px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch({
+                        type: "MARK_TASK_APPROVED",
+                        payload: { task_id: infoOfSpecificTask.task_id },
+                      });
+                      handleClose();
+                      dispatch({
+                        type: "SET_SNACKBAR_MESSAGE",
+                        payload: (
+                          <Alert severity="success">Task Approved</Alert>
+                        ),
+                      });
+                      handleOpenSnackbar();
+                    }}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      marginLeft: "3px",
+                      width: "150px",
+                      maxWidth: "220px",
+                      marginTop: "5px",
+                      backgroundColor: "rgb(187, 41, 46)",
+                      "&:hover": {
+                        backgroundColor: "rgb(187, 41, 46)",
+                        transform: "scale(1.03)",
+                      },
+                    }}
+                    onClick={() => {
 
-												backgroundColor: "rgb(187, 41, 46)",
-												"&:hover": {
-													backgroundColor: "rgb(187, 41, 46)",
-													transform: "scale(1.03)",
-												},
-											}}
-											onClick={() => setEditMode(!editMode)}
-										>
-											<EditIcon />
-										</Button>
-									</Tooltip>
-								)}
-							</Box>
-							{!editMode && (
-								<Box sx={{ display: "flex", justifyContent: "center" }}>
-									<Button
-										variant="contained"
-										sx={{
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-											marginRight: "3px",
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => {
-											dispatch({
-												type: "MARK_TASK_APPROVED",
-												payload: { task_id: infoOfSpecificTask.task_id },
-											});
-											handleClose();
-											dispatch({
-												type: "SET_SNACKBAR_MESSAGE",
-												payload: (
-													<Alert severity="success">Task Approved</Alert>
-												),
-											});
-											handleOpenSnackbar();
-										}}
-									>
-										Approve
-									</Button>
-									<Button
-										variant="contained"
-										sx={{
-											marginLeft: "3px",
-											width: "150px",
-											maxWidth: "220px",
-											marginTop: "5px",
-											backgroundColor: "rgb(187, 41, 46)",
-											"&:hover": {
-												backgroundColor: "rgb(187, 41, 46)",
-												transform: "scale(1.03)",
-											},
-										}}
-										onClick={() => {
-											dispatch({
-												type: "DENY_TASK",
-												payload: infoOfSpecificTask,
-											});
-											handleClose();
-											dispatch({
-												type: "SET_SNACKBAR_MESSAGE",
-												payload: <Alert severity="warning">Task Denied</Alert>,
-											});
-											handleOpenSnackbar();
-										}}
-									>
-										Deny
-									</Button>
-								</Box>
-							)}
-						</Paper>
-						<Modal
-							open={openChild}
-							onClose={() => {
-								handleCloseChild();
-							}}
-							sx={{
-								overflow: "scroll",
-							}}
-						>
-							<Stack
-								sx={{
-									display: "flex",
-									alignItems: "center",
-								}}
-							>
-								<Paper
-									sx={{
-										display: "flex",
-										flexDirection: "column",
-										padding: "20px",
-										"background-color": "rgb(241, 241, 241)",
-										width: "400px",
-									}}
-									elevation={3}
-								>
-									<ClearIcon onClick={() => setOpenChild(false)} />
+                      swal({
+                        title: "Are you sure?",
+                        text: "Denying this task will delete this task from the system.",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                      })
+                      .then(willDelete => {
+                        if (willDelete) {
+                          swal("Task Denied", "", "success");
+                          dispatch({
+                            type: "DENY_TASK",
+                            payload: infoOfSpecificTask,
+                          });
+                          handleClose();
+                          dispatch({
+                            type: "SET_SNACKBAR_MESSAGE",
+                            payload: <Alert severity="warning">Task Denied</Alert>,
+                          });
+                          handleOpenSnackbar();
+                        }
+                        else {
+                          swal("Task not denied.");
+                        }
+                      });
+                      
+                    }}
+                  >
+                    Deny
+                  </Button>
+                </Box>
+              )}
+            </Paper>
+            <Modal
+              open={openChild}
+              onClose={() => {
+                handleCloseChild();
+              }}
+              sx={{
+                overflow: "scroll",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Paper
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "20px",
+                    "background-color": "rgb(241, 241, 241)",
+                    width: "400px",
+                  }}
+                  elevation={3}
+                >
+                  <ClearIcon onClick={() => setOpenChild(false)} />
 									<Typography
 										variant="h4"
 										component="h2"

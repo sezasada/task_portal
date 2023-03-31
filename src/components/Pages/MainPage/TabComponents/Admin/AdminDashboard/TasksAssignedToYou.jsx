@@ -16,6 +16,7 @@ import {
 	Snackbar,
 	Alert,
 } from "@mui/material";
+
 import { Tooltip } from '@mui/material';
 import { IconButton } from '@mui/material';
 import AddIcon from "@mui/icons-material/Add";
@@ -328,6 +329,7 @@ export default function TasksAssignedToYou() {
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 
+							<Box sx={{ display: "flex", justifyContent: "center" }}>
 							<ImageList class="image_line">
 								{photosForTask &&
 									photosForTask.map((item) => {
@@ -344,6 +346,8 @@ export default function TasksAssignedToYou() {
 										);
 									})}
 							</ImageList>
+							
+							</Box>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
 							<Tooltip title="View comments" placement="top">
 								<Button
@@ -368,6 +372,7 @@ export default function TasksAssignedToYou() {
 								</Tooltip>
 								</Box>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
+							<Tooltip title="Mark Task As Complete">
 								<Button
 									variant="contained"
 									onClick={handleCompleteTask}
@@ -383,8 +388,11 @@ export default function TasksAssignedToYou() {
 										},
 									}}
 								>
-									Mark Task Complete
+									Mark Complete
 								</Button>
+							</Tooltip>
+							<Tooltip title="Send Back To Available Tasks">
+
 								<Button
 									variant="contained"
 									onClick={handleDropTask}
@@ -400,9 +408,11 @@ export default function TasksAssignedToYou() {
 										},
 									}}
 								>
-									Send Back to Available Tasks
+									Can't Complete
 								</Button>
+								</Tooltip>
 							</Box>
+						
 						</Paper>
 						<Modal
 							open={openChild}
