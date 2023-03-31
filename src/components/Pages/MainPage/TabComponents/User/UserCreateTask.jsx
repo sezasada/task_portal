@@ -15,6 +15,8 @@ import {
   Alert,
 } from "@mui/material";
 import moment from "moment";
+import { Tooltip } from '@mui/material';
+import { IconButton } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import AddIcon from "@mui/icons-material/Add";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -310,7 +312,7 @@ export default function UserCreateTask() {
                   </Box>
                 )}
                 renderInput={(params) => (
-                  <TextField {...params} label="Add Location" />
+                  <TextField {...params} label="Add Location" required />
                 )}
               />
               <FormControl>
@@ -355,6 +357,7 @@ export default function UserCreateTask() {
                       },
                     }}
                     value={dueDate}
+					label="Suggested Due Date"
                     onChange={(newValue) => setDueDate(newValue)}
                   />
                 </LocalizationProvider>
@@ -369,21 +372,13 @@ export default function UserCreateTask() {
                   alignItems: "center",
                 }}
               >
-                <Button
-                  variant="contained"
-                  type="button"
+				<Tooltip title="Add a photo" placement="right">
+                <IconButton
                   onClick={openWidget}
-                  sx={{
-                    width: "100px",
-                    backgroundColor: "rgb(187, 41, 46)",
-                    "&:hover": {
-                      backgroundColor: "rgb(187, 41, 46)",
-                      transform: "scale(1.03)",
-                    },
-                  }}
                 >
                   <AddAPhotoIcon />
-                </Button>
+                </IconButton>
+				</Tooltip>
               </Box>
 
               {state.length != 0 &&
@@ -422,6 +417,7 @@ export default function UserCreateTask() {
                   alignItems: "center",
                 }}
               >
+				<Tooltip title="Create task">
                 <Button
                   variant="contained"
                   type="submit"
@@ -436,6 +432,7 @@ export default function UserCreateTask() {
                 >
                   <AddIcon />
                 </Button>
+				</Tooltip>
               </Box>
             </Stack>
           </form>
