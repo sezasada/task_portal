@@ -39,7 +39,7 @@ function LandingPage() {
           variant="h4"
           sx={{ textDecoration: "underline", textAlign: "center", color:"rgb(187, 41, 46)" }}
         >
-          Welcome to the Task Portal!
+          Welcome to FarmWorks!
         </Typography>
       </Paper>
       <br />
@@ -81,9 +81,8 @@ function LandingPage() {
         	This task management solution was designed
               exclusively for the Farm in the Dell of Red River Valley
               organization. Our website is specifically tailored to help staff
-              and volunteers manage various tasks related to farming operations. With this task
-              portal, you can easily organize your to-do lists, assign tasks to
-              team members, and track progress in real-time. Sign up today to start using the task portal and
+              and volunteers manage various tasks related to farming operations. With FarmWorks, you can easily organize your to-do lists, assign tasks to
+              team members, and track progress in real-time. Sign up today to start using FarmWorks and
               streamline your farming operations at Farm in the Dell of Red
               River Valley.
             </Typography>

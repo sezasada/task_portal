@@ -24,6 +24,7 @@ import {
 	Snackbar,
 	Alert,
 } from "@mui/material";
+import swal from 'sweetalert';
 import { Tooltip } from '@mui/material';
 import { IconButton } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -920,16 +921,33 @@ export default function TasksAwaitingApproval() {
                       },
                     }}
                     onClick={() => {
-                      dispatch({
-                        type: "DENY_TASK",
-                        payload: infoOfSpecificTask,
+
+                      swal({
+                        title: "Are you sure?",
+                        text: "Denying this task will delete this task from the system.",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                      })
+                      .then(willDelete => {
+                        if (willDelete) {
+                          swal("Task Denied", "", "success");
+                          dispatch({
+                            type: "DENY_TASK",
+                            payload: infoOfSpecificTask,
+                          });
+                          handleClose();
+                          dispatch({
+                            type: "SET_SNACKBAR_MESSAGE",
+                            payload: <Alert severity="warning">Task Denied</Alert>,
+                          });
+                          handleOpenSnackbar();
+                        }
+                        else {
+                          swal("Task not denied.");
+                        }
                       });
-                      handleClose();
-                      dispatch({
-                        type: "SET_SNACKBAR_MESSAGE",
-                        payload: <Alert severity="warning">Task Denied</Alert>,
-                      });
-                      handleOpenSnackbar();
+                      
                     }}
                   >
                     Deny
