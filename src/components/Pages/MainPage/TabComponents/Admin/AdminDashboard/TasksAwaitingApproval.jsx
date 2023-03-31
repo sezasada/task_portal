@@ -638,15 +638,18 @@ export default function TasksAwaitingApproval() {
                       </IconButton>
 					  </Tooltip>
                     </div>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
 
 										{editedPhotos &&
 											editedPhotos.map((item) => {
 												return <img src={item.photo_url} width={100} />;
 											})}
+                      </Box>
 									</>
 								</Box>
 							) : (
 								// if there is no image, there's a big space under location. Might neet to fix that.
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
 								<ImageList class="image_line">
 									{photosForTask != null &&
 										photosForTask.map((item) => {
@@ -663,6 +666,7 @@ export default function TasksAwaitingApproval() {
 											);
 										})}
 								</ImageList>
+                </Box>
 							)}
 							<Typography>
 								{editMode ? (

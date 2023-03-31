@@ -328,6 +328,7 @@ export default function TasksAssignedToYou() {
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
 
+							<Box sx={{ display: "flex", justifyContent: "center" }}>
 							<ImageList class="image_line">
 								{photosForTask &&
 									photosForTask.map((item) => {
@@ -344,6 +345,8 @@ export default function TasksAssignedToYou() {
 										);
 									})}
 							</ImageList>
+							
+							</Box>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
 							<Tooltip title="View comments" placement="top">
 								<Button

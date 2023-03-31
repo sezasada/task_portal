@@ -141,7 +141,7 @@ export default function AdminManageTasks() {
       setEditedTaskID(infoOfSpecificTask.task_id);
       setEditedPhotos(photos);
       setEditedUserLookup(currentAssignedTo);
-      setEditedUserLookupInput(currentAssignedTo.first_name);
+      // setEditedUserLookupInput(currentAssignedTo.first_name);
     } else {
       setEditedTitle("");
       setEditedBudget("");
@@ -1019,14 +1019,17 @@ export default function AdminManageTasks() {
                           <AddAPhotoIcon />
                         </IconButton>
                       </div>
+                      <Box sx={{ display: "flex", justifyContent: "center" }}>
                       {editedPhotos &&
                         editedPhotos.map((item) => {
                           return <img src={item.photo_url} width={100} />;
                         })}
+                        </Box>
                     </>
                   </Box>
                 ) : (
                   // if there is no image, there's a big space under location. Might neet to fix that.
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
                   <ImageList class="image_line">
                     {photosForTask != null &&
                       photosForTask.map((item) => {
@@ -1043,6 +1046,7 @@ export default function AdminManageTasks() {
                         );
                       })}
                   </ImageList>
+                  </Box>
                 )}
               </Typography>
               <Typography>
@@ -1617,11 +1621,13 @@ export default function AdminManageTasks() {
               </Tooltip>
               </Box>
             
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
               {state &&
                 state.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
-              <br />
+                </Box>
+              
               <TextField
                 type="text"
                 label="Notes"
@@ -1893,10 +1899,12 @@ export default function AdminManageTasks() {
               ) : (
                 ""
               )}
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
               {photosForTask &&
                 photosForTask.map((item) => {
                   return <img src={item.photo_url} width={100} />;
                 })}
+                </Box>
               <br />
               <Typography variant="h6" component="h4">
                 Comments:
