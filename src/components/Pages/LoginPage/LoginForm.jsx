@@ -39,10 +39,7 @@ function LoginForm() {
       }}
       spacing={3}
     >
-      <Paper
-        sx={{ p: 3, backgroundColor: "rgb(241, 241, 241)", maxWidth: "750px" }}
-        elevation={3}
-      >
+      
         <form onSubmit={login}>
 		<Stack
 		sx={{
@@ -133,7 +130,7 @@ function LoginForm() {
           </Button>
 		  </Stack>
         </form>
-      </Paper>
+      
     </Stack>
   );
 }
