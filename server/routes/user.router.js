@@ -207,7 +207,7 @@ router.put("/reset_password", async (req, res) => {
       const msg = {
         to: username,
         from: "kathrynszombatfalvy@gmail.com",
-        subject: "Farm in the Dell reset password",
+        subject: "Farm in the Dell of the Red River Valley Password Reset",
         html: `
     <p>Hello,</p>
     <p>It seems like you forgot your password for Farm in the Dell. If this is true, click the link below to reset your password.</p>
