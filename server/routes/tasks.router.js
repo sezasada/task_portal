@@ -645,17 +645,16 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
         `SELECT "username", "send_emails" FROM "user" WHERE "id" = $1;`,
         [assigned_to_id]
       );
-      console.log("userEmail.rows[0].username", userEmail.rows[0].username);
-      console.log("userEmail.rows[0].send_emails", userEmail.rows[0].send_emails);
+    
       //only send email if user is set to recieve emails
       if (userEmail.rows[0].send_emails === true) {
         const msg = {
           to: userEmail.rows[0].username,
           from: "kathrynszombatfalvy@gmail.com",
-          subject: "Task Assigned to You",
+          subject: "New Task Assigned to You",
           html: `
       <p>Hello,</p>
-      <p>A new task has been assigned to you.</p>
+      <p>A new task has been assigned to you at Farm in the Dell of the Red River Valley.</p>
       <a href="http://localhost:3000/#/main">View Task</a>
       <p>Thank you.</p>`,
         };
@@ -1088,10 +1087,10 @@ router.put(`/admin_edit_task`, async (req, res) => {
         const msg = {
           to: userEmail.rows[0].username,
           from: "kathrynszombatfalvy@gmail.com",
-          subject: "Task Assigned to You",
+          subject: "New Task Assigned to You",
           html: `
       <p>Hello,</p>
-      <p>A new task has been assigned to you.</p>
+      <p>A new task has been assigned to you at Farm in the Dell of the Red River Valley.</p>
       <a href="http://localhost:3000/#/main">View Task</a>
       <p>Thank you.</p>`,
         };
