@@ -1493,7 +1493,7 @@ export default function AdminManageTasks() {
           </Stack>
         </Modal>
       </Paper>
-      <Stack
+      {/* <Stack
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -1654,7 +1654,7 @@ export default function AdminManageTasks() {
                 </LocalizationProvider>
               </FormControl>
 
-              {/* This just sets up the window.cloudinary widget */}
+              {/* This just sets up the window.cloudinary widget 
               {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
               <Box
               sx={{
@@ -1706,10 +1706,10 @@ export default function AdminManageTasks() {
                 <AddIcon />
               </Button>
               </Tooltip>
-            </Stack>
-          </form>
+            </Stack>  
+          </form> 
         </Paper>
-      </Stack>
+      </Stack> */}
       <Paper
         sx={{
           p: 3,
