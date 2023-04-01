@@ -89,6 +89,7 @@ function* markTaskApprovedSaga(action) {
   try {
     yield axios.put("/api/tasks/admin_approve", action.payload);
     yield put({ type: "FETCH_INCOMING_TASKS" });
+    yield put({type: "FETCH_ALL_TASKS_FOR_ADMIN"});
     const response = yield axios.get("/api/tasks/all_tasks");
     yield put({ type: "SET_ALL_TASKS", payload: response.data });
     yield put({ type: "SET_ALL_AVAILABLE_TASKS", payload: response.data });

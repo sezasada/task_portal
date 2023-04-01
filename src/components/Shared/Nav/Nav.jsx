@@ -132,6 +132,16 @@ function Nav() {
 									history.push("/main");
 								}}
 							/>
+							<Tab
+								icon={
+									<BorderColorSharpIcon style={{ color: "rgb(187, 41, 46)" }} />
+								}
+								// label={<span style={{ color: "black" }}>Dashboard</span>}
+								onClick={() => {
+									dispatch({ type: "SET_TAB_INDEX", payload: 3});
+									history.push("/main");
+								}}
+							/>
 						</Tabs>
 					) : user.is_verified ? (
 						<Tabs
