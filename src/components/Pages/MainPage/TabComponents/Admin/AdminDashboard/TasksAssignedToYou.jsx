@@ -17,8 +17,8 @@ import {
 	Alert,
 } from "@mui/material";
 
-import { Tooltip } from '@mui/material';
-import { IconButton } from '@mui/material';
+import { Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -26,6 +26,9 @@ import { Box, Stack } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import moment from "moment";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function TasksAssignedToYou() {
 	const dispatch = useDispatch();
@@ -91,6 +94,14 @@ export default function TasksAssignedToYou() {
 		});
 		setComment("");
 	}
+
+	const settings = {
+		dots: false,
+		infinite: false,
+		speed: 500,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+	};
 
 	// -------------- Snackbar Stuff -------------- //
 	const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -328,91 +339,95 @@ export default function TasksAssignedToYou() {
 							>
 								Notes: {infoOfSpecificTask.notes}
 							</Typography>
-
-							<Box sx={{ display: "flex", justifyContent: "center" }}>
-							<ImageList class="image_line">
-								{photosForTask &&
-									photosForTask.map((item) => {
-										return (
-											<img
-												src={item.photo_url}
-												style={{
-													width: "300px",
-													border: "1px solid black",
-													margin: "5px",
-													"border-radius": "3%",
-												}}
-											/>
-										);
-									})}
-							</ImageList>
-							
+							<br style={{ display: "block", height: "1em", content: '""' }} />
+							<Box>
+								<>
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "center",
+										}}
+									>
+										<Box sx={{ width: "85%" }}>
+											<Slider {...settings}>
+												{photosForTask &&
+													photosForTask.map((item) => (
+														<div className="slide">
+															<img className="slide-img" src={item.photo_url} />
+														</div>
+													))}
+											</Slider>
+										</Box>
+									</Box>
+									<br
+										style={{ display: "block", height: "1em", content: '""' }}
+									/>
+								</>
 							</Box>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
-							<Tooltip title="View comments" placement="top">
-								<Button
-								sx={{
-									width: "100px",
-									
-									color:"white",
-									maxWidth: "220px",
-									marginTop: "5px",
-									backgroundColor: "rgb(187, 41, 46)",
-									"&:hover": {
-										backgroundColor: "rgb(187, 41, 46)",
-										transform: "scale(1.03)",
-									},
-								}}
-									onClick={() => {
-										handleOpenChild();
-									}}
-								>
-									<CommentIcon />
-								</Button>
-								</Tooltip>
-								</Box>
-							<Box sx={{ display: "flex", justifyContent: "center" }}>
-							<Tooltip title="Mark Task As Complete">
-								<Button
-									variant="contained"
-									onClick={handleCompleteTask}
-									sx={{
-										width: "200px",
-										marginRight: "3px",
-										maxWidth: "220px",
-										marginTop: "5px",
-										backgroundColor: "rgb(187, 41, 46)",
-										"&:hover": {
-											backgroundColor: "rgb(187, 41, 46)",
-											transform: "scale(1.03)",
-										},
-									}}
-								>
-									Mark Complete
-								</Button>
-							</Tooltip>
-							<Tooltip title="Send Back To Available Tasks">
+								<Tooltip title="View comments" placement="top">
+									<Button
+										sx={{
+											width: "100px",
 
-								<Button
-									variant="contained"
-									onClick={handleDropTask}
-									sx={{
-										width: "200px",
-										maxWidth: "220px",
-										marginTop: "5px",
-										marginLeft:"3px",
-										backgroundColor: "rgb(187, 41, 46)",
-										"&:hover": {
+											color: "white",
+											maxWidth: "220px",
+											marginTop: "5px",
 											backgroundColor: "rgb(187, 41, 46)",
-											transform: "scale(1.03)",
-										},
-									}}
-								>
-									Can't Complete
-								</Button>
+											"&:hover": {
+												backgroundColor: "rgb(187, 41, 46)",
+												transform: "scale(1.03)",
+											},
+										}}
+										onClick={() => {
+											handleOpenChild();
+										}}
+									>
+										<CommentIcon />
+									</Button>
 								</Tooltip>
 							</Box>
-						
+							<Box sx={{ display: "flex", justifyContent: "center" }}>
+								<Tooltip title="Mark Task As Complete">
+									<Button
+										variant="contained"
+										onClick={handleCompleteTask}
+										sx={{
+											width: "200px",
+											marginRight: "3px",
+											maxWidth: "220px",
+											marginTop: "5px",
+											backgroundColor: "rgb(187, 41, 46)",
+											"&:hover": {
+												backgroundColor: "rgb(187, 41, 46)",
+												transform: "scale(1.03)",
+											},
+										}}
+									>
+										Mark Complete
+									</Button>
+								</Tooltip>
+								<Tooltip title="Send Back To Available Tasks">
+									<Button
+										variant="contained"
+										onClick={handleDropTask}
+										sx={{
+											width: "200px",
+											maxWidth: "220px",
+											marginTop: "5px",
+											marginLeft: "3px",
+											backgroundColor: "rgb(187, 41, 46)",
+											"&:hover": {
+												backgroundColor: "rgb(187, 41, 46)",
+												transform: "scale(1.03)",
+											},
+										}}
+									>
+										Can't Complete
+									</Button>
+								</Tooltip>
+							</Box>
 						</Paper>
 						<Modal
 							open={openChild}
@@ -473,19 +488,19 @@ export default function TasksAssignedToYou() {
 										InputProps={{
 											endAdornment: (
 												<Tooltip title="Add comment">
-												<Button
-													variant="contained"
-													onClick={handleSubmitComment}
-													sx={{
-														backgroundColor: "rgb(187, 41, 46)",
-														"&:hover": {
+													<Button
+														variant="contained"
+														onClick={handleSubmitComment}
+														sx={{
 															backgroundColor: "rgb(187, 41, 46)",
-															transform: "scale(1.03)",
-														},
-													}}
-												>
-													<AddIcon />
-												</Button>
+															"&:hover": {
+																backgroundColor: "rgb(187, 41, 46)",
+																transform: "scale(1.03)",
+															},
+														}}
+													>
+														<AddIcon />
+													</Button>
 												</Tooltip>
 											),
 										}}
