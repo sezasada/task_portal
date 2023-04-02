@@ -188,7 +188,7 @@ export default function UserCreateTask() {
 			<Paper
 				sx={{
 					p: 3,
-					maxWidth: "35vh",
+					maxWidth: "750px",
 					width: "90%",
 					backgroundColor: "rgb(241, 241, 241)",
 				}}
@@ -210,6 +210,7 @@ export default function UserCreateTask() {
 					>
 						Create a New Task
 					</Typography>
+					<hr />
 					<form
 						onSubmit={handleSubmitTask}
 						style={{
@@ -407,6 +408,7 @@ export default function UserCreateTask() {
 								state.map((item) => {
 									return <img src={item.file_url} width={100} />;
 								})}
+							<br />
 							<br />
 							<Box
 								sx={{

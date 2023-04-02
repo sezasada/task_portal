@@ -285,15 +285,16 @@ export default function TasksAssignedToYou() {
 								sx={{ borderBottom: "1px solid grey" }}
 							>
 								Tags:
+								<List>
+									{specificTaskTags &&
+										specificTaskTags.map((tag) => (
+											<ListItem key={tag.tag_id}>
+												<Typography>{tag.tag_name}</Typography>
+											</ListItem>
+										))}
+								</List>
 							</Typography>
-
-							<ul>
-								{specificTaskTags &&
-									specificTaskTags.map((tag) => (
-										<li key={tag.tag_id}>{tag.tag_name}</li>
-									))}
-							</ul>
-
+							<br />
 							<Typography
 								variant="h6"
 								component="h4"
@@ -471,7 +472,6 @@ export default function TasksAssignedToYou() {
 											"margin-right": "2px",
 											"padding-left": "2px",
 											"padding-right": "2px",
-								
 										}}
 										onChange={(event) => setComment(event.target.value)}
 										variant="outlined"
