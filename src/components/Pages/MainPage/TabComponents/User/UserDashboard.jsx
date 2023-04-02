@@ -605,14 +605,13 @@ export default function UserDashboard() {
 								sx={{ borderBottom: "1px solid grey" }}
 							>
 								Tags:
+								<ul>
+									{specificTaskTags &&
+										specificTaskTags.map((tag) => (
+											<li key={tag.tag_id}>{tag.tag_name}</li>
+										))}
+								</ul>
 							</Typography>
-
-							<ul>
-								{specificTaskTags &&
-									specificTaskTags.map((tag) => (
-										<li key={tag.tag_id}>{tag.tag_name}</li>
-									))}
-							</ul>
 
 							<Typography
 								variant="h6"
@@ -965,14 +964,13 @@ export default function UserDashboard() {
 								sx={{ borderBottom: "1px solid grey" }}
 							>
 								Tags:
+								<ul>
+									{specificTaskTags &&
+										specificTaskTags.map((tag) => (
+											<li key={tag.tag_id}>{tag.tag_name}</li>
+										))}
+								</ul>
 							</Typography>
-
-							<ul>
-								{specificTaskTags &&
-									specificTaskTags.map((tag) => (
-										<li key={tag.tag_id}>{tag.tag_name}</li>
-									))}
-							</ul>
 
 							<Typography
 								variant="h6"
