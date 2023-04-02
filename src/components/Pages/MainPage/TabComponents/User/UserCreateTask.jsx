@@ -162,14 +162,6 @@ export default function UserCreateTask() {
 				.open();
 	};
 
-	const settings = {
-		dots: false,
-		infinite: false,
-		speed: 500,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-	};
-
 	console.log("infoOfSpecificTask.user_id:", infoOfSpecificTask.user_id);
 
 	// ------------------- Snackbar stuff ---------------------- //
@@ -411,28 +403,10 @@ export default function UserCreateTask() {
 									<AddAPhotoIcon />
 								</IconButton>
 							</Tooltip>
-							<Box>
-								<>
-									<Box
-										sx={{
-											display: "flex",
-											alignItems: "center",
-											justifyContent: "center",
-										}}
-									>
-										<Box sx={{ width: "85%" }}>
-											<Slider {...settings}>
-												{state &&
-													state.map((item) => (
-														<div className="slide">
-															<img className="slide-img" src={item.file_url} />
-														</div>
-													))}
-											</Slider>
-										</Box>
-									</Box>
-								</>
-							</Box>
+							{state.length != 0 &&
+								state.map((item) => {
+									return <img src={item.file_url} width={100} />;
+								})}
 							<br />
 							<Box
 								sx={{
