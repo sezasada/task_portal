@@ -424,7 +424,7 @@ export default function TasksAssignedToYou() {
 											},
 										}}
 									>
-										Can't Complete
+										Drop Task
 									</Button>
 								</Tooltip>
 							</Box>
