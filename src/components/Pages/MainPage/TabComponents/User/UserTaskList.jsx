@@ -4,7 +4,7 @@ import { Stack } from "@mui/system";
 import ClearIcon from "@mui/icons-material/Clear";
 import CommentIcon from "@mui/icons-material/Comment";
 import AddIcon from "@mui/icons-material/Add";
-import { Tooltip } from "@mui/material";
+import { ListItem, Tooltip } from "@mui/material";
 import {
 	Paper,
 	Typography,
@@ -359,17 +359,6 @@ export default function UserTaskList() {
 								sx={{
 									width: "45%",
 									marginRight: "5%",
-									"& .MuiOutlinedInput-root": {
-										"& fieldset": {
-											borderColor: "black",
-										},
-										"&.Mui-focused fieldset": {
-											borderColor: "black",
-										},
-									},
-									"& .MuiFormLabel-root.Mui-focused": {
-										color: "rgb(187, 41, 46)",
-									},
 								}}
 							>
 								<InputLabel id="sort-by-location-label">
@@ -398,17 +387,6 @@ export default function UserTaskList() {
 							<FormControl
 								sx={{
 									width: "45%",
-									"& .MuiOutlinedInput-root": {
-										"& fieldset": {
-											borderColor: "black",
-										},
-										"&.Mui-focused fieldset": {
-											borderColor: "black",
-										},
-									},
-									"& .MuiFormLabel-root.Mui-focused": {
-										color: "rgb(187, 41, 46)",
-									},
 								}}
 							>
 								<InputLabel id="sort-by-tags-label">Sort By Tags</InputLabel>
@@ -476,7 +454,7 @@ export default function UserTaskList() {
 										borderBottom: "1px solid grey",
 									}}
 								>
-									Task Info
+									Task Details
 								</Typography>
 								<br />
 								<Typography
@@ -493,14 +471,16 @@ export default function UserTaskList() {
 									sx={{ borderBottom: "1px solid grey" }}
 								>
 									Tags:
+									<List>
+										{specificTaskTags &&
+											specificTaskTags.map((tag) => (
+												<ListItem key={tag.tag_id}>
+													<Typography>{tag.tag_name}</Typography>
+												</ListItem>
+											))}
+									</List>
 								</Typography>
-
-								<ul>
-									{specificTaskTags &&
-										specificTaskTags.map((tag) => (
-											<li key={tag.tag_id}>{tag.tag_name}</li>
-										))}
-								</ul>
+								<br />
 								<Typography
 									variant="h6"
 									component="h4"

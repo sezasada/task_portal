@@ -154,12 +154,6 @@ export default function UserDashboard() {
 			spacing={3}
 			sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
 		>
-			{/* <Box>
-        <Typography component="h5" variant="h5">
-          Welcome, {user.first_name}!
-        </Typography>
-      </Box> */}
-
 			<Paper
 				sx={{
 					p: 3,
@@ -224,7 +218,6 @@ export default function UserDashboard() {
 					}}
 					sx={{
 						margin: "0 auto",
-
 						width: "90%",
 						maxWidth: "750px",
 						overflow: "scroll",
@@ -258,7 +251,7 @@ export default function UserDashboard() {
 									borderBottom: "1px solid grey",
 								}}
 							>
-								Task Info
+								Task Details
 							</Typography>
 							<br />
 							<Typography
@@ -275,14 +268,16 @@ export default function UserDashboard() {
 								sx={{ borderBottom: "1px solid grey" }}
 							>
 								Tags:
+								<List>
+									{specificTaskTags &&
+										specificTaskTags.map((tag) => (
+											<ListItem key={tag.tag_id}>
+												<Typography>{tag.tag_name}</Typography>
+											</ListItem>
+										))}
+								</List>
 							</Typography>
-							<ul>
-								{specificTaskTags &&
-									specificTaskTags.map((tag) => (
-										<li key={tag.tag_id}>{tag.tag_name}</li>
-									))}
-							</ul>
-
+							<br />
 							<Typography
 								variant="h6"
 								component="h4"
@@ -588,7 +583,7 @@ export default function UserDashboard() {
 									color: "rgb(187, 41, 46)",
 								}}
 							>
-								Task Info
+								Task Details
 							</Typography>
 							<br />
 							<Typography
@@ -604,15 +599,17 @@ export default function UserDashboard() {
 								component="h4"
 								sx={{ borderBottom: "1px solid grey" }}
 							>
-								Tags:
-								<ul>
+								<List>
+									Tags:
 									{specificTaskTags &&
 										specificTaskTags.map((tag) => (
-											<li key={tag.tag_id}>{tag.tag_name}</li>
+											<ListItem key={tag.tag_id}>
+												<Typography>{tag.tag_name}</Typography>
+											</ListItem>
 										))}
-								</ul>
+								</List>
 							</Typography>
-
+							<br />
 							<Typography
 								variant="h6"
 								component="h4"
@@ -721,21 +718,23 @@ export default function UserDashboard() {
 								>
 									Mark Complete
 								</Button>
-								<Button
-									variant="contained"
-									sx={{
-										marginLeft: "3px",
-										backgroundColor: "rgb(187, 41, 46)",
-										"&:hover": {
+								<Tooltip title="Send Back To Available Tasks">
+									<Button
+										variant="contained"
+										sx={{
+											marginLeft: "3px",
 											backgroundColor: "rgb(187, 41, 46)",
-											transform: "scale(1.03)",
-										},
-										width: "30%",
-									}}
-									onClick={handleDropTask}
-								>
-									Can't Complete
-								</Button>
+											"&:hover": {
+												backgroundColor: "rgb(187, 41, 46)",
+												transform: "scale(1.03)",
+											},
+											width: "30%",
+										}}
+										onClick={handleDropTask}
+									>
+										Drop Task
+									</Button>
+								</Tooltip>
 							</Box>
 						</Paper>
 						<Modal
@@ -947,7 +946,7 @@ export default function UserDashboard() {
 									color: "rgb(187, 41, 46)",
 								}}
 							>
-								Task Info
+								Task Details
 							</Typography>
 							<br />
 							<Typography
@@ -964,14 +963,16 @@ export default function UserDashboard() {
 								sx={{ borderBottom: "1px solid grey" }}
 							>
 								Tags:
-								<ul>
+								<List>
 									{specificTaskTags &&
 										specificTaskTags.map((tag) => (
-											<li key={tag.tag_id}>{tag.tag_name}</li>
+											<ListItem key={tag.tag_id}>
+												<Typography>{tag.tag_name}</Typography>
+											</ListItem>
 										))}
-								</ul>
+								</List>
 							</Typography>
-
+							<br />
 							<Typography
 								variant="h6"
 								component="h4"
