@@ -61,6 +61,7 @@ export default function AdminManageUsers() {
 			if (willDelete) {
 			  swal("User Deleted", "", "success");
 			  dispatch({ type: "DENY_USER_REQUEST", payload: infoOfSpecificUser });
+		setOpen2(false)
 		handleClose();
 		dispatch({
 			type: "SET_SNACKBAR_MESSAGE",
