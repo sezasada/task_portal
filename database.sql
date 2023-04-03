@@ -69,10 +69,10 @@ CREATE TABLE "password_reset_tokens" (
 );
 
 INSERT INTO "tags" ("tag_name")
-VALUES ('Cleaning'), ('Maintenance'), ('Planting'), ('Harvesting'), ('Weeding'), ('Washing'), ('Organizing'), ('Building'), ('Signage'), ('Equipment');
+VALUES ('Cleaning'), ('Maintenance'), ('Planting'), ('Harvesting'), ('Weeding'), ('Washing'), ('Organizing'), ('Building'), ('Signage'), ('Equipment'), ('Other');
 
 INSERT INTO "locations" ("location_name")
-VALUES ('Garden - Section 1A'), ('Garden - Section 1B'), ('Garden - Section 2A'), ('Garden - Section 2B'), ('Garden - Section 3A'), ('Garden - Section 3B'), ('Garden - Section 4A'), ('Garden - Section 4B'), ('Barn'), ('Cold Frame'), ('Office'), ('Wash Pack Area'), ('Strawberry Patch'), ('Asparagus Patch'), ('Parking Lot') ;
+VALUES ('Garden - Section 1A'), ('Garden - Section 1B'), ('Garden - Section 2A'), ('Garden - Section 2B'), ('Garden - Section 3A'), ('Garden - Section 3B'), ('Garden - Section 4A'), ('Garden - Section 4B'), ('Barn'), ('Cold Frame'), ('Office'), ('Wash Pack Area'), ('Strawberry Patch'), ('Asparagus Patch'), ('Parking Lot'), ('Other');
 
 -- HERE IS THE BIGGEST JOIN IN THE WORLD -- 
 SELECT "tasks"."id" AS "task_id", "title", "notes", "has_budget", "budget", "location_id", "status",
