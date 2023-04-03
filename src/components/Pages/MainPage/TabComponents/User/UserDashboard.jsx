@@ -53,7 +53,8 @@ export default function UserDashboard() {
 		(store) => store.allCompletedUserTaskReducer
 	);
 	const [comment, setComment] = useState("");
-
+ 
+	
 	// Manage opening and closing of first details modal
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => {
