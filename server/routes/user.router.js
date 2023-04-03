@@ -114,18 +114,49 @@ router.put("/update_user", (req, res) => {
 });
 
 //delete user
-router.delete(`/delete_user/:id`, (req, res) => {
+router.delete(`/delete_user/:id`, async (req, res) => {
+  try{
   let user_id = req.params.id;
-  const queryText = `DELETE FROM "user" WHERE "id" =$1;
-  `;
 
-  pool
-    .query(queryText, [user_id])
-    .then(res.sendStatus(200))
-    .catch((err) => {
-      console.log("delete user failed", err);
-      res.sendStatus(500);
-    });
+   //pull the id of the tasks that were created by or assigned to the user id
+   const findTaskIDQuery = `SELECT "id" FROM "tasks" WHERE "assigned_to_id" =$1 OR "created_by_id" =$1;`;
+   const result = await pool.query(findTaskIDQuery, [user_id]);
+
+  //Delete  userid  from comments that they posted and delete the comments that are related to the task ids that are being removed
+  const commentsQuery = `DELETE FROM "comments" WHERE "posted_by_id" =$1;`;
+  await pool.query(commentsQuery, [user_id]);
+
+  const secondCommentsQuery = `DELETE FROM "comments" WHERE "task_id" = $1;`
+  for (task of result.rows){
+    await pool.query(secondCommentsQuery, [task.id]);
+  }
+  //Delete from photos the photos that are related to the task ids being removed
+  const photosQuery = `DELETE FROM "photos" WHERE "task_id" = $1;`
+  for (task of result.rows){
+    await pool.query(photosQuery, [task.id]);
+  }
+
+  //delete any tags associated with those task ids
+  const tagsQuery = `DELETE FROM "tags_per_task" WHERE "task_id" =$1;`
+  console.log("result.rows", result.rows);
+  for (task of result.rows){
+    await pool.query(tagsQuery, [task.id]);
+  }
+  //delete the tasks that that user has been assigned to or has created
+  const tasksQuery = `DELETE FROM "tasks" WHERE "created_by_id" =$1;`;
+  await pool.query(tasksQuery, [user_id]);
+  const secondTasksQuery = `DELETE FROM "tasks" WHERE "assigned_to_id" =$1 ;`;
+  await pool.query(secondTasksQuery, [user_id]);
+  //delete the user
+  const queryText = `DELETE FROM "user" WHERE "id" =$1;`;
+  await pool.query(queryText, [user_id]);
+    
+    res.sendStatus(200)
+  }catch(error){
+    console.error("Error trying to delete user", error);
+    res.status(500);
+  }
+
 });
 
 // Grab all unverified users

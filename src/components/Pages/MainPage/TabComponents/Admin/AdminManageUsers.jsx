@@ -52,7 +52,7 @@ export default function AdminManageUsers() {
 	const handleDeny = () => {
 		swal({
 			title: "Are you sure?",
-			text: 'This action will delete the user from the system',
+			text: 'This action will delete the user from the system including any tasks that they are assigned to or have created',
 			icon: "warning",
 			buttons: true,
 			dangerMode: true,
