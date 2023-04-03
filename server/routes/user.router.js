@@ -138,7 +138,7 @@ router.delete(`/delete_user/:id`, async (req, res) => {
 
   //delete any tags associated with those task ids
   const tagsQuery = `DELETE FROM "tags_per_task" WHERE "task_id" =$1;`
-  console.log("result.rows", result.rows);
+  // console.log("result.rows", result.rows);
   for (task of result.rows){
     await pool.query(tagsQuery, [task.id]);
   }

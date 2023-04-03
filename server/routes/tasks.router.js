@@ -644,7 +644,7 @@ router.get("/all_available_tasks", rejectUnauthenticated, async (req, res) => {
 });
 //post route to add new task
 router.post("/admin", rejectUnauthenticated, async (req, res) => {
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
   try {
     const {
       title,
@@ -736,7 +736,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
         };
         //send email to the user
         await sgMail.send(msg);
-        console.log("Email sent");
+        // console.log("Email sent");
       }
     }
 
@@ -896,7 +896,7 @@ router.post(`/add_tag`, (req, res) => {
 router.delete(`/delete_location/:id`, async (req, res) =>{
   try{
   const location_id = req.params.id;
-  console.log("location_id", location_id);
+  // console.log("location_id", location_id);
   await pool.query(`UPDATE "tasks"
   SET "location_id" = 20 WHERE "location_id" = $1;`, [location_id]);
   await pool.query(`DELETE FROM locations WHERE "id"=$1`, [location_id]);
@@ -1091,7 +1091,7 @@ router.put(`/admin_incomplete_task`, (req, res) => {
 
 //admin edits original settings for task
 router.put(`/admin_edit_task`, async (req, res) => {
-   console.log("just getting into admin edit task, this is req.body", req.body);
+  //  console.log("just getting into admin edit task, this is req.body", req.body);
 
   let title = req.body.title;
   let tagObjects = req.body.tags;
@@ -1144,7 +1144,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
       await pool.query(add_photos_query, [task_id, photo.photo_url]);
     }
   }
-     console.log("about to check assigned_to_id", assigned_to_id);
+    //  console.log("about to check assigned_to_id", assigned_to_id);
     if (assigned_to_id) {
       //if there is an assiged to, update the assigned to id and time assigned in db
       const assignedQuery = `UPDATE "tasks"
@@ -1158,7 +1158,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
         `SELECT "username", "send_emails" FROM "user" WHERE "id" = $1;`,
         [assigned_to_id]
       );
-      console.log("userEmail.rows[0].username", userEmail.rows[0].username);
+      // console.log("userEmail.rows[0].username", userEmail.rows[0].username);
       if (userEmail.rows[0].send_emails === true) {
         const msg = {
           to: userEmail.rows[0].username,
@@ -1172,7 +1172,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
         };
         //send email to the user
         await sgMail.send(msg);
-        console.log("Email sent");
+        // console.log("Email sent");
       }
     }
 
@@ -1183,7 +1183,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
     //then add all updated tags for this task to the tags_per_task table
     const queryText2 = `INSERT INTO "tags_per_task" ("task_id", "tag_id")
   VALUES ($1, $2)`;
-  console.log("tags", tags);
+  // console.log("tags", tags);
     for (let tag of tags) {
       if (tag){
       await pool.query(queryText2, [task_id, tag]);
@@ -1198,7 +1198,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  console.log("this is the id for the task we should be deleting", id);
+  // console.log("this is the id for the task we should be deleting", id);
   try {
     // const task = await pool.query("SELECT * FROM tasks WHERE id = $1", [id]);
     // console.log(task);

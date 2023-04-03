@@ -383,7 +383,7 @@ router.get("/status/:status", rejectUnauthenticated, async (req, res) => {
     ;
     `;
     const result = await pool.query(queryText, [status]);
-    console.log("successful sort by status");
+    // console.log("successful sort by status");
     res.send(result.rows);
   } catch (error) {
     console.log("error getting task", error);
