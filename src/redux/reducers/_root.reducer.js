@@ -20,6 +20,7 @@ import allTasksForUserReducer from './all.tasks.for.user.reducer';
 import allAvailableTasksReducer from './all.available.tasks.reducer';
 import sortingTasksReducer from './sorting.reducer';
 import snackbarMessageReducer from './snackbar.message.reducer';
+import incomingTasksForUserReducer from './incoming.tasks.for.user.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -48,7 +49,8 @@ const rootReducer = combineReducers({
   allTasksForUserReducer,
   allAvailableTasksReducer,
   sortingTasksReducer,
-  snackbarMessageReducer
+  snackbarMessageReducer,
+  incomingTasksForUserReducer
 });
 
 export default rootReducer;

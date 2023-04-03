@@ -38,7 +38,7 @@ export default function UserDashboard() {
 	const user = useSelector((store) => store.user);
 
 	// Access task reducers
-	const incomingTasks = useSelector((store) => store.incomingTasksReducer);
+	const incomingTasks = useSelector((store) => store.incomingTasksForUserReducer);
 	const tasksForAdmin = useSelector((store) => store.allTasksForAdminReducer);
 	const commentsForTask = useSelector((store) => store.commentsForTaskReducer);
 

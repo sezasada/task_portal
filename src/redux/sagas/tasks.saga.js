@@ -49,6 +49,16 @@ function* fetchIncomingTasksSaga() {
   }
 }
 
+function* fetchIncomingTasksForUserSaga() {
+  try {
+    const response = yield axios.get("/api/tasks/not_approved_user");
+    yield put({ type: "SET_INCOMING_TASKS_FOR_USER", payload: response.data });
+    yield put({ type: "FETCH_ALL_AVAILABLE_TASKS" });
+  } catch (error) {
+    console.log("Error with fetching incoming tasks:", error);
+  }
+}
+
 function* fetchAllTasksForAdminSaga() {
   try {
     const response = yield axios.get("/api/tasks/user_assigned_tasks");
@@ -140,8 +150,10 @@ function* submitEditsSaga(action) {
 }
 
 function* tasksSaga() {
+
   yield takeLatest("FETCH_ALL_TASKS", fetchAllTasksSaga);
   yield takeLatest("FETCH_INCOMING_TASKS", fetchIncomingTasksSaga);
+  yield takeLatest("FETCH_INCOMING_TASKS_FOR_USER", fetchIncomingTasksForUserSaga);
   yield takeLatest("ADD_NEW_TASK_USER", addNewTaskUserSaga);
   yield takeLatest("FETCH_ALL_TASKS_FOR_ADMIN", fetchAllTasksForAdminSaga);
   yield takeLatest("FETCH_ALL_TASKS_FOR_USER", fetchAllTasksForUserSaga);

@@ -27,6 +27,8 @@ function UserPage() {
 		dispatch({ type: "FETCH_ALL_TASKS_FOR_ADMIN" });
 		dispatch({ type: "FETCH_ALL_COMPLETED_TASKS" });
 		dispatch({ type: "FETCH_COMPLETED_USER_TASKS" });
+		dispatch({ type: "FETCH_INCOMING_TASKS_FOR_USER" });
+
 	}, []);
 
 	return (
