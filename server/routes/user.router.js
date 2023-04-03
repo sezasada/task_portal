@@ -56,21 +56,22 @@ router.post("/logout", (req, res) => {
 });
 
 //update user verified status
-router.put("/update_verified", (req, res) => {
+router.put("/update_verified", async (req, res) => {
+  try{
   let current_verified_status = req.body.is_verified;
   let user_id = req.body.id;
   const queryText = `UPDATE "user"
   SET "is_verified" = $1
   WHERE "id"=$2;`;
 
-  pool.query(queryText, [current_verified_status, user_id]).then(res.sendStatus(200))
-  pool
-    .query(queryText, [current_verified_status, user_id])
-    .then(res.sendStatus(200))
-    .catch((err) => {
-      console.log("update verified status failed", err);
-      res.sendStatus(500);
-    });
+  await pool.query(queryText, [current_verified_status, user_id]);
+  res.sendStatus(200);
+    
+  }catch(error){
+    console.log("update verified status failed", error);
+    res.sendStatus(500);
+
+  }
 });
 
 //update user admin status
