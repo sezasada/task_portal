@@ -117,10 +117,20 @@ export default function AdminManageTasks() {
 	const handleAddTag = () => {
 		dispatch({ type: "ADD_TAG", payload: { tagName: newTag } });
 		setNewTag("");
+		dispatch({
+			type: "SET_SNACKBAR_MESSAGE",
+			payload: <Alert severity="success">Tag Created</Alert>,
+		});
+		handleOpenSnackbar();
 	};
 	const handleAddLocation = () => {
 		dispatch({ type: "ADD_LOCATION", payload: { locationName: newLocation } });
 		setNewLocation("");
+		dispatch({
+			type: "SET_SNACKBAR_MESSAGE",
+			payload: <Alert severity="success">Location Created</Alert>,
+		});
+		handleOpenSnackbar();
 	};
 
 	//Manage edit mode
@@ -2090,6 +2100,7 @@ export default function AdminManageTasks() {
 					alignItems: "center",
 					gap: 6,
 					flexWrap: "wrap",
+					maxWidth: "750px",
 				}}
 			>
 				<Paper
@@ -2268,7 +2279,7 @@ export default function AdminManageTasks() {
 									<TableRow hover key={location.id}>
 										<TableCell>{location.location_name}</TableCell>
 										<TableCell>
-											<Tooltip title="Delete locatiion" placement="right">
+											<Tooltip title="Delete location" placement="right">
 												<Button
 													variant="contained"
 													type="button"
