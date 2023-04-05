@@ -238,7 +238,7 @@ router.put("/reset_password", async (req, res) => {
 
       const msg = {
         to: username,
-        from: "kathrynszombatfalvy@gmail.com",
+        from: "Farminthedellrrv@live.com",
         subject: "Farm in the Dell of the Red River Valley Password Reset",
         html: `
     <p>Hello,</p>
@@ -251,7 +251,7 @@ router.put("/reset_password", async (req, res) => {
       sgMail
         .send(msg)
         .then(() => {
-          // console.log("Email sent");
+          console.log("Email sent");
           res.send("email sent");
         })
         .catch((error) => {

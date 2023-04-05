@@ -726,7 +726,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
       if (userEmail.rows[0].send_emails === true) {
         const msg = {
           to: userEmail.rows[0].username,
-          from: "kathrynszombatfalvy@gmail.com",
+          from: "Farminthedellrrv@live.com",
           subject: "New Task Assigned to You",
           html: `
       <p>Hello,</p>
@@ -825,7 +825,7 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
 
       const msg = {
         to: email.username,
-        from: "kathrynszombatfalvy@gmail.com",
+        from: "Farminthedellrrv@live.com",
         subject: "Approval Request for Newly Created Task",
         html: `
   <p>Dear Admin,</p>
@@ -1006,7 +1006,7 @@ router.put("/user_status_change", (req, res) => {
 
 //   const msg = {
 //     to: userEmail,
-//     from: "kathrynszombatfalvy@gmail.com",
+//     from: "Farminthedellrrv@live.com",
 //     subject: "Task Assigned to You",
 //     html: `
 // <p>Hello,</p>
@@ -1162,7 +1162,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
       if (userEmail.rows[0].send_emails === true) {
         const msg = {
           to: userEmail.rows[0].username,
-          from: "kathrynszombatfalvy@gmail.com",
+          from: "Farminthedellrrv@live.com",
           subject: "New Task Assigned to You",
           html: `
       <p>Hello,</p>
