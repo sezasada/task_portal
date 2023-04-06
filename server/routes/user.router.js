@@ -210,8 +210,7 @@ router.put("/reset_password", async (req, res) => {
     const firstQueryText = `SELECT * FROM "user" WHERE "username" = $1;`;
     
     const username = req.body.email;
-    const userID = req.body.id;
-    
+  
     const firstResponse = await pool.query(firstQueryText, [username]);
     
 
@@ -221,6 +220,8 @@ router.put("/reset_password", async (req, res) => {
       res.send("email doesnt exist");
     } else {
       //if response is does exist, then create a token and send the email to reset password
+      const userID = firstResponse.rows[0].id;
+      console.log("userID", userID);
 
       let randomToken = crypto.randomBytes(20).toString("hex");
       const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
@@ -271,8 +272,6 @@ router.put("/set_new_password", async (req, res) => {
   try {
     console.log("start of set new password router");
 
-
-    
     const password = encryptLib.encryptPassword(req.body.password);
     const token = req.body.token;
 

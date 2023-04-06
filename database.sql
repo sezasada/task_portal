@@ -67,6 +67,8 @@ CREATE TABLE "password_reset_tokens" (
 	"token" TEXT,
 	"timestamp" TIMESTAMP
 );
+ALTER TABLE "password_reset_tokens"
+ADD "user_id" INT  NOT NULL;
 
 INSERT INTO "tags" ("tag_name")
 VALUES ('Cleaning'), ('Maintenance'), ('Planting'), ('Harvesting'), ('Weeding'), ('Washing'), ('Organizing'), ('Building'), ('Signage'), ('Equipment'), ('Other');
