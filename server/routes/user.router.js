@@ -210,6 +210,7 @@ router.put("/reset_password", async (req, res) => {
     const firstQueryText = `SELECT * FROM "user" WHERE "username" = $1;`;
     
     const username = req.body.email;
+    const userID = req.body.id;
     
     const firstResponse = await pool.query(firstQueryText, [username]);
     
@@ -224,13 +225,14 @@ router.put("/reset_password", async (req, res) => {
       let randomToken = crypto.randomBytes(20).toString("hex");
       const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-      const queryText = `INSERT INTO password_reset_tokens (email, token, timestamp) 
-  VALUES ($1, $2, $3) RETURNING token;`;
+      const queryText = `INSERT INTO password_reset_tokens (email, token, timestamp, user_id) 
+  VALUES ($1, $2, $3, $4) RETURNING token;`;
 
       let response = await pool.query(queryText, [
         username,
         randomToken,
         timestamp,
+        userID,
       ]);
       let token = response.rows[0].token;
 
@@ -267,15 +269,24 @@ router.put("/reset_password", async (req, res) => {
 //router to encrypt new password and save it to the user table
 router.put("/set_new_password", async (req, res) => {
   try {
+    console.log("start of set new password router");
+
+
     
     const password = encryptLib.encryptPassword(req.body.password);
     const token = req.body.token;
 
+    //get userid
+    const id = await pool.query(`SELECT "user_id" from "password_reset_tokens" WHERE "token" = $1;`, [token]);
+    console.log("token", token);
+    console.log("id", id);
+
     const queryText = `UPDATE "user"
   SET "password" = $1 
-  WHERE "id" = 2;`;
+  WHERE "id" = $2;`;
     //update password in db
-    let response = await pool.query(queryText, [password]);
+    let response = await pool.query(queryText, [password, id]);
+    console.log("response", response);
 
     //delete token from db
     const deleteQueryText = `DELETE FROM "password_reset_tokens"
