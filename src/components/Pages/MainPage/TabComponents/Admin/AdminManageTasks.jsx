@@ -578,7 +578,7 @@ export default function AdminManageTasks() {
 						color: "rgb(187, 41, 46)",
 					}}
 				>
-					All Uncompleted Tasks
+					All Incomplete Tasks
 				</Typography>
 				<hr />
 				<TableContainer sx={{ height: "325px", overflow: "scroll" }}>
