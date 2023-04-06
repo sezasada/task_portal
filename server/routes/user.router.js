@@ -234,7 +234,7 @@ router.put("/reset_password", async (req, res) => {
       ]);
       let token = response.rows[0].token;
 
-      let link = `http://localhost:3000/#/reset?${token}`;
+      let link = `https://farmworks.fly.dev/#/reset?${token}`;
 
       const msg = {
         to: username,

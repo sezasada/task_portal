@@ -731,7 +731,7 @@ router.post("/admin", rejectUnauthenticated, async (req, res) => {
           html: `
       <p>Hello,</p>
       <p>A new task has been assigned to you at Farm in the Dell of the Red River Valley.</p>
-      <a href="http://localhost:3000/#/main">View Task</a>
+      <a href="https://farmworks.fly.dev/#/main">View Task</a>
       <p>Thank you.</p>`,
         };
         //send email to the user
@@ -819,7 +819,7 @@ router.post("/user", rejectUnauthenticated, async (req, res) => {
 
     const adminEmails = results.rows;
 
-    const linkToPortal = "http://localhost:3000/#/main";
+    const linkToPortal = "https://farmworks.fly.dev/#/main";
 
     for (email of adminEmails) {
 
@@ -1167,7 +1167,7 @@ router.put(`/admin_edit_task`, async (req, res) => {
           html: `
       <p>Hello,</p>
       <p>A new task has been assigned to you at Farm in the Dell of the Red River Valley.</p>
-      <a href="http://localhost:3000/#/main">View Task</a>
+      <a href="https://farmworks.fly.dev/#/main">View Task</a>
       <p>Thank you.</p>`,
         };
         //send email to the user
