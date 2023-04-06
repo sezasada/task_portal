@@ -278,13 +278,13 @@ router.put("/set_new_password", async (req, res) => {
     //get userid
     const id = await pool.query(`SELECT "user_id" from "password_reset_tokens" WHERE "token" = $1;`, [token]);
     console.log("token", token);
-    console.log("id", id);
+    console.log("id", id.rows[0].user_id);
 
     const queryText = `UPDATE "user"
   SET "password" = $1 
   WHERE "id" = $2;`;
     //update password in db
-    let response = await pool.query(queryText, [password, id]);
+    let response = await pool.query(queryText, [password, id.rows[0].user_id]);
     console.log("response", response);
 
     //delete token from db
