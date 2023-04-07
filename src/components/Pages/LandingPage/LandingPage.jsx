@@ -67,6 +67,9 @@ function LandingPage() {
 						width: "348px",
 						marginTop: "8px",
 						marginRight: "10px",
+						"@media(max-width: 600px)": {
+							marginRight: "0",
+						},
 					}}
 				>
 					<Paper
@@ -114,6 +117,10 @@ function LandingPage() {
 				<Box
 					sx={{
 						width: "40%",
+						"@media(max-width: 600px)": {
+							marginTop: "20px",
+							width: "100%",
+						},
 					}}
 				>
 					<Paper
