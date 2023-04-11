@@ -1,8 +1,9 @@
-# fly.toml file generated for farmworks on 2023-04-06T13:22:19-05:00
+# fly.toml file generated for farminthedell on 2023-04-11T17:45:23-05:00
 
-app = "farmworks"
+app = "farminthedell"
 kill_signal = "SIGINT"
 kill_timeout = 5
+primary_region = "den"
 processes = []
 
 [env]
